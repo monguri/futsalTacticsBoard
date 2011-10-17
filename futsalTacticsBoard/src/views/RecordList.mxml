@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		creationComplete="viewCreationCompleteHandler(event)"
+		title="RecordList" destructionPolicy="never">
+	<fx:Declarations>
+		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
+	</fx:Declarations>
+	<fx:Script>
+	<![CDATA[
+		import model.MainModel;
+		
+		import mx.events.FlexEvent;
+		
+		private function viewCreationCompleteHandler(event:FlexEvent):void
+		{
+			list.dataProvider = MainModel.getInstance().getRecordList();
+		}
+		
+		private function backButtonClickHandler(event:MouseEvent):void
+		{
+			this.navigator.popView();
+		}
+			
+		private function listClickHandler(event:MouseEvent):void
+		{
+			if (list.selectedIndex >= 0) // リストにアイテムが一つもないときはselectedIndex = -1, selectedItem = undefined
+			{
+				this.navigator.pushView(Record, list.selectedItem);
+			}
+		}
+		
+		private function getRecordName(file:File):String
+		{
+			return MainModel.getInstance().getRecordName(file);
+		}
+	]]>
+	</fx:Script>
+	<s:navigationContent>
+		<s:Button label="back" click="backButtonClickHandler(event)"/>
+	</s:navigationContent>
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="justify"/>
+	</s:layout>
+	<s:List id="list" width="100%" height="100%" click="listClickHandler(event)" labelFunction="getRecordName"/>
+</s:View>

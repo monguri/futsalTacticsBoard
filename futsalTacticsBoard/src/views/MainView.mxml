@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:views="views.*"
+		xmlns:controllers="controllers.*"
+		actionBarVisible="false"
+		backgroundColor="0xffd700"
+		destructionPolicy="never"
+		title="MainView"
+		initialize="initializeHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import model.Const;
+			
+			import mx.events.FlexEvent;
+			
+			private static const FIELD_PLAYER_BLUE_IMAGE_PATH:String = "../assets/field_player_blue.png";
+			private static const FIELD_PLAYER_RED_IMAGE_PATH:String = "../assets/field_player_red.png";
+			private static const GOAL_KEEPER_BLUE_IMAGE_PATH:String = "../assets/goal_keeper_blue.png";
+			private static const GOAL_KEEPER_RED_IMAGE_PATH:String = "../assets/goal_keeper_red.png";
+			private static const BALL_IMAGE_PATH:String = "../assets/ball.png";
+		
+			protected function initializeHandler(event:FlexEvent):void
+			{
+				// コマの画像の設定
+				fieldPlayerBlue1.imageSource = FIELD_PLAYER_BLUE_IMAGE_PATH;
+				fieldPlayerBlue2.imageSource = FIELD_PLAYER_BLUE_IMAGE_PATH;
+				fieldPlayerBlue3.imageSource = FIELD_PLAYER_BLUE_IMAGE_PATH;
+				fieldPlayerBlue4.imageSource = FIELD_PLAYER_BLUE_IMAGE_PATH;
+				fieldPlayerRed1.imageSource = FIELD_PLAYER_RED_IMAGE_PATH;
+				fieldPlayerRed2.imageSource = FIELD_PLAYER_RED_IMAGE_PATH;
+				fieldPlayerRed3.imageSource = FIELD_PLAYER_RED_IMAGE_PATH;
+				fieldPlayerRed4.imageSource = FIELD_PLAYER_RED_IMAGE_PATH;
+				goalKeeperBlue.imageSource = GOAL_KEEPER_BLUE_IMAGE_PATH;
+				goalKeeperRed.imageSource = GOAL_KEEPER_RED_IMAGE_PATH;
+				ball.imageSource = BALL_IMAGE_PATH;
+				
+				// ボールにはラベルを表示しない
+				ball.textEnabled = false;
+
+				// ボタンのラベル設定
+				recordButton.label = Const.RECORD_BUTTON_LABEL_START;
+				resetButton.label = Const.RESET_BUTTON_LABEL;
+				recordListButton.label = Const.RECORD_LIST_BUTTON_LABEL_LIST;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<controllers:MainController id="controller"/>
+		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
+	</fx:Declarations>
+	
+	<!--
+	<fx:Script source="../controller/MainController.as"/>
+	-->
+	<s:Image x="24" y="3" cacheAsBitmap="true" smooth="true" source="../assets/futsal_court.png"/>
+	<s:HGroup x="10" y="430" width="300" gap="8" horizontalAlign="center">
+		<s:Button id="recordButton" width="90" height="25" cacheAsBitmap="true" fontSize="12"
+				  fontStyle="normal" fontWeight="bold" />
+		<s:Button id="resetButton" width="90" height="25" cacheAsBitmap="true" fontSize="12"
+				  fontStyle="normal" fontWeight="bold"/>
+		<s:Button id="recordListButton" width="90" height="25" cacheAsBitmap="true" fontSize="12"
+				  fontStyle="normal" fontWeight="bold"/>
+	</s:HGroup>
+	<views:Piece id="fieldPlayerBlue1"/>
+	<views:Piece id="fieldPlayerBlue2"/>
+	<views:Piece id="fieldPlayerBlue3"/>
+	<views:Piece id="fieldPlayerBlue4"/>
+	<views:Piece id="fieldPlayerRed1"/>
+	<views:Piece id="fieldPlayerRed2"/>
+	<views:Piece id="fieldPlayerRed3"/>
+	<views:Piece id="fieldPlayerRed4"/>
+	<views:Piece id="goalKeeperBlue"/>
+	<views:Piece id="goalKeeperRed"/>
+	<views:Piece id="ball"/>
+</s:View>

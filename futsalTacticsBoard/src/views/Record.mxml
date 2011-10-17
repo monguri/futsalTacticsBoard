@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		add="viewAddHandler(event)" title="Record">
+	<fx:Declarations>
+		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
+	</fx:Declarations>
+	<fx:Script>
+	<![CDATA[
+		import model.MainModel;
+		
+		import mx.events.FlexEvent;
+		
+		import spark.events.TextOperationEvent;
+		import spark.transitions.SlideViewTransition;
+		import spark.transitions.ViewTransitionDirection;
+		
+		private function backButtonClickHandler(event:MouseEvent):void
+		{
+			this.navigator.popView();
+		}
+			
+		public override function createReturnObject():Object{
+			return data;
+		}
+		
+		private function viewAddHandler(event:Event):void
+		{
+			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
+			{
+				recordNameTextInput.text = MainModel.getInstance().getRecordName(data as File);
+				creationDateLabel.text = (data as File).creationDate.toLocaleString();
+			}
+		}
+		
+		private function playButtonClickHandler(event:MouseEvent):void
+		{
+			this.navigator.popToFirstView();
+		}
+		
+		// TODO:削除時には確認ダイアログが必要
+		private function deleteButtonClickHandler(event:MouseEvent):void
+		{
+			if (data != null)
+			{
+				var recordName:String = MainModel.getInstance().getRecordName(data as File);
+				MainModel.getInstance().deleteRecord(recordName);
+			}
+			this.navigator.popView();
+		}
+		
+		private function recordNameTextInputSoftKeyboardDeactivateHandler(event:SoftKeyboardEvent):void
+		{
+			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
+			{
+				MainModel.getInstance().renameRecord((data as File), recordNameTextInput.text);
+			}
+		}
+		
+	]]>
+	</fx:Script>
+	<s:navigationContent>
+		<s:Button label="back" click="backButtonClickHandler(event)"/>
+	</s:navigationContent>
+	<s:layout>
+		<s:VerticalLayout gap="20" horizontalAlign="left" paddingBottom="10" paddingLeft="10"
+						  paddingRight="10" paddingTop="10"/>
+	</s:layout>
+	<s:Label text="Record Name" textAlign="left"/>
+	<s:TextInput id="recordNameTextInput" width="100%" prompt="Record Name"
+				 softKeyboardDeactivate="recordNameTextInputSoftKeyboardDeactivateHandler(event)"/>
+	<s:Label text="Creation Date" textAlign="left"/>
+	<!-- データバインディング使いたいが、アプリ再開がこの画面のときはdataはnullなので。方法未調査
+	<s:Label id="creationDateLabel" text="{(data as File).creationDate.toLocaleString()}" textAlign="left"/>
+	-->
+	<s:Label id="creationDateLabel" width="100%" textAlign="center"/>
+	<s:HGroup gap="20" horizontalAlign="center">
+		<s:Button id="playButton" width="90" height="25" label="PLAY" cacheAsBitmap="true"
+				  click="playButtonClickHandler(event)" fontSize="12" fontStyle="normal"
+				  fontWeight="bold"/>
+		<!-- TODO 3D機能はいずれ作る
+		<s:Button id="play3dButton" width="90" height="25" label="PLAY 3D" cacheAsBitmap="true"
+				  fontSize="12" fontStyle="normal" fontWeight="bold"/>
+		-->
+		<s:Button id="deleteButton" width="90" height="25" label="DELETE" cacheAsBitmap="true"
+				  click="deleteButtonClickHandler(event)" fontSize="12" fontStyle="normal"
+				  fontWeight="bold"/>
+	</s:HGroup>
+</s:View>

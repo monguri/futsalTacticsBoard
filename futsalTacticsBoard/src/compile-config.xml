@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flex-config>
+	<compiler>
+		<define>
+			<name>CONFIG::SAVE_TO_SHARED_OBJECT</name>
+			<value>false</value>
+		</define>
+		<define>
+			<name>CONFIG::SAVE_TO_XML_FILE</name>
+			<value>true</value>
+		</define>
+		<define>
+			<name>CONFIG::FREE</name>
+			<value>false</value>
+		</define>
+	</compiler>
+</flex-config>
