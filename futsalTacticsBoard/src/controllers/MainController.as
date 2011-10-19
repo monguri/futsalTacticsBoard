@@ -14,6 +14,8 @@ package controllers
 	import mx.events.FlexEvent;
 	
 	import spark.components.supportClasses.ViewReturnObject;
+	import spark.core.ContentCache;
+	import spark.core.IContentLoader;
 	
 	import views.MainView;
 	import views.Piece;
@@ -144,9 +146,13 @@ package controllers
 			_pieces.push(_view.fieldPlayerRed3);
 			_pieces.push(_view.fieldPlayerRed4);
 			
+			var contentLoader:IContentLoader = new ContentCache();
+			_view.courtImage.contentLoader = contentLoader;
+			
 			for each (var piece:Piece in _pieces)
 			{
 				piece.textInput.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE, pieceTextInputSoftKeyboardDeactivateHandler);
+				piece.image.contentLoader = contentLoader;
 			}
 
 			// ボタンのマウスクリックイベント;

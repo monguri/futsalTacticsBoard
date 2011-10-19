@@ -5,6 +5,8 @@ package controllers
 	import mx.core.IMXMLObject;
 	import mx.events.FlexEvent;
 	
+	import spark.core.ContentCache;
+	
 	import views.Piece;
 
 	public class PieceController implements IMXMLObject
