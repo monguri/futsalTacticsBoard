@@ -7,8 +7,8 @@ package controllers
 	import flash.filesystem.File;
 	import flash.geom.Point;
 	
-	import model.Const;
-	import model.MainModel;
+	import models.Const;
+	import models.MainModel;
 	
 	import mx.core.IMXMLObject;
 	import mx.events.FlexEvent;

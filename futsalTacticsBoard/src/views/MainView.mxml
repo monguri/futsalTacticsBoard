@@ -10,7 +10,7 @@
 		initialize="initializeHandler(event)">
 	<fx:Script>
 		<![CDATA[
-			import model.Const;
+			import models.Const;
 			
 			import mx.events.FlexEvent;
 			

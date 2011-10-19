@@ -8,7 +8,7 @@
 	</fx:Declarations>
 	<fx:Script>
 	<![CDATA[
-		import model.MainModel;
+		import models.MainModel;
 		
 		import mx.events.FlexEvent;
 		

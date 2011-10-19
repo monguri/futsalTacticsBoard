@@ -1,4 +1,4 @@
-package model
+package models
 {
 	CONFIG::SAVE_TO_XML_FILE
 	import flash.filesystem.File;
