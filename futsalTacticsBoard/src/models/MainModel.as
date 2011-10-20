@@ -74,7 +74,7 @@ package models
 				}
 			}
 			
-			MainModel.getInstance().saveRecord();
+			saveRecord();
 
 			// メモリ解放
 			_piecesPoints = null;
@@ -83,17 +83,16 @@ package models
 
 		public function loadSaveDataToBuffer(recordName:String):Boolean
 		{
-			MainModel.getInstance().clearSaveDataBuffer();
+			clearSaveDataBuffer();
 			
 			var success:Boolean;
-		
-			success = MainModel.getInstance().loadPiecesPoints(recordName);
+			success = loadPiecesPoints(recordName);
 			if (!success)
 			{
 				return false;
 			}
 			
-			success = MainModel.getInstance().loadPiecesTexts(recordName);
+			success = loadPiecesTexts(recordName);
 			if (!success)
 			{
 				return false;
@@ -132,10 +131,12 @@ package models
 			var piece:XML;
 			var point:XML;
 			var text:XML;
+			
 			for (var i:uint = 0; i < _piecesPoints.length; i++)
 			{
 				piece = <piece></piece>;
 				piece.@id = i; //TODO:idにはballとかfieldPlayerBlueとか持たせたいな
+				
 				for (var j:uint = 0; j < _piecesPoints[i].length; j++)
 				{
 					point = <point/>;
@@ -143,6 +144,7 @@ package models
 					point.@y = _piecesPoints[i][j].y;
 					piece.appendChild(point);
 				}
+				
 				xml.appendChild(piece);
 			}
 			
@@ -154,25 +156,15 @@ package models
 					xml.piece[i].appendChild(text);
 				}
 			}
+			
+			xml.appendChild(<comment></comment>);
 			trace(xml);
 			
 			// 保存時は、現在日時をファイル名とする
 			var file:File = new File(RECORD_SAVE_DIRECTORY + getCurrentDateTimeString() + ".xml");
-			var fs:FileStream = new FileStream();
-			fs.open(file, FileMode.WRITE);
-			fs.writeUTFBytes(xml.toXMLString());
-			fs.close();
+			writeXmlStringToFile(file, xml.toXMLString());
 		}
 		
-		// TODO:SO版を用意していない
-		CONFIG::SAVE_TO_XML_FILE
-		public function renameRecord(file:File, newName:String):void
-		{
-			var dest:File = new File(RECORD_SAVE_DIRECTORY + newName + ".xml");
-			// TODO:第２引数を上書きモードにしているので、既存のファイルがあると上書きになってしまう。例外も考慮してない。
-			file.moveTo(dest, true);
-		}
-
 		CONFIG::SAVE_TO_SHARED_OBJECT
 		public function loadPiecesPoints(recordName:String):Boolean
 		{
@@ -221,12 +213,8 @@ package models
 			{
 				return false;
 			}
-			var fs:FileStream = new FileStream();
-			fs.open(file, FileMode.READ);
-			var xmlStr:String = fs.readUTFBytes(fs.bytesAvailable);
-			fs.close();
 			
-			var xml:XML = new XML(xmlStr);
+			var xml:XML = new XML(readXmlStringFromFile(file));
 			var pieces:XMLList = xml.piece;
 			var len1:int = pieces.length();
 			var len2:int = 0;
@@ -279,12 +267,8 @@ package models
 			{
 				return false;
 			}
-			var fs:FileStream = new FileStream();
-			fs.open(file, FileMode.READ);
-			var xmlStr:String = fs.readUTFBytes(fs.bytesAvailable);
-			fs.close();
 			
-			var xml:XML = new XML(xmlStr);
+			var xml:XML = new XML(readXmlStringFromFile(file));
 			var pieces:XMLList = xml.piece;
 			var len1:int = pieces.length();
 			var len2:int = 0;
@@ -319,19 +303,6 @@ package models
 			}
 		}
 		
-		//
-		// ゲッター/セッター
-		//
-		public function get piecesPointsBuffer():Vector.<Vector.<Point>>
-		{
-			return _piecesPoints;
-		}
-		
-		public function get piecesTextsBuffer():Vector.<Vector.<String>>
-		{
-			return _piecesTexts;
-		}
-
 		// TODO:SO版では複数件保存したりリストとして参照したりできてない。
 		// 保存方法として、so.data下にArray持たせて、各要素にレコード名にあたるものを持たせるしかない
 		public function getRecordList():IList
@@ -347,16 +318,76 @@ package models
 					xmlFiles.push(file);
 				}
 			}
+			
 			_recordList = new ArrayCollection(xmlFiles);
 			return _recordList;
 		}
 		
+		// TODO:SO版を用意していない
+		CONFIG::SAVE_TO_XML_FILE
 		public function getRecordName(file:File):String
 		{
 			// -1 は"."の分
 			var endIndex:int = file.name.lastIndexOf(file.extension) - 1;
 			return file.name.slice(0, endIndex);
-			
+		}
+		
+		// TODO:SO版を用意していない
+		CONFIG::SAVE_TO_XML_FILE
+		public function setRecordName(file:File, newName:String):void
+		{
+			var dest:File = new File(RECORD_SAVE_DIRECTORY + newName + ".xml");
+			// TODO:第２引数を上書きモードにしているので、既存のファイルがあると上書きになってしまう。例外も考慮してない。
+			file.moveTo(dest, true);
+		}
+
+		// TODO:SO版を用意していない
+		CONFIG::SAVE_TO_XML_FILE
+		public function getComment(file:File):String
+		{
+			var xml:XML = new XML(readXmlStringFromFile(file));
+			return xml.comment;
+		}
+		
+		// TODO:SO版を用意していない
+		CONFIG::SAVE_TO_XML_FILE
+		public function setComment(file:File, comment:String):void
+		{
+			var xml:XML = new XML(readXmlStringFromFile(file));
+			xml.comment = comment;
+			writeXmlStringToFile(file, xml.toXMLString());
+		}
+		
+		CONFIG::SAVE_TO_XML_FILE
+		private function readXmlStringFromFile(file:File):String
+		{
+			var fs:FileStream = new FileStream();
+			fs.open(file, FileMode.READ);
+			var xmlStr:String = fs.readUTFBytes(fs.bytesAvailable);
+			fs.close();
+			return xmlStr;
+		}
+		
+		CONFIG::SAVE_TO_XML_FILE
+		private function writeXmlStringToFile(file:File, xmlStr:String):void
+		{
+			var fs:FileStream = new FileStream();
+			fs.open(file, FileMode.WRITE);
+			fs.writeUTFBytes(xmlStr);
+			fs.close();
+		}
+		
+		//
+		// ゲッター/セッター
+		//
+		public function get piecesPointsBuffer():Vector.<Vector.<Point>>
+		{
+			return _piecesPoints;
+		}
+		
+		public function get piecesTextsBuffer():Vector.<Vector.<String>>
+		{
+			return _piecesTexts;
 		}
 	}
 }

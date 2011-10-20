@@ -20,6 +20,15 @@
 			this.navigator.popView();
 		}
 			
+		private function saveButtonClickHandler(event:MouseEvent):void
+		{
+			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
+			{
+				MainModel.getInstance().setRecordName((data as File), recordNameTextInput.text);
+				MainModel.getInstance().setComment((data as File), commentTextArea.text);
+			}
+		}
+			
 		public override function createReturnObject():Object{
 			return data;
 		}
@@ -28,8 +37,10 @@
 		{
 			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
 			{
-				recordNameTextInput.text = MainModel.getInstance().getRecordName(data as File);
-				creationDateLabel.text = (data as File).creationDate.toLocaleString();
+				var file:File = data as File;
+				recordNameTextInput.text = MainModel.getInstance().getRecordName(file);
+				commentTextArea.text = MainModel.getInstance().getComment(file);
+				creationDateLabel.text = file.creationDate.toLocaleString();
 			}
 		}
 		
@@ -41,39 +52,34 @@
 		// TODO:削除時には確認ダイアログが必要
 		private function deleteButtonClickHandler(event:MouseEvent):void
 		{
-			if (data != null)
+			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
 			{
 				var recordName:String = MainModel.getInstance().getRecordName(data as File);
 				MainModel.getInstance().deleteRecord(recordName);
 			}
 			this.navigator.popView();
 		}
-		
-		private function recordNameTextInputSoftKeyboardDeactivateHandler(event:SoftKeyboardEvent):void
-		{
-			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
-			{
-				MainModel.getInstance().renameRecord((data as File), recordNameTextInput.text);
-			}
-		}
-		
 	]]>
 	</fx:Script>
 	<s:navigationContent>
 		<s:Button label="back" click="backButtonClickHandler(event)"/>
 	</s:navigationContent>
+	<s:actionContent>
+		<s:Button label="save" click="saveButtonClickHandler(event)"/>
+	</s:actionContent>
 	<s:layout>
 		<s:VerticalLayout gap="20" horizontalAlign="left" paddingBottom="10" paddingLeft="10"
 						  paddingRight="10" paddingTop="10"/>
 	</s:layout>
 	<s:Label text="Record Name" textAlign="left"/>
-	<s:TextInput id="recordNameTextInput" width="100%" prompt="Record Name"
-				 softKeyboardDeactivate="recordNameTextInputSoftKeyboardDeactivateHandler(event)"/>
+	<s:TextInput id="recordNameTextInput" width="100%" prompt="Record Name" />
 	<s:Label text="Creation Date" textAlign="left"/>
 	<!-- データバインディング使いたいが、アプリ再開がこの画面のときはdataはnullなので。方法未調査
 	<s:Label id="creationDateLabel" text="{(data as File).creationDate.toLocaleString()}" textAlign="left"/>
 	-->
 	<s:Label id="creationDateLabel" width="100%" textAlign="center"/>
+	<s:Label text="Comment" textAlign="left"/>
+	<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="55" />
 	<s:HGroup gap="20" horizontalAlign="center">
 		<s:Button id="playButton" width="90" height="25" label="PLAY" cacheAsBitmap="true"
 				  click="playButtonClickHandler(event)" fontSize="12" fontStyle="normal"
