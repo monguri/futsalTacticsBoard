@@ -26,6 +26,7 @@
 			{
 				MainModel.getInstance().setRecordName((data as File), recordNameTextInput.text);
 				MainModel.getInstance().setComment((data as File), commentTextArea.text);
+				this.navigator.popView();
 			}
 		}
 			
