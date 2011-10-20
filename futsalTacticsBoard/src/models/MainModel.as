@@ -336,9 +336,17 @@ package models
 		CONFIG::SAVE_TO_XML_FILE
 		public function setRecordName(file:File, newName:String):void
 		{
-			var dest:File = new File(RECORD_SAVE_DIRECTORY + newName + ".xml");
-			// TODO:第２引数を上書きモードにしているので、既存のファイルがあると上書きになってしまう。例外も考慮してない。
-			file.moveTo(dest, true);
+			var oldName:String = getRecordName(file);
+			if (oldName != newName) // ファイル名を変えずにmoveTo(dest, true)すると例外が発生する
+			{
+				var dest:File = new File(RECORD_SAVE_DIRECTORY + newName + ".xml");
+				// TODO:第２引数を上書きモードにしているので、既存のファイルがあると上書きになってしまう。例外を考慮してない。
+				try {
+					file.moveTo(dest, true);
+				} catch(e:Error) {
+					// do nothing
+				}
+			}
 		}
 
 		// TODO:SO版を用意していない
