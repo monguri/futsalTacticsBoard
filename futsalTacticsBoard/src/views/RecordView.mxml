@@ -14,6 +14,7 @@
 		import spark.components.supportClasses.ViewReturnObject;
 		import spark.events.TextOperationEvent;
 		import spark.transitions.SlideViewTransition;
+		import spark.transitions.SlideViewTransitionMode;
 		import spark.transitions.ViewTransitionDirection;
 		
 		private function backButtonClickHandler(event:MouseEvent):void
@@ -23,7 +24,10 @@
 			
 		private function editButtonClickHandler(event:MouseEvent):void
 		{
-			this.navigator.pushView(EditRecordView, data);
+			var v:SlideViewTransition = new SlideViewTransition();
+			v.mode = SlideViewTransitionMode.COVER;
+			v.direction = ViewTransitionDirection.UP;
+			this.navigator.pushView(EditRecordView, data, null, v);
 		}
 			
 		public override function createReturnObject():Object{
@@ -36,7 +40,7 @@
 			
 			// popで遷移してきたのかpushで遷移してきたのか判定
 			var o:ViewReturnObject = navigator.poppedViewReturnedObject;
-			if (o != null)
+			if (o != null && o.object is File)
 			{ // popで遷移してきた
 				file = o.object as File;
 			}

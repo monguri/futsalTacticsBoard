@@ -14,11 +14,15 @@
 		
 		import spark.events.TextOperationEvent;
 		import spark.transitions.SlideViewTransition;
+		import spark.transitions.SlideViewTransitionMode;
 		import spark.transitions.ViewTransitionDirection;
 		
 		private function cancelButtonClickHandler(event:MouseEvent):void
 		{
-			this.navigator.popView();
+			var v:SlideViewTransition = new SlideViewTransition();
+			v.mode = SlideViewTransitionMode.UNCOVER;
+			v.direction = ViewTransitionDirection.DOWN;
+			this.navigator.popView(v);
 		}
 			
 		private function doneButtonClickHandler(event:MouseEvent):void
@@ -29,7 +33,11 @@
 				// setRecordNameによりファイルの実体のファイル名が変わってしまい、dataの中のパスでは参照できなくなる。
 				MainModel.getInstance().setComment((data as File), commentTextArea.text);
 				MainModel.getInstance().setRecordName((data as File), recordNameTextInput.text);
-				this.navigator.popView();
+
+				var v:SlideViewTransition = new SlideViewTransition();
+				v.mode = SlideViewTransitionMode.UNCOVER;
+				v.direction = ViewTransitionDirection.DOWN;
+				this.navigator.popView(v);
 			}
 		}
 			
