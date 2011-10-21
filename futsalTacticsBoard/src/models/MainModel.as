@@ -305,6 +305,7 @@ package models
 		
 		// TODO:SO版では複数件保存したりリストとして参照したりできてない。
 		// 保存方法として、so.data下にArray持たせて、各要素にレコード名にあたるものを持たせるしかない
+		CONFIG::SAVE_TO_XML_FILE
 		public function getRecordList():IList
 		{
 			// レコードが増えているかもしれないので画面表示のたびにリストを初期化する
@@ -321,6 +322,13 @@ package models
 			
 			_recordList = new ArrayCollection(xmlFiles);
 			return _recordList;
+		}
+		
+		CONFIG::SAVE_TO_XML_FILE
+		public function getRecord(recordName:String):File
+		{
+			var file:File = new File(RECORD_SAVE_DIRECTORY + recordName + ".xml");
+			return file;
 		}
 		
 		// TODO:SO版を用意していない

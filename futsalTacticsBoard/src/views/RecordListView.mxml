@@ -38,7 +38,7 @@
 	]]>
 	</fx:Script>
 	<s:navigationContent>
-		<s:Button label="back" click="backButtonClickHandler(event)"/>
+		<s:Button label="Back" click="backButtonClickHandler(event)"/>
 	</s:navigationContent>
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="justify"/>
