@@ -19,7 +19,7 @@ package controllers
 	
 	import views.MainView;
 	import views.Piece;
-	import views.RecordList;
+	import views.RecordListView;
 	
 	public class MainController implements IMXMLObject
 	{
@@ -237,7 +237,7 @@ package controllers
 			{
 				MainModel.getInstance().flushSaveDataBuffer(); // バッファのデータを記録領域に保存
 				MainModel.getInstance().clearSaveDataBuffer(); // バッファをクリア
-				_view.navigator.pushView(RecordList);
+				_view.navigator.pushView(RecordListView);
 				_view.recordButton.label = Const.RECORD_BUTTON_LABEL_START;
 		
 				// 録画終了したら他のボタン復活
@@ -282,7 +282,7 @@ package controllers
 			}
 			else
 			{
-				_view.navigator.pushView(RecordList);
+				_view.navigator.pushView(RecordListView);
 			}
 		}
 		

@@ -2,7 +2,8 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		add="viewAddHandler(event)"
-		title="RecordList" destructionPolicy="never">
+		title="RecordList"
+		destructionPolicy="never">
 	<fx:Declarations>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
@@ -26,7 +27,7 @@
 		{
 			if (list.selectedIndex >= 0) // リストにアイテムが一つもないときはselectedIndex = -1, selectedItem = undefined
 			{
-				this.navigator.pushView(Record, list.selectedItem);
+				this.navigator.pushView(RecordView, list.selectedItem);
 			}
 		}
 		
