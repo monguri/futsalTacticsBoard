@@ -22,11 +22,8 @@
 
 		private function cancelButtonClickHandler(event:MouseEvent):void
 		{
-			var v:SlideViewTransition = new SlideViewTransition();
-			v.mode = SlideViewTransitionMode.UNCOVER;
-			v.direction = ViewTransitionDirection.DOWN;
-			this.navigator.popView(v);
 			saveFlag = false;
+			popView();
 		}
 			
 		private function doneButtonClickHandler(event:MouseEvent):void
@@ -38,14 +35,20 @@
 				MainModel.getInstance().setComment((data as File), commentTextArea.text);
 				MainModel.getInstance().setRecordName((data as File), recordNameTextInput.text);
 
-				var v:SlideViewTransition = new SlideViewTransition();
-				v.mode = SlideViewTransitionMode.UNCOVER;
-				v.direction = ViewTransitionDirection.DOWN;
-				this.navigator.popView(v);
 				saveFlag = true;
 			}
+			
+			popView();
 		}
 			
+		private function popView():void
+		{
+			var v:SlideViewTransition = new SlideViewTransition();
+			v.mode = SlideViewTransitionMode.UNCOVER;
+			v.direction = ViewTransitionDirection.DOWN;
+			this.navigator.popView(v);
+		}
+		
 		public override function createReturnObject():Object{
 			if (saveFlag)
 			{
