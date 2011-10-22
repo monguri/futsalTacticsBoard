@@ -2,7 +2,7 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		add="viewAddHandler(event)"
-		title="EditRecord">
+		title="AddRecord">
 	<fx:Declarations>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
@@ -16,6 +16,7 @@
 		import spark.transitions.SlideViewTransition;
 		import spark.transitions.SlideViewTransitionMode;
 		import spark.transitions.ViewTransitionDirection;
+		
 		
 		/* ファイルを保存するかどうか */
 		private var saveFlag:Boolean = false;
@@ -31,45 +32,28 @@
 			
 		private function doneButtonClickHandler(event:MouseEvent):void
 		{
-			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
-			{
-				// setCommentをsetRecordNameより先にする。
-				// setRecordNameによりファイルの実体のファイル名が変わってしまい、dataの中のパスでは参照できなくなる。
-				MainModel.getInstance().setComment((data as File), commentTextArea.text);
-				MainModel.getInstance().setRecordName((data as File), recordNameTextInput.text);
-
-				var v:SlideViewTransition = new SlideViewTransition();
-				v.mode = SlideViewTransitionMode.UNCOVER;
-				v.direction = ViewTransitionDirection.DOWN;
-				this.navigator.popView(v);
-				saveFlag = true;
-			}
+			var v:SlideViewTransition = new SlideViewTransition();
+			v.mode = SlideViewTransitionMode.UNCOVER;
+			v.direction = ViewTransitionDirection.DOWN;
+			this.navigator.popView(v);
+			saveFlag = true;
 		}
 			
 		public override function createReturnObject():Object{
+			// TODO:ファイル文字列で判断させるのはよい作りではない
 			if (saveFlag)
 			{
-				// ファイル名を変更したらdataに入っているパスは古くなっているので、Fileインスタンスを作り直す。
-				var file:File = MainModel.getInstance().getRecord(recordNameTextInput.text);
-				return file;
+				return recordNameTextInput.text;
 			}
 			else
 			{
-				// ファイル名を変更してないのならdataに入っているパスを使う
-				return data;
+				return "";
 			}
 		}
 		
 		private function viewAddHandler(event:Event):void
 		{
-			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
-			{
-				var file:File = data as File;
-				recordNameTextInput.text = MainModel.getInstance().getRecordName(file);
-				commentTextArea.text = MainModel.getInstance().getComment(file);
-				creationDateLabel.text = file.creationDate.toLocaleString();
-				doneButton.enabled = MainModel.getInstance().isValidRecordName(recordNameTextInput.text);
-			}
+			recordNameTextInput.text = MainModel.getInstance().getCurrentDateTimeString();
 		}
 		
 		private function recordNameTextInputChangeHandler(event:TextOperationEvent):void
@@ -91,11 +75,6 @@
 	<s:Label text="Record Name :" textAlign="left"/>
 	<s:TextInput id="recordNameTextInput" width="100%"
 				 change="recordNameTextInputChangeHandler(event)" prompt="Record Name" />
-	<s:Label text="Creation Date :" textAlign="left"/>
-	<!-- データバインディング使いたいが、アプリ再開がこの画面のときはdataはnullなので。方法未調査
-	<s:Label id="creationDateLabel" text="{(data as File).creationDate.toLocaleString()}" textAlign="left"/>
-	-->
-	<s:Label id="creationDateLabel" width="100%" textAlign="center"/>
 	<s:Label text="Comment :" textAlign="left"/>
 	<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="120" />
 </s:View>

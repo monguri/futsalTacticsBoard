@@ -58,7 +58,7 @@ package models
 			}
 		}
 		
-		public function flushSaveDataBuffer():void
+		public function flushSaveDataBuffer(recordName:String):void
 		{
 			// 無償版の場合は、一個だけしか保存させない
 			// ShareObject版は複数件保存に対応してないので何もしない
@@ -74,7 +74,12 @@ package models
 				}
 			}
 			
-			saveRecord();
+			CONFIG::SAVE_TO_SHARED_OBJECT{
+				saveRecord();
+			}
+			CONFIG::SAVE_TO_XML_FILE{
+				saveRecord(recordName);
+			}
 
 			// メモリ解放
 			_piecesPoints = null;
@@ -111,7 +116,7 @@ package models
 		 * @return 
 		 */		
 		CONFIG::SAVE_TO_SHARED_OBJECT
-		public function saveRecord():void
+		private function saveRecord():void
 		{
 			var so:SharedObject = SharedObject.getLocal(getCurrentDateTimeString());
 			// 一度メソッドの引数としてキャストしているから情報が消えるのかも。引数の型を*でやるとうまくいくかも
@@ -125,7 +130,7 @@ package models
 		}
 
 		CONFIG::SAVE_TO_XML_FILE
-		public function saveRecord():void
+		private function saveRecord(recordName:String):void
 		{
 			var xml:XML = <pieces></pieces>;
 			var piece:XML;
@@ -161,7 +166,7 @@ package models
 			trace(xml);
 			
 			// 保存時は、現在日時をファイル名とする
-			var file:File = new File(RECORD_SAVE_DIRECTORY + getCurrentDateTimeString() + ".xml");
+			var file:File = new File(RECORD_SAVE_DIRECTORY + recordName + ".xml");
 			writeXmlStringToFile(file, xml.toXMLString());
 		}
 		
@@ -193,7 +198,7 @@ package models
 			return true;
 		}
 		
-		private function getCurrentDateTimeString():String
+		public function getCurrentDateTimeString():String
 		{
 			var now:Date = new Date();
 			var year:Number = now.fullYear;
@@ -391,6 +396,23 @@ package models
 			fs.open(file, FileMode.WRITE);
 			fs.writeUTFBytes(xmlStr);
 			fs.close();
+		}
+		
+		CONFIG::SAVE_TO_XML_FILE
+		public function isValidRecordName(recordName:String):Boolean
+		{
+			// TODO:もっとまともなvalidationが必要
+			if (recordName == null)
+			{
+				return false;
+			}
+			
+			if (recordName == "")
+			{
+				return false;
+			}
+			
+			return true;
 		}
 		
 		//

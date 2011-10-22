@@ -16,7 +16,12 @@ package controllers
 	import spark.components.supportClasses.ViewReturnObject;
 	import spark.core.ContentCache;
 	import spark.core.IContentLoader;
+	import spark.transitions.SlideViewTransition;
+	import spark.transitions.SlideViewTransitionMode;
+	import spark.transitions.ViewTransitionDirection;
 	
+	import views.AddRecordView;
+	import views.EditRecordView;
 	import views.MainView;
 	import views.Piece;
 	import views.RecordListView;
@@ -104,28 +109,41 @@ package controllers
 			
 			// 描画されてから再生されるようにADDED_TO_STAGEイベントハンドラで再生開始
 			var o:ViewReturnObject = _view.navigator.poppedViewReturnedObject;
-			if (o == null || !(o.object is File)) {
+			if (o == null) {
 				return;
 			}
 			
-			// 拡張子をのぞいたファイル名を取得する。1+ は"."を取り除くため
-			var file:File = (o.object as File);
-			var recordName:String = MainModel.getInstance().getRecordName(file);
-		
-			var success:Boolean = MainModel.getInstance().loadSaveDataToBuffer(recordName);
-			// ロード失敗なら再生状態に遷移しない
-			if (!success) {
-				return;
+			if (o.object is File) // RecordViewのPlayボタンからのpop
+			{
+				// 拡張子をのぞいたファイル名を取得する。1+ は"."を取り除くため
+				var file:File = (o.object as File);
+				var recordName:String = MainModel.getInstance().getRecordName(file);
+			
+				var success:Boolean = MainModel.getInstance().loadSaveDataToBuffer(recordName);
+				// ロード失敗なら再生状態に遷移しない
+				if (!success) {
+					return;
+				}
+			
+				_view.recordListButton.label = Const.RECORD_LIST_BUTTON_LABEL_STOP;
+				
+				// 再生中は他のボタンの機能は殺す
+				_view.recordButton.enabled = false;
+				_view.resetButton.enabled = false;
+				
+				// 再生状態/非再生状態　のトグル
+				_isPlaying = ! _isPlaying;
 			}
-		
-			_view.recordListButton.label = Const.RECORD_LIST_BUTTON_LABEL_STOP;
-			
-			// 再生中は他のボタンの機能は殺す
-			_view.recordButton.enabled = false;
-			_view.resetButton.enabled = false;
-			
-			// 再生状態/非再生状態　のトグル
-			_isPlaying = ! _isPlaying;
+			else if (o.object is String) // AddRecordViewからのpop
+			{
+				var fileName:String = o.object as String;
+				if (fileName != "") // 保存するとき
+				{
+					// ControllerやViewが、内部の保存形式に依存する実装なのはよくない。ファイル名だけでやりとりできるようにすべき。
+					MainModel.getInstance().flushSaveDataBuffer(fileName); // バッファのデータを記録領域に保存
+				}
+				MainModel.getInstance().clearSaveDataBuffer(); // バッファをクリア
+			}
 		}
 		
 		public function creationCompleteHandler(event:Event):void
@@ -235,9 +253,12 @@ package controllers
 		{
 			if (_isRecording)
 			{
-				MainModel.getInstance().flushSaveDataBuffer(); // バッファのデータを記録領域に保存
-				MainModel.getInstance().clearSaveDataBuffer(); // バッファをクリア
-				_view.navigator.pushView(RecordListView);
+				var v:SlideViewTransition = new SlideViewTransition();
+				v.mode = SlideViewTransitionMode.COVER;
+				v.direction = ViewTransitionDirection.UP;
+				_view.navigator.pushView(AddRecordView, null, null, v);
+				// TODO:Cancelボタンを押したときは保存しない。それと、こちらから遷移したときはタイトルはAddRecord。.
+				
 				_view.recordButton.label = Const.RECORD_BUTTON_LABEL_START;
 		
 				// 録画終了したら他のボタン復活
