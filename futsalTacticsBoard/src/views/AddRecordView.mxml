@@ -54,6 +54,8 @@
 		private function viewAddHandler(event:Event):void
 		{
 			recordNameTextInput.text = MainModel.getInstance().getCurrentDateTimeString();
+			// flexヘルプによると、Air for iOSでは無効。setFocus()も試したが有効にならない。もちろんシミュレータでも無効。
+			recordNameTextInput.requestSoftKeyboard();
 		}
 		
 		private function recordNameTextInputChangeHandler(event:TextOperationEvent):void
@@ -74,7 +76,13 @@
 	</s:layout>
 	<s:Label text="Record Name :" textAlign="left"/>
 	<s:TextInput id="recordNameTextInput" width="100%"
-				 change="recordNameTextInputChangeHandler(event)" prompt="Record Name" />
+				 change="recordNameTextInputChangeHandler(event)" prompt="Record Name"/>
 	<s:Label text="Comment :" textAlign="left"/>
-	<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="120" />
+	<s:VGroup> <!-- VerticalLayoutのgapをそのまま適用するとすきまが空きすぎるのでVGroupでまとめた -->
+		<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="120" />
+		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
+		<s:Button id="editEndButton" width="100%" height="25" label="END EDIT" cacheAsBitmap="true"
+				  fontSize="12" fontStyle="normal"
+				  fontWeight="bold"/>
+	</s:VGroup>
 </s:View>

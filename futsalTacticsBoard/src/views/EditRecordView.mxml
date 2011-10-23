@@ -28,6 +28,7 @@
 			
 		private function doneButtonClickHandler(event:MouseEvent):void
 		{
+			// TODO:アプリ再開がこの画面から再開するときは保存ができない。まあAddでなくEditだから大した被害ないけど。
 			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
 			{
 				// setCommentをsetRecordNameより先にする。
@@ -73,6 +74,9 @@
 				creationDateLabel.text = file.creationDate.toLocaleString();
 				doneButton.enabled = MainModel.getInstance().isValidRecordName(recordNameTextInput.text);
 			}
+			
+			// flexヘルプによると、Air for iOSでは無効。setFocus()も試したが有効にならない。もちろんシミュレータでも無効。
+			recordNameTextInput.requestSoftKeyboard();
 		}
 		
 		private function recordNameTextInputChangeHandler(event:TextOperationEvent):void
@@ -100,5 +104,11 @@
 	-->
 	<s:Label id="creationDateLabel" width="100%" textAlign="center"/>
 	<s:Label text="Comment :" textAlign="left"/>
-	<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="120" />
+	<s:VGroup> <!-- VerticalLayoutのgapをそのまま適用するとすきまが空きすぎるのでVGroupでまとめた -->
+		<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="120" />
+		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
+		<s:Button id="editEndButton" width="100%" height="25" label="END EDIT" cacheAsBitmap="true"
+				  fontSize="12" fontStyle="normal"
+				  fontWeight="bold"/>
+	</s:VGroup>
 </s:View>
