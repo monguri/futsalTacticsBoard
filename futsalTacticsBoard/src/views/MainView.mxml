@@ -54,7 +54,7 @@
 	<!--
 	<fx:Script source="../controller/MainController.as"/>
 	-->
-	<s:BitmapImage id="courtImage" x="24" y="3" source="../assets/futsal_court.png"/>
+	<s:BitmapImage id="courtImage" x="24" y="3" source="@Embed('assets/futsal_court.png')"/>
 	<s:HGroup x="10" y="430" width="300" gap="8" horizontalAlign="center">
 		<s:Button id="recordButton" width="90" height="25" cacheAsBitmap="true" fontSize="12"
 				  fontStyle="normal" fontWeight="bold" />
