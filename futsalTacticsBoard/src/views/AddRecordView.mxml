@@ -3,6 +3,13 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		add="viewAddHandler(event)"
 		title="AddRecord">
+	<fx:Script>
+		<![CDATA[
+			import models.Const;
+			
+			import mx.core.mx_internal;
+		]]>
+	</fx:Script>
 	<fx:Declarations>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
@@ -55,7 +62,10 @@
 		{
 			recordNameTextInput.text = MainModel.getInstance().getCurrentDateTimeString();
 			// flexヘルプによると、Air for iOSでは無効。setFocus()も試したが有効にならない。もちろんシミュレータでも無効。
-			recordNameTextInput.requestSoftKeyboard();
+			// focusManagerも効かなかった
+//			recordNameTextInput.setFocus();
+//			focusManager.setFocus(recordNameTextInput);
+//			recordNameTextInput.requestSoftKeyboard();
 		}
 		
 		private function recordNameTextInputChangeHandler(event:TextOperationEvent):void
@@ -76,10 +86,10 @@
 	</s:layout>
 	<s:Label text="Record Name :" textAlign="left"/>
 	<s:TextInput id="recordNameTextInput" width="100%"
-				 change="recordNameTextInputChangeHandler(event)" prompt="Record Name"/>
+				 change="recordNameTextInputChangeHandler(event)" prompt="Record Name" maxChars="{Const.RECORD_NAME_MAX_CHARS}"/>
 	<s:Label text="Comment :" textAlign="left"/>
 	<s:VGroup> <!-- VerticalLayoutのgapをそのまま適用するとすきまが空きすぎるのでVGroupでまとめた -->
-		<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="120" />
+		<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="120" maxChars="{Const.RECORD_COMMENT_MAX_CHARS}"/>
 		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
 		<s:Button id="editEndButton" width="100%" height="25" label="END EDIT" cacheAsBitmap="true"
 				  fontSize="12" fontStyle="normal"

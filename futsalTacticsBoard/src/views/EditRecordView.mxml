@@ -8,6 +8,7 @@
 	</fx:Declarations>
 	<fx:Script>
 	<![CDATA[
+		import models.Const;
 		import models.MainModel;
 		
 		import mx.events.FlexEvent;
@@ -97,7 +98,7 @@
 	</s:layout>
 	<s:Label text="Record Name :" textAlign="left"/>
 	<s:TextInput id="recordNameTextInput" width="100%"
-				 change="recordNameTextInputChangeHandler(event)" prompt="Record Name" />
+				 change="recordNameTextInputChangeHandler(event)" prompt="Record Name" maxChars="{Const.RECORD_NAME_MAX_CHARS}"/>
 	<s:Label text="Creation Date :" textAlign="left"/>
 	<!-- データバインディング使いたいが、アプリ再開がこの画面のときはdataはnullなので。方法未調査
 	<s:Label id="creationDateLabel" text="{(data as File).creationDate.toLocaleString()}" textAlign="left"/>
@@ -105,7 +106,7 @@
 	<s:Label id="creationDateLabel" width="100%" textAlign="center"/>
 	<s:Label text="Comment :" textAlign="left"/>
 	<s:VGroup> <!-- VerticalLayoutのgapをそのまま適用するとすきまが空きすぎるのでVGroupでまとめた -->
-		<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="120" />
+		<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="120" maxChars="{Const.RECORD_COMMENT_MAX_CHARS}"/>
 		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
 		<s:Button id="editEndButton" width="100%" height="25" label="END EDIT" cacheAsBitmap="true"
 				  fontSize="12" fontStyle="normal"
