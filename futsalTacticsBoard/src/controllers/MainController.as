@@ -164,6 +164,7 @@ package controllers
 			_pieces.push(_view.fieldPlayerRed3);
 			_pieces.push(_view.fieldPlayerRed4);
 			
+			// ContentCacheを使って画像描画の高速化
 			var contentLoader:IContentLoader = new ContentCache();
 			_view.courtImage.contentLoader = contentLoader;
 			
@@ -173,6 +174,11 @@ package controllers
 				piece.image.contentLoader = contentLoader;
 			}
 
+			// ボタンのラベル設定
+			_view.recordButton.label = Const.RECORD_BUTTON_LABEL_START;
+			_view.resetButton.label = Const.RESET_BUTTON_LABEL;
+			_view.recordListButton.label = Const.RECORD_LIST_BUTTON_LABEL_LIST;
+			
 			// ボタンのマウスクリックイベント;
 			_view.recordButton.addEventListener(MouseEvent.CLICK, recordButtonMouseClickHandler);
 			_view.resetButton.addEventListener(MouseEvent.CLICK, resetButtonMouseClickHandler);

@@ -6,8 +6,7 @@
 		actionBarVisible="false"
 		backgroundColor="0xffd700"
 		destructionPolicy="never"
-		title="MainView"
-		initialize="initializeHandler(event)">
+		title="MainView">
 	<fx:Script>
 		<![CDATA[
 			import models.Const;
@@ -19,31 +18,6 @@
 			private static const GOAL_KEEPER_BLUE_IMAGE_PATH:String = "../assets/goal_keeper_blue.png";
 			private static const GOAL_KEEPER_RED_IMAGE_PATH:String = "../assets/goal_keeper_red.png";
 			private static const BALL_IMAGE_PATH:String = "../assets/ball.png";
-		
-			protected function initializeHandler(event:FlexEvent):void
-			{
-				// コマの画像の設定
-				fieldPlayerBlue1.imageSource = FIELD_PLAYER_BLUE_IMAGE_PATH;
-				fieldPlayerBlue2.imageSource = FIELD_PLAYER_BLUE_IMAGE_PATH;
-				fieldPlayerBlue3.imageSource = FIELD_PLAYER_BLUE_IMAGE_PATH;
-				fieldPlayerBlue4.imageSource = FIELD_PLAYER_BLUE_IMAGE_PATH;
-				fieldPlayerRed1.imageSource = FIELD_PLAYER_RED_IMAGE_PATH;
-				fieldPlayerRed2.imageSource = FIELD_PLAYER_RED_IMAGE_PATH;
-				fieldPlayerRed3.imageSource = FIELD_PLAYER_RED_IMAGE_PATH;
-				fieldPlayerRed4.imageSource = FIELD_PLAYER_RED_IMAGE_PATH;
-				goalKeeperBlue.imageSource = GOAL_KEEPER_BLUE_IMAGE_PATH;
-				goalKeeperRed.imageSource = GOAL_KEEPER_RED_IMAGE_PATH;
-				ball.imageSource = BALL_IMAGE_PATH;
-				
-				// ボールにはラベルを表示しない
-				ball.textEnabled = false;
-
-				// ボタンのラベル設定
-				recordButton.label = Const.RECORD_BUTTON_LABEL_START;
-				resetButton.label = Const.RESET_BUTTON_LABEL;
-				recordListButton.label = Const.RECORD_LIST_BUTTON_LABEL_LIST;
-			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -63,15 +37,15 @@
 		<s:Button id="recordListButton" width="90" height="25" cacheAsBitmap="true" fontSize="12"
 				  fontStyle="normal" fontWeight="bold"/>
 	</s:HGroup>
-	<views:Piece id="fieldPlayerBlue1"/>
-	<views:Piece id="fieldPlayerBlue2"/>
-	<views:Piece id="fieldPlayerBlue3"/>
-	<views:Piece id="fieldPlayerBlue4"/>
-	<views:Piece id="fieldPlayerRed1"/>
-	<views:Piece id="fieldPlayerRed2"/>
-	<views:Piece id="fieldPlayerRed3"/>
-	<views:Piece id="fieldPlayerRed4"/>
-	<views:Piece id="goalKeeperBlue"/>
-	<views:Piece id="goalKeeperRed"/>
-	<views:Piece id="ball"/>
+	<views:Piece id="fieldPlayerBlue1" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
+	<views:Piece id="fieldPlayerBlue2" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
+	<views:Piece id="fieldPlayerBlue3" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
+	<views:Piece id="fieldPlayerBlue4" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
+	<views:Piece id="fieldPlayerRed1" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
+	<views:Piece id="fieldPlayerRed2" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
+	<views:Piece id="fieldPlayerRed3" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
+	<views:Piece id="fieldPlayerRed4" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
+	<views:Piece id="goalKeeperBlue" imageSource="{GOAL_KEEPER_BLUE_IMAGE_PATH}"/>
+	<views:Piece id="goalKeeperRed" imageSource="{GOAL_KEEPER_RED_IMAGE_PATH}"/>
+	<views:Piece id="ball" imageSource="{BALL_IMAGE_PATH}" textEnabled="false"/>
 </s:View>
