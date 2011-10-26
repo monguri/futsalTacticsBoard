@@ -7,7 +7,7 @@ package controllers
 	
 	import spark.core.ContentCache;
 	
-	import views.Piece;
+	import components.Piece;
 
 	public class PieceController implements IMXMLObject
 	{

@@ -6,7 +6,7 @@
 		actionBarVisible="false"
 		backgroundColor="0xffd700"
 		destructionPolicy="never"
-		title="MainView">
+		title="MainView" xmlns:components="components.*">
 	<fx:Script>
 		<![CDATA[
 			import models.Const;
@@ -37,15 +37,15 @@
 		<s:Button id="recordListButton" width="90" height="25" cacheAsBitmap="true" fontSize="12"
 				  fontStyle="normal" fontWeight="bold"/>
 	</s:HGroup>
-	<views:Piece id="fieldPlayerBlue1" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
-	<views:Piece id="fieldPlayerBlue2" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
-	<views:Piece id="fieldPlayerBlue3" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
-	<views:Piece id="fieldPlayerBlue4" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
-	<views:Piece id="fieldPlayerRed1" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
-	<views:Piece id="fieldPlayerRed2" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
-	<views:Piece id="fieldPlayerRed3" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
-	<views:Piece id="fieldPlayerRed4" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
-	<views:Piece id="goalKeeperBlue" imageSource="{GOAL_KEEPER_BLUE_IMAGE_PATH}"/>
-	<views:Piece id="goalKeeperRed" imageSource="{GOAL_KEEPER_RED_IMAGE_PATH}"/>
-	<views:Piece id="ball" imageSource="{BALL_IMAGE_PATH}" textEnabled="false"/>
+	<components:Piece id="fieldPlayerBlue1" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
+	<components:Piece id="fieldPlayerBlue2" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
+	<components:Piece id="fieldPlayerBlue3" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
+	<components:Piece id="fieldPlayerBlue4" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
+	<components:Piece id="fieldPlayerRed1" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
+	<components:Piece id="fieldPlayerRed2" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
+	<components:Piece id="fieldPlayerRed3" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
+	<components:Piece id="fieldPlayerRed4" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
+	<components:Piece id="goalKeeperBlue" imageSource="{GOAL_KEEPER_BLUE_IMAGE_PATH}"/>
+	<components:Piece id="goalKeeperRed" imageSource="{GOAL_KEEPER_RED_IMAGE_PATH}"/>
+	<components:Piece id="ball" imageSource="{BALL_IMAGE_PATH}" textEnabled="false"/>
 </s:View>

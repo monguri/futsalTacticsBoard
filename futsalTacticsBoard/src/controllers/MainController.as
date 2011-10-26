@@ -23,7 +23,7 @@ package controllers
 	import views.AddRecordView;
 	import views.EditRecordView;
 	import views.MainView;
-	import views.Piece;
+	import components.Piece;
 	import views.RecordListView;
 	
 	public class MainController implements IMXMLObject
