@@ -90,7 +90,7 @@
 		<s:Button label="Cancel" click="cancelButtonClickHandler(event)"/>
 	</s:navigationContent>
 	<s:actionContent>
-		<s:Button id="doneButton" label="Done" click="doneButtonClickHandler(event)"/>
+		<s:Button id="doneButton" label="Done" enabled="false" click="doneButtonClickHandler(event)"/>
 	</s:actionContent>
 	<s:layout>
 		<s:VerticalLayout gap="20" horizontalAlign="left" paddingBottom="10" paddingLeft="10"

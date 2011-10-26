@@ -59,11 +59,12 @@
 		private function viewAddHandler(event:Event):void
 		{
 			recordNameTextInput.text = MainModel.getInstance().getCurrentDateTimeString();
+			doneButton.enabled = MainModel.getInstance().isValidRecordName(recordNameTextInput.text);
 			// flexヘルプによると、Air for iOSでは無効。setFocus()も試したが有効にならない。もちろんシミュレータでも無効。
 			// focusManagerも効かなかった
 //			recordNameTextInput.setFocus();
 //			focusManager.setFocus(recordNameTextInput);
-//			recordNameTextInput.requestSoftKeyboard();
+			recordNameTextInput.requestSoftKeyboard();
 		}
 		
 		private function recordNameTextInputChangeHandler(event:TextOperationEvent):void
@@ -76,7 +77,7 @@
 		<s:Button label="Cancel" click="cancelButtonClickHandler(event)"/>
 	</s:navigationContent>
 	<s:actionContent>
-		<s:Button id="doneButton" label="Done" click="doneButtonClickHandler(event)"/>
+		<s:Button id="doneButton" label="Done" enabled="false" click="doneButtonClickHandler(event)"/>
 	</s:actionContent>
 	<s:layout>
 		<s:VerticalLayout gap="20" horizontalAlign="left" paddingBottom="10" paddingLeft="10"
