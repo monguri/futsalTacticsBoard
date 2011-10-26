@@ -139,6 +139,7 @@
 	<icon>
 		<!-- この３つで十分 -->
 		<image29x29>assets/icon29.png</image29x29>
+		<image48x48>assets/icon48.png</image48x48>
 		<image57x57>assets/icon57.png</image57x57>
 		<image114x114>assets/icon114.png</image114x114>
 	</icon>

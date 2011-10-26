@@ -6,8 +6,6 @@
 	<fx:Script>
 		<![CDATA[
 			import models.Const;
-			
-			import mx.core.mx_internal;
 		]]>
 	</fx:Script>
 	<fx:Declarations>
