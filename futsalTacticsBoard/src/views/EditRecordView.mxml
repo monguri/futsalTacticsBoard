@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:s="library://ns.adobe.com/flex/spark"
-		add="viewAddHandler(event)"
-		title="EditRecord">
+		xmlns:components="components.*" destructionPolicy="never"
+		add="viewAddHandler(event)" title="EditRecord">
 	<fx:Declarations>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	<fx:Script>
 	<![CDATA[
-		import models.Const;
 		import models.MainModel;
-		
-		import mx.events.FlexEvent;
 		
 		import spark.events.TextOperationEvent;
 		import spark.transitions.SlideViewTransition;
@@ -34,8 +31,8 @@
 			{
 				// setCommentをsetRecordNameより先にする。
 				// setRecordNameによりファイルの実体のファイル名が変わってしまい、dataの中のパスでは参照できなくなる。
-				MainModel.getInstance().setComment((data as File), commentTextArea.text);
-				MainModel.getInstance().setRecordName((data as File), recordNameTextInput.text);
+				MainModel.getInstance().setComment((data as File), info.commentTextArea.text);
+				MainModel.getInstance().setRecordName((data as File), info.recordNameTextInput.text);
 
 				saveFlag = true;
 			}
@@ -55,7 +52,7 @@
 			if (saveFlag)
 			{
 				// ファイル名を変更したらdataに入っているパスは古くなっているので、Fileインスタンスを作り直す。
-				var file:File = MainModel.getInstance().getRecord(recordNameTextInput.text);
+				var file:File = MainModel.getInstance().getRecord(info.recordNameTextInput.text);
 				return file;
 			}
 			else
@@ -67,22 +64,21 @@
 		
 		private function viewAddHandler(event:Event):void
 		{
+			info.currentState='edit';
+			
 			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
 			{
 				var file:File = data as File;
-				recordNameTextInput.text = MainModel.getInstance().getRecordName(file);
-				commentTextArea.text = MainModel.getInstance().getComment(file);
-				creationDateLabel.text = file.creationDate.toLocaleString();
-				doneButton.enabled = MainModel.getInstance().isValidRecordName(recordNameTextInput.text);
+				info.recordNameTextInput.text = MainModel.getInstance().getRecordName(file);
+				info.commentTextArea.text = MainModel.getInstance().getComment(file);
+				info.recordNameTextInputChangeCallback = recordNameTextInputChangeHandler;
+				doneButton.enabled = MainModel.getInstance().isValidRecordName(info.recordNameTextInput.text);
 			}
-			
-			// flexヘルプによると、Air for iOSでは無効。setFocus()も試したが有効にならない。もちろんシミュレータでも無効。
-			recordNameTextInput.requestSoftKeyboard();
 		}
 		
 		private function recordNameTextInputChangeHandler(event:TextOperationEvent):void
 		{
-			doneButton.enabled = MainModel.getInstance().isValidRecordName(recordNameTextInput.text);
+			doneButton.enabled = MainModel.getInstance().isValidRecordName(info.recordNameTextInput.text);
 		}
 	]]>
 	</fx:Script>
@@ -90,26 +86,8 @@
 		<s:Button label="Cancel" click="cancelButtonClickHandler(event)"/>
 	</s:navigationContent>
 	<s:actionContent>
-		<s:Button id="doneButton" label="Done" enabled="false" click="doneButtonClickHandler(event)"/>
+		<s:Button id="doneButton" label="Done" click="doneButtonClickHandler(event)" enabled="false"/>
 	</s:actionContent>
-	<s:layout>
-		<s:VerticalLayout gap="20" horizontalAlign="left" paddingBottom="10" paddingLeft="10"
-						  paddingRight="10" paddingTop="10"/>
-	</s:layout>
-	<s:Label text="Record Name :" textAlign="left"/>
-	<s:TextInput id="recordNameTextInput" width="100%"
-				 change="recordNameTextInputChangeHandler(event)" prompt="Record Name" maxChars="{Const.RECORD_NAME_MAX_CHARS}"/>
-	<s:Label text="Creation Date :" textAlign="left"/>
-	<!-- データバインディング使いたいが、アプリ再開がこの画面のときはdataはnullなので。方法未調査
-	<s:Label id="creationDateLabel" text="{(data as File).creationDate.toLocaleString()}" textAlign="left"/>
-	-->
-	<s:Label id="creationDateLabel" width="100%" textAlign="center"/>
-	<s:Label text="Comment :" textAlign="left"/>
-	<s:VGroup> <!-- VerticalLayoutのgapをそのまま適用するとすきまが空きすぎるのでVGroupでまとめた -->
-		<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="120" maxChars="{Const.RECORD_COMMENT_MAX_CHARS}"/>
-		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
-		<s:Button id="editEndButton" width="100%" height="25" label="END EDIT" cacheAsBitmap="true"
-				  fontSize="12" fontStyle="normal"
-				  fontWeight="bold"/>
-	</s:VGroup>
+	<components:RecordInformation id="info" gap="20" paddingBottom="10" paddingLeft="10"
+								  paddingRight="10" paddingTop="10"/>
 </s:View>

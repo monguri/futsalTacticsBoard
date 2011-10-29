@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:s="library://ns.adobe.com/flex/spark"
-		add="viewAddHandler(event)"
-		title="AddRecord">
-	<fx:Script>
-		<![CDATA[
-			import models.Const;
-		]]>
-	</fx:Script>
+		xmlns:views="views.*"
+		xmlns:components="components.*"
+		add="viewAddHandler(event)" title="AddRecord">
 	<fx:Declarations>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
@@ -48,7 +44,7 @@
 			// TODO:ファイル文字列で判断させるのはよい作りではない
 			if (saveFlag)
 			{
-				return recordNameTextInput.text;
+				return info.recordNameTextInput.text;
 			}
 			else
 			{
@@ -58,18 +54,15 @@
 		
 		private function viewAddHandler(event:Event):void
 		{
-			recordNameTextInput.text = MainModel.getInstance().getCurrentDateTimeString();
-			doneButton.enabled = MainModel.getInstance().isValidRecordName(recordNameTextInput.text);
-			// flexヘルプによると、Air for iOSでは無効。setFocus()も試したが有効にならない。もちろんシミュレータでも無効。
-			// focusManagerも効かなかった
-//			recordNameTextInput.setFocus();
-//			focusManager.setFocus(recordNameTextInput);
-			recordNameTextInput.requestSoftKeyboard();
+			info.currentState='edit';
+			info.recordNameTextInput.text = MainModel.getInstance().getCurrentDateTimeString();
+			info.recordNameTextInputChangeCallback = recordNameTextInputChangeHandler;
+			doneButton.enabled = MainModel.getInstance().isValidRecordName(info.recordNameTextInput.text);
 		}
 		
-		private function recordNameTextInputChangeHandler(event:TextOperationEvent):void
+		private function recordNameTextInputChangeHandler():void
 		{
-			doneButton.enabled = MainModel.getInstance().isValidRecordName(recordNameTextInput.text);
+			doneButton.enabled = MainModel.getInstance().isValidRecordName(info.recordNameTextInput.text);
 		}
 	]]>
 	</fx:Script>
@@ -77,21 +70,8 @@
 		<s:Button label="Cancel" click="cancelButtonClickHandler(event)"/>
 	</s:navigationContent>
 	<s:actionContent>
-		<s:Button id="doneButton" label="Done" enabled="false" click="doneButtonClickHandler(event)"/>
+		<s:Button id="doneButton" label="Done" click="doneButtonClickHandler(event)" enabled="false"/>
 	</s:actionContent>
-	<s:layout>
-		<s:VerticalLayout gap="20" horizontalAlign="left" paddingBottom="10" paddingLeft="10"
-						  paddingRight="10" paddingTop="10"/>
-	</s:layout>
-	<s:Label text="Record Name :" textAlign="left"/>
-	<s:TextInput id="recordNameTextInput" width="100%"
-				 change="recordNameTextInputChangeHandler(event)" prompt="Record Name" maxChars="{Const.RECORD_NAME_MAX_CHARS}"/>
-	<s:Label text="Comment :" textAlign="left"/>
-	<s:VGroup> <!-- VerticalLayoutのgapをそのまま適用するとすきまが空きすぎるのでVGroupでまとめた -->
-		<s:TextArea id="commentTextArea" width="100%" prompt="Comment" height="120" maxChars="{Const.RECORD_COMMENT_MAX_CHARS}"/>
-		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
-		<s:Button id="editEndButton" width="100%" height="25" label="END EDIT" cacheAsBitmap="true"
-				  fontSize="12" fontStyle="normal"
-				  fontWeight="bold"/>
-	</s:VGroup>
+	<components:RecordInformation id="info" gap="20" paddingBottom="10" paddingLeft="10"
+								  paddingRight="10" paddingTop="10"/>
 </s:View>

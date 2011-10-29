@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  add="groupAddHandler(event)"
+		  >
+	<fx:Declarations>
+		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import models.Const;
+			
+			import mx.events.FlexEvent;
+			
+			import spark.events.TextOperationEvent;
+			
+			private var _recordNameTextInputChangeCallback:Function;
+			
+			protected function groupAddHandler(event:FlexEvent):void
+			{
+				// flexヘルプによると、Air for iOSでは無効。setFocus()も試したが有効にならない。もちろんシミュレータでも無効。
+				// focusManagerも効かなかった
+	//			recordNameTextInput.setFocus();
+	//			focusManager.setFocus(recordNameTextInput);
+				recordNameTextInput.requestSoftKeyboard();
+			}
+			
+			protected function recordNameTextInputChangeHandler(event:TextOperationEvent):void
+			{
+				_recordNameTextInputChangeCallback();
+			}
+			
+			public function set recordNameTextInputChangeCallback(callback:Function):void
+			{
+				_recordNameTextInputChangeCallback = callback;
+			}
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="show"/>
+		<s:State name="edit"/>
+	</s:states>
+	
+	<s:Label text="Record Name :" textAlign="left"/>
+	<s:TextInput id="recordNameTextInput" change="recordNameTextInputChangeHandler(event)"
+				 maxChars="{Const.RECORD_NAME_MAX_CHARS}" prompt="Record Name"
+				 width="300" borderVisible.show="false" editable.show="false"/>
+	<s:Label includeIn="show" text="Creation Date :" textAlign="left"/>
+	<!-- データバインディング使いたいが、アプリ再開がこの画面のときはdataはnullなので。方法未調査
+	<s:Label id="creationDateLabel" text="{(data as File).creationDate.toLocaleString()}" textAlign="left"/>
+	-->
+	<s:Label id="creationDateLabel" includeIn="show" width="300" textAlign="center"/>
+	<s:Label text="Comment :" textAlign="left"/>
+	<s:VGroup> <!-- VerticalLayoutのgapをそのまま適用するとすきまが空きすぎるのでVGroupでまとめた -->
+		<s:TextArea id="commentTextArea" height="120" maxChars="{Const.RECORD_COMMENT_MAX_CHARS}"
+					prompt="Comment"
+					width="300" borderVisible.show="false" editable.show="false"/>
+		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
+		<s:Button id="editEndButton" includeIn="edit" width="300" height="25" label="END EDIT"
+				  cacheAsBitmap="true" fontSize="12" fontStyle="normal" fontWeight="bold"/>
+	</s:VGroup>
+</s:VGroup>
