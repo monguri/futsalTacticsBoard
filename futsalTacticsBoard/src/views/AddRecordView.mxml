@@ -11,9 +11,6 @@
 	<![CDATA[
 		import models.MainModel;
 		
-		import mx.events.FlexEvent;
-		
-		import spark.events.TextOperationEvent;
 		import spark.transitions.SlideViewTransition;
 		import spark.transitions.SlideViewTransitionMode;
 		import spark.transitions.ViewTransitionDirection;
@@ -33,6 +30,10 @@
 			
 		private function doneButtonClickHandler(event:MouseEvent):void
 		{
+			//TODO:Modelに直接触るのはよくない
+			MainModel.getInstance().titleBuffer = info.titleTextInput.text;
+			MainModel.getInstance().commentBuffer = info.commentTextArea.text;
+			
 			var v:SlideViewTransition = new SlideViewTransition();
 			v.mode = SlideViewTransitionMode.UNCOVER;
 			v.direction = ViewTransitionDirection.DOWN;
@@ -41,27 +42,21 @@
 		}
 			
 		public override function createReturnObject():Object{
-			// TODO:ファイル文字列で判断させるのはよい作りではない
-			if (saveFlag)
-			{
-				return info.recordNameTextInput.text;
-			}
-			else
-			{
-				return "";
-			}
+			// TODO:Booleanで判断させるのはよい作りではない
+			return saveFlag;
 		}
 		
 		private function viewAddHandler(event:Event):void
 		{
-			info.recordNameTextInput.text = MainModel.getInstance().getCurrentDateTimeString();
-			info.recordNameTextInputChangeCallback = recordNameTextInputChangeHandler;
-			doneButton.enabled = MainModel.getInstance().isValidRecordName(info.recordNameTextInput.text);
+			info.recordTextChangeCallback = recordTextChangeHandler;
+			doneButton.enabled = MainModel.getInstance().isValidText(info.titleTextInput.text)
+									&& MainModel.getInstance().isValidText(info.commentTextArea.text);
 		}
 		
-		private function recordNameTextInputChangeHandler():void
+		private function recordTextChangeHandler():void
 		{
-			doneButton.enabled = MainModel.getInstance().isValidRecordName(info.recordNameTextInput.text);
+			doneButton.enabled = MainModel.getInstance().isValidText(info.titleTextInput.text)
+									&& MainModel.getInstance().isValidText(info.commentTextArea.text);
 		}
 	]]>
 	</fx:Script>

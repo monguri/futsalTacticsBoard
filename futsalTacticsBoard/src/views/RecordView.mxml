@@ -52,7 +52,7 @@
 				return;
 			}
 		
-			info.recordNameTextInput.text = MainModel.getInstance().getRecordName(file);
+			info.titleTextInput.text = MainModel.getInstance().getTitle(file);
 			info.commentTextArea.text = MainModel.getInstance().getComment(file);
 			info.creationDate = file.creationDate.toLocaleString();
 		}

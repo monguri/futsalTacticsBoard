@@ -27,7 +27,7 @@ package models
 		public static const RECORD_BUTTON_LABEL_SUSPEND:String = "REC END";
 		
 		// レコード名は拡張子含めて３２文字に収まるように26に
-		public static const RECORD_NAME_MAX_CHARS:int = 26;
+		public static const RECORD_TITLE_MAX_CHARS:int = 16;
 		public static const RECORD_COMMENT_MAX_CHARS:int = 256;
 		
 		public function Const()

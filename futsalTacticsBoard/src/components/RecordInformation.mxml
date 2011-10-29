@@ -13,7 +13,8 @@
 			
 			import spark.events.TextOperationEvent;
 			
-			private var _recordNameTextInputChangeCallback:Function;
+			private var _recordTextChangeCallback:Function;
+			private var _commentTextAreaChangeCallback:Function;
 			private var _creationDate:String;
 			
 			private function groupAddHandler(event:FlexEvent):void
@@ -22,12 +23,12 @@
 				// focusManagerも効かなかった
 	//			recordNameTextInput.setFocus();
 	//			focusManager.setFocus(recordNameTextInput);
-				recordNameTextInput.requestSoftKeyboard();
+				titleTextInput.requestSoftKeyboard();
 			}
 			
-			private function recordNameTextInputChangeHandler(event:TextOperationEvent):void
+			private function recordTextChangeHandler(event:TextOperationEvent):void
 			{
-				_recordNameTextInputChangeCallback();
+				_recordTextChangeCallback();
 			}
 			
 			// includeInしていると、ViewのaddのタイミングではViewにaddされてないようなのでaddされたら設定する。
@@ -39,9 +40,9 @@
 			//
 			// ゲッター/セッター
 			//
-			public function set recordNameTextInputChangeCallback(callback:Function):void
+			public function set recordTextChangeCallback(callback:Function):void
 			{
-				_recordNameTextInputChangeCallback = callback;
+				_recordTextChangeCallback = callback;
 			}
 			
 			public function set creationDate(value:String):void
@@ -55,10 +56,10 @@
 		<s:State name="edit"/>
 	</s:states>
 	
-	<s:Label text="Record Name :" textAlign="left"/>
-	<s:TextInput id="recordNameTextInput" width="300"
-				 change="recordNameTextInputChangeHandler(event)"
-				 maxChars="{Const.RECORD_NAME_MAX_CHARS}"
+	<s:Label text="Title :" textAlign="left"/>
+	<s:TextInput id="titleTextInput" width="300"
+				 change="recordTextChangeHandler(event)"
+				 maxChars="{Const.RECORD_TITLE_MAX_CHARS}"
 				 prompt.edit="Record Name"
 				 borderVisible.show="false" editable.show="false"/>
 	<s:Label includeIn="show" text="Creation Date :" textAlign="left"/>
@@ -71,7 +72,7 @@
 	<s:VGroup> <!-- VerticalLayoutのgapをそのまま適用するとすきまが空きすぎるのでVGroupでまとめた -->
 		<s:TextArea id="commentTextArea" width="300" height="120"
 					maxChars="{Const.RECORD_COMMENT_MAX_CHARS}"
-					prompt.edit="Comment"
+					prompt.edit="Comment" change="recordTextChangeHandler(event)"
 					borderVisible.show="false" editable.show="false"/>
 		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
 		<s:Button id="editEndButton" includeIn="edit" width="300" height="25" label="END EDIT"

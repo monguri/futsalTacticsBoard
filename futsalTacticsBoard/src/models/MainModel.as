@@ -21,6 +21,8 @@ package models
 		// 録画データバッファ。録画(書き込み)と再生(読み出し)の両方で記録領域とのI/Oをバッファする。
 		private var _piecesPoints:Vector.<Vector.<Point>>;
 		private var _piecesTexts:Vector.<Vector.<String>>;
+		private var _title:String;
+		private var _comment:String;
 
 		private static const NUM_PIECES:uint = 11;
 		private static const RECORD_SAVE_DIRECTORY:String = "app-storage:/";
@@ -46,6 +48,9 @@ package models
 		
 		public function clearSaveDataBuffer():void
 		{
+			_title = null;
+			_comment = null;
+			
 			// 別のメモリ領域に再確保
 			_piecesPoints = new Vector.<Vector.<Point>>();
 			_piecesTexts = new Vector.<Vector.<String>>();
@@ -58,7 +63,7 @@ package models
 			}
 		}
 		
-		public function flushSaveDataBuffer(recordName:String):void
+		public function flushSaveDataBuffer():void
 		{
 			// 無償版の場合は、一個だけしか保存させない
 			// ShareObject版は複数件保存に対応してないので何もしない
@@ -78,7 +83,7 @@ package models
 				saveRecord();
 			}
 			CONFIG::SAVE_TO_XML_FILE{
-				saveRecord(recordName);
+				saveRecord();
 			}
 
 			// メモリ解放
@@ -130,13 +135,18 @@ package models
 		}
 
 		CONFIG::SAVE_TO_XML_FILE
-		private function saveRecord(recordName:String):void
+		private function saveRecord():void
 		{
-			var xml:XML = <pieces></pieces>;
+			//TODO:先頭の<xml>というのはださいかもしれない
+			var xml:XML = <xml></xml>;
+			var title:XML = <title>{_title}</title>;
+			xml.appendChild(title);
+			var comment:XML = <comment>{_comment}</comment>;
+			xml.appendChild(comment);
+			xml.appendChild(<pieces></pieces>);
+			
 			var piece:XML;
 			var point:XML;
-			var text:XML;
-			
 			for (var i:uint = 0; i < _piecesPoints.length; i++)
 			{
 				piece = <piece></piece>;
@@ -150,23 +160,23 @@ package models
 					piece.appendChild(point);
 				}
 				
-				xml.appendChild(piece);
+				xml.pieces.appendChild(piece);
 			}
 			
+			var text:XML;
 			for (i = 0; i < piecesTextsBuffer.length; i++)
 			{
 				for (j = 0; j < piecesTextsBuffer[i].length; j++)
 				{
 					text = <text>{piecesTextsBuffer[i][j]}</text>;
-					xml.piece[i].appendChild(text);
+					xml.pieces.piece[i].appendChild(text);
 				}
 			}
 			
-			xml.appendChild(<comment></comment>);
 			trace(xml);
 			
 			// 保存時は、現在日時をファイル名とする
-			var file:File = new File(RECORD_SAVE_DIRECTORY + recordName + ".xml");
+			var file:File = new File(RECORD_SAVE_DIRECTORY + getCurrentDateTimeString() + ".xml");
 			writeXmlStringToFile(file, xml.toXMLString());
 		}
 		
@@ -345,29 +355,46 @@ package models
 			return file.name.slice(0, endIndex);
 		}
 		
+//		// TODO:SO版を用意していない
+//		CONFIG::SAVE_TO_XML_FILE
+//		public function setRecordName(file:File, newName:String):void
+//		{
+//			var oldName:String = getRecordName(file);
+//			if (oldName != newName) // ファイル名を変えずにmoveTo(dest, true)すると例外が発生する
+//			{
+//				var dest:File = new File(RECORD_SAVE_DIRECTORY + newName + ".xml");
+//				// TODO:第２引数を上書きモードにしているので、既存のファイルがあると上書きになってしまう。例外を考慮してない。
+//				try {
+//					file.moveTo(dest, true);
+//				} catch(e:Error) {
+//					// do nothing
+//				}
+//			}
+//		}
+
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
-		public function setRecordName(file:File, newName:String):void
+		public function getTitle(file:File):String
 		{
-			var oldName:String = getRecordName(file);
-			if (oldName != newName) // ファイル名を変えずにmoveTo(dest, true)すると例外が発生する
-			{
-				var dest:File = new File(RECORD_SAVE_DIRECTORY + newName + ".xml");
-				// TODO:第２引数を上書きモードにしているので、既存のファイルがあると上書きになってしまう。例外を考慮してない。
-				try {
-					file.moveTo(dest, true);
-				} catch(e:Error) {
-					// do nothing
-				}
-			}
+			var xml:XML = new XML(readXmlStringFromFile(file));
+			return xml.title;
 		}
-
+		
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
 		public function getComment(file:File):String
 		{
 			var xml:XML = new XML(readXmlStringFromFile(file));
 			return xml.comment;
+		}
+		
+		// TODO:SO版を用意していない
+		CONFIG::SAVE_TO_XML_FILE
+		public function setTitle(file:File, title:String):void
+		{
+			var xml:XML = new XML(readXmlStringFromFile(file));
+			xml.title = title;
+			writeXmlStringToFile(file, xml.toXMLString());
 		}
 		
 		// TODO:SO版を用意していない
@@ -399,19 +426,9 @@ package models
 		}
 		
 		CONFIG::SAVE_TO_XML_FILE
-		public function isValidRecordName(recordName:String):Boolean
+		public function isValidText(recordName:String):Boolean
 		{
-			// TODO:もっとまともなvalidationが必要
-			if (recordName == null)
-			{
-				return false;
-			}
-			
-			if (recordName == "")
-			{
-				return false;
-			}
-			
+			// TODO:validationの実装。xmlに入る文字列かどうかのチェック
 			return true;
 		}
 		
@@ -426,6 +443,16 @@ package models
 		public function get piecesTextsBuffer():Vector.<Vector.<String>>
 		{
 			return _piecesTexts;
+		}
+
+		public function set titleBuffer(value:String):void
+		{
+			_title = value;
+		}
+
+		public function set commentBuffer(value:String):void
+		{
+			_comment = value;
 		}
 	}
 }

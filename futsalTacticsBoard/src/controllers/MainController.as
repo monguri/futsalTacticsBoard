@@ -1,5 +1,7 @@
 package controllers
 {
+	import components.Piece;
+	
 	import flash.display.StageQuality;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -21,9 +23,7 @@ package controllers
 	import spark.transitions.ViewTransitionDirection;
 	
 	import views.AddRecordView;
-	import views.EditRecordView;
 	import views.MainView;
-	import components.Piece;
 	import views.RecordListView;
 	
 	public class MainController implements IMXMLObject
@@ -134,13 +134,13 @@ package controllers
 				// 再生状態/非再生状態　のトグル
 				_isPlaying = ! _isPlaying;
 			}
-			else if (o.object is String) // AddRecordViewからのpop
+			else if (o.object is Boolean) // AddRecordViewからのpop
 			{
-				var fileName:String = o.object as String;
-				if (fileName != "") // 保存するとき
+				// Do nothing
+				var saveFlag:Boolean = o.object as Boolean;
+				if (saveFlag) // 保存するとき
 				{
-					// ControllerやViewが、内部の保存形式に依存する実装なのはよくない。ファイル名だけでやりとりできるようにすべき。
-					MainModel.getInstance().flushSaveDataBuffer(fileName); // バッファのデータを記録領域に保存
+					MainModel.getInstance().flushSaveDataBuffer(); // バッファのデータを記録領域に保存
 				}
 				MainModel.getInstance().clearSaveDataBuffer(); // バッファをクリア
 			}
