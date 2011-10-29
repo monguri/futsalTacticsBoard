@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:s="library://ns.adobe.com/flex/spark"
-		xmlns:components="components.*" destructionPolicy="never"
-		add="viewAddHandler(event)" title="EditRecord">
+		xmlns:components="components.*"
+		add="viewAddHandler(event)" destructionPolicy="never" title="EditRecord">
 	<fx:Declarations>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
@@ -64,8 +64,6 @@
 		
 		private function viewAddHandler(event:Event):void
 		{
-			info.currentState='edit';
-			
 			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
 			{
 				var file:File = data as File;
@@ -88,6 +86,6 @@
 	<s:actionContent>
 		<s:Button id="doneButton" label="Done" click="doneButtonClickHandler(event)" enabled="false"/>
 	</s:actionContent>
-	<components:RecordInformation id="info" gap="20" paddingBottom="10" paddingLeft="10"
-								  paddingRight="10" paddingTop="10"/>
+	<components:RecordInformation id="info" currentState="edit" gap="20" paddingBottom="10"
+								  paddingLeft="10" paddingRight="10" paddingTop="10"/>
 </s:View>
