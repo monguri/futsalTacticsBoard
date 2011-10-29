@@ -54,7 +54,7 @@
 		
 			info.recordNameTextInput.text = MainModel.getInstance().getRecordName(file);
 			info.commentTextArea.text = MainModel.getInstance().getComment(file);
-			info.creationDateLabel.text = file.creationDate.toLocaleString();
+			info.creationDate = file.creationDate.toLocaleString();
 		}
 		
 		private function playButtonClickHandler(event:MouseEvent):void
@@ -83,8 +83,8 @@
 	<s:layout>
 		<s:VerticalLayout gap="20" horizontalAlign="center"/>
 	</s:layout>
-	<components:RecordInformation id="info" gap="20" paddingBottom="10" paddingLeft="10"
-								  paddingRight="10" paddingTop="10"/>
+	<components:RecordInformation id="info" currentState="show" gap="20" paddingBottom="10"
+								  paddingLeft="10" paddingRight="10" paddingTop="10"/>
 	<s:HGroup gap="20" horizontalAlign="center" paddingLeft="0">
 		<s:Button id="playButton" width="90" height="25" label="PLAY" cacheAsBitmap="true"
 				  click="playButtonClickHandler(event)" fontSize="12" fontStyle="normal"
