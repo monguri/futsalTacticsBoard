@@ -180,6 +180,18 @@ package models
 			writeXmlStringToFile(file, xml.toXMLString());
 		}
 		
+		private function getCurrentDateTimeString():String
+		{
+			var now:Date = new Date();
+			var year:Number = now.fullYear;
+			var month:Number = now.month + 1;
+			var date:Number = now.date;
+			var hours:Number = now.hours;
+			var minutes:Number = now.minutes;
+			var seconds:Number = now.seconds;
+			return (year.toString() + "-" + month.toString() + "-" + date.toString() + " " + hours.toString() + minutes.toString() + seconds.toString());
+		}
+		
 		CONFIG::SAVE_TO_SHARED_OBJECT
 		public function loadPiecesPoints(recordName:String):Boolean
 		{
@@ -208,18 +220,6 @@ package models
 			return true;
 		}
 		
-		public function getCurrentDateTimeString():String
-		{
-			var now:Date = new Date();
-			var year:Number = now.fullYear;
-			var month:Number = now.month + 1;
-			var date:Number = now.date;
-			var hours:Number = now.hours;
-			var minutes:Number = now.minutes;
-			var seconds:Number = now.seconds;
-			return (year.toString() + "-" + month.toString() + "-" + date.toString() + " " + hours.toString() + minutes.toString() + seconds.toString());
-		}
-		
 		CONFIG::SAVE_TO_XML_FILE
 		public function loadPiecesPoints(recordName:String):Boolean
 		{
@@ -230,7 +230,7 @@ package models
 			}
 			
 			var xml:XML = new XML(readXmlStringFromFile(file));
-			var pieces:XMLList = xml.piece;
+			var pieces:XMLList = xml.pieces.piece;
 			var len1:int = pieces.length();
 			var len2:int = 0;
 			var points:XMLList;
@@ -284,7 +284,7 @@ package models
 			}
 			
 			var xml:XML = new XML(readXmlStringFromFile(file));
-			var pieces:XMLList = xml.piece;
+			var pieces:XMLList = xml.pieces.piece;
 			var len1:int = pieces.length();
 			var len2:int = 0;
 			var texts:XMLList;
@@ -318,7 +318,7 @@ package models
 			}
 		}
 		
-		// TODO:SO版では複数件保存したりリストとして参照したりできてない。
+		// TODO:SO版はリストがとれない。それが欠点。今のところSO版は凍結
 		// 保存方法として、so.data下にArray持たせて、各要素にレコード名にあたるものを持たせるしかない
 		CONFIG::SAVE_TO_XML_FILE
 		public function getRecordList():IList
@@ -337,13 +337,6 @@ package models
 			
 			_recordList = new ArrayCollection(xmlFiles);
 			return _recordList;
-		}
-		
-		CONFIG::SAVE_TO_XML_FILE
-		public function getRecord(recordName:String):File
-		{
-			var file:File = new File(RECORD_SAVE_DIRECTORY + recordName + ".xml");
-			return file;
 		}
 		
 		// TODO:SO版を用意していない

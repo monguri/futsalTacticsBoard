@@ -31,8 +31,6 @@
 			{
 				MainModel.getInstance().setTitle((data as File), info.titleTextInput.text);
 				MainModel.getInstance().setComment((data as File), info.commentTextArea.text);
-
-				saveFlag = true;
 			}
 			
 			popView();
@@ -47,17 +45,7 @@
 		}
 		
 		public override function createReturnObject():Object{
-			if (saveFlag)
-			{
-				// ファイル名を変更したらdataに入っているパスは古くなっているので、Fileインスタンスを作り直す。
-				var file:File = MainModel.getInstance().getRecord(info.titleTextInput.text);
-				return file;
-			}
-			else
-			{
-				// ファイル名を変更してないのならdataに入っているパスを使う
-				return data;
-			}
+			return data;
 		}
 		
 		private function viewAddHandler(event:Event):void
