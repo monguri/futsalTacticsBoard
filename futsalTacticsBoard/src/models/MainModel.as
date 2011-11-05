@@ -367,6 +367,16 @@ package models
 
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
+		public function getNumberRecords():uint
+		{
+			// TODO:Recordクラスを作ったら、これもRecordクラスの数を数えるようにする
+			var dir:File = new File(RECORD_SAVE_DIRECTORY);
+			var allFiles:Array = dir.getDirectoryListing();
+			return allFiles.length;
+		}
+		
+		// TODO:SO版を用意していない
+		CONFIG::SAVE_TO_XML_FILE
 		public function getTitle(file:File):String
 		{
 			var xml:XML = new XML(readXmlStringFromFile(file));

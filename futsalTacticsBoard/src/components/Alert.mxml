@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnablePopUpContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+						   xmlns:s="library://ns.adobe.com/flex/spark"
+						   width="200">
+	<fx:Declarations>
+		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			public function show(owner:DisplayObjectContainer, 
+										message:String, title:String):void {
+				var a:Alert = new Alert();
+				a.open(owner, true);
+				a.titleWindow.title = title;
+				a.label.text = message;
+				PopUpManager.centerPopUp(a);
+			}
+		]]>
+	</fx:Script>
+	<s:TitleWindow id="titleWindow" close="close()" title="Caption">
+		<s:VGroup gap="20" horizontalAlign="center" paddingBottom="8" paddingLeft="8"
+				  paddingRight="8" paddingTop="8">
+			<s:Label id="label" width="180"/>
+			<s:Button height="30" label="OK" click="close()"/>
+		</s:VGroup>
+	</s:TitleWindow>
+</s:SkinnablePopUpContainer>

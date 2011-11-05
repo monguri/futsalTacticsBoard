@@ -5,10 +5,12 @@
 		xmlns:components="components.*"
 		add="viewAddHandler(event)" destructionPolicy="never" title="AddRecord">
 	<fx:Declarations>
+		<components:Alert id="saveLimitAlert"/>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	<fx:Script>
 	<![CDATA[
+		import models.Const;
 		import models.MainModel;
 		
 		import spark.transitions.SlideViewTransition;
@@ -30,6 +32,19 @@
 			
 		private function doneButtonClickHandler(event:MouseEvent):void
 		{
+			saveFlag = true;
+			
+			var curNumRecords:uint = MainModel.getInstance().getNumberRecords();
+			if (curNumRecords + 1 == Const.RECORD_NUMBER_LIMIT)
+			{
+				saveLimitAlert.show(this, "The number of records comes to limit. You can delete some records.", "Limit Alert");
+			}
+			else if (curNumRecords >= Const.RECORD_NUMBER_LIMIT)
+			{
+				saveLimitAlert.show(this, "The number of records is over limit. Please delete some records.", "Save Failed");
+				saveFlag = false;
+			}
+			
 			//TODO:Modelに直接触るのはよくない
 			MainModel.getInstance().titleBuffer = info.titleTextInput.text;
 			MainModel.getInstance().commentBuffer = info.commentTextArea.text;
@@ -38,7 +53,6 @@
 			v.mode = SlideViewTransitionMode.UNCOVER;
 			v.direction = ViewTransitionDirection.DOWN;
 			this.navigator.popView(v);
-			saveFlag = true;
 		}
 			
 		public override function createReturnObject():Object{
