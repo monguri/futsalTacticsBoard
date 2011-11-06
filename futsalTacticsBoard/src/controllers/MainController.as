@@ -187,6 +187,12 @@ package controllers
 			_view.recordButton.addEventListener(MouseEvent.CLICK, recordButtonMouseClickHandler);
 			_view.resetButton.addEventListener(MouseEvent.CLICK, resetButtonMouseClickHandler);
 			_view.recordListButton.addEventListener(MouseEvent.CLICK, recordListButtonMouseClickHandler);
+			
+			// 無償版の場合は、アプリ起動時に制限事項のポップアップを出す
+			CONFIG::FREE{
+				var freeVersionAlert:Alert = new Alert();
+				freeVersionAlert.show(_view, "At this free version, you can have just 1 record. 1000 records enable at \"futsal tactics board.\"", "Free Ver. Limitation");
+			}
 		}
 		
 		/**
