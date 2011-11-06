@@ -191,7 +191,7 @@ package controllers
 			// 無償版の場合は、アプリ起動時に制限事項のポップアップを出す
 			CONFIG::FREE{
 				var freeVerLimit:Alert = new Alert();
-				freeVerLimit.show(_view, "At this free version, you can have just 1 record. 1000 records enable at \"futsal tactics board.\"", "Free Ver. Limitation");
+				freeVerLimit.show(_view, "At this free version, you can have just 1 record.\n 1000 records enable at \"futsal tactics board\".\n Check it!", "Free Ver. Limitation");
 			}
 		}
 		
