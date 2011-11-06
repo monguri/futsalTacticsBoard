@@ -1,5 +1,6 @@
 package controllers
 {
+	import components.Alert;
 	import components.Piece;
 	
 	import flash.display.StageQuality;
@@ -35,6 +36,9 @@ package controllers
 		private var _isPlaying:Boolean = false;
 		
 		private var _pieces:Vector.<Piece>;
+		
+		// 録画中のフレーム数
+		private var _recordFrame:uint = 0;
 		
 		// 再生中のフレーム数
 		private var _playFrame:uint = 0;
@@ -209,7 +213,7 @@ package controllers
 			if (_isRecording && isAnyPieceDraging())
 			{
 				// TODO:座標をすべて保存するのでなくevent.targetのObjectと座標をPointを保存したい。テキストも保存するからそれとの分離がポイント
-				writeDataToSaveDataBuffer();
+				recordEnterFrameHandler();
 			}
 			else if (_isPlaying)
 			{
@@ -228,6 +232,38 @@ package controllers
 			}
 		
 			return false;
+		}
+		
+		private function recordEnterFrameHandler():void
+		{
+			if (_recordFrame >= Const.RECORD_FRAME_RATE_LIMIT) // 録画可能な容量をオーバーした
+			{
+				var saveFrameAlert:Alert = new Alert();
+				saveFrameAlert.show(_view, "The size of record comes to limit.", "Size Limit");
+				stopRecording();
+				_recordFrame = 0;
+				return;
+			}
+			
+			writeDataToSaveDataBuffer();
+			_recordFrame++;
+		}
+		
+		private function stopRecording():void
+		{
+			if (_isRecording)
+			{
+				stopAllPieceDrag(); // ドラッグ中に録画停止された場合に各pieceのドラッグ状態をoffにする必要がある
+				recordButtonMouseClickHandler();
+			}
+		}
+		
+		private function stopAllPieceDrag():void
+		{
+			for each (var piece:Piece in _pieces)
+			{
+				piece.controller.stopDrag();
+			}
 		}
 		
 		private function playEnterFrameHandler():void
@@ -255,7 +291,7 @@ package controllers
 		}
 		
 		/* 録画ボタンのマウスクリックイベント */
-		public function recordButtonMouseClickHandler(event:MouseEvent):void
+		public function recordButtonMouseClickHandler(event:MouseEvent = null):void
 		{
 			if (_isRecording)
 			{
@@ -280,11 +316,12 @@ package controllers
 				// 録画中は他のボタンの機能は殺す
 				_view.resetButton.enabled = false;
 				_view.recordListButton.enabled = false;
-				
-				// 録画データ上書きしたら前の録画データの再生中フレーム数は初期化
-				_playFrame = 0;
 			}
 			
+				
+			// 録画フレーム数初期化
+			_recordFrame = 0;
+			// 録画状態ON/OFFトグル
 			_isRecording = ! _isRecording;
 		}
 		
@@ -304,6 +341,10 @@ package controllers
 				// 再生停止したら他のボタンを復活
 				_view.recordButton.enabled = true;
 				_view.resetButton.enabled = true;
+				
+				// 再生中フレーム数は初期化 TODO:録画リストボタンと再生/再生中断ボタンを分けたらここで0にしちゃうと途中から再生ができない
+				_playFrame = 0;
+				
 				// 再生状態/非再生状態　のトグル
 				_isPlaying = ! _isPlaying;
 			}

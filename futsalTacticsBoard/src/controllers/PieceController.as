@@ -40,11 +40,20 @@ package controllers
 			_isDraging = true;
 		}
 		
-		private function imageMouseUpHandler(event:MouseEvent):void
+		private function imageMouseUpHandler(event:MouseEvent = null):void
 		{
 			// view全体を移動対象にする
 			_view.stopDrag();
 			_isDraging = false;
+		}
+		
+		/**
+		 * ドラッグ状態を終了させる 
+		 * 
+		 */		
+		public function stopDrag():void
+		{
+			imageMouseUpHandler();
 		}
 		
 		//

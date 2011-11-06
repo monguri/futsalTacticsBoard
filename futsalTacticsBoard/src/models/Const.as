@@ -30,7 +30,7 @@ package models
 		public static const RECORD_TITLE_MAX_CHARS:int = 16;
 		public static const RECORD_COMMENT_MAX_CHARS:int = 256;
 		
-		public static const RECORD_NUMBER_LIMIT:int = 2;
+		public static const RECORD_NUMBER_LIMIT:int = 1000;
 		public static const RECORD_FRAME_RATE_LIMIT:int = 3 * 60 * 24;
 		
 		public function Const()
