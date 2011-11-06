@@ -183,13 +183,8 @@ package models
 		private function getCurrentDateTimeString():String
 		{
 			var now:Date = new Date();
-			var year:Number = now.fullYear;
-			var month:Number = now.month + 1;
-			var date:Number = now.date;
-			var hours:Number = now.hours;
-			var minutes:Number = now.minutes;
-			var seconds:Number = now.seconds;
-			return (year.toString() + "-" + month.toString() + "-" + date.toString() + " " + hours.toString() + minutes.toString() + seconds.toString());
+			// 協定世界時の1970/1/1 0:00:00からのミリ秒数でファイル名が一意に定まる
+			return now.time.toString();
 		}
 		
 		CONFIG::SAVE_TO_SHARED_OBJECT
