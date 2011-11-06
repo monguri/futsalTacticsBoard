@@ -5,7 +5,7 @@
 		xmlns:components="components.*"
 		add="viewAddHandler(event)" destructionPolicy="never" title="AddRecord">
 	<fx:Declarations>
-		<components:Alert id="saveLimitAlert"/>
+		<components:Alert id="saveNumLimit"/>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	<fx:Script>
@@ -37,11 +37,11 @@
 			var curNumRecords:uint = MainModel.getInstance().getNumberRecords();
 			if (curNumRecords + 1 == Const.RECORD_NUMBER_LIMIT)
 			{
-				saveLimitAlert.show(this, "The number of records comes to limit. You can delete some records.", "Limit Alert");
+				saveNumLimit.show(this, "The number of records comes to limit. You can delete some records.", "Limit Alert");
 			}
 			else if (curNumRecords >= Const.RECORD_NUMBER_LIMIT)
 			{
-				saveLimitAlert.show(this, "The number of records is over limit. Please delete some records.", "Save Failed");
+				saveNumLimit.show(this, "The number of records is over limit. Please delete some records.", "Save Failed");
 				saveFlag = false;
 			}
 			

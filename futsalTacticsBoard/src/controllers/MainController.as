@@ -190,8 +190,8 @@ package controllers
 			
 			// 無償版の場合は、アプリ起動時に制限事項のポップアップを出す
 			CONFIG::FREE{
-				var freeVersionAlert:Alert = new Alert();
-				freeVersionAlert.show(_view, "At this free version, you can have just 1 record. 1000 records enable at \"futsal tactics board.\"", "Free Ver. Limitation");
+				var freeVerLimit:Alert = new Alert();
+				freeVerLimit.show(_view, "At this free version, you can have just 1 record. 1000 records enable at \"futsal tactics board.\"", "Free Ver. Limitation");
 			}
 		}
 		
@@ -244,8 +244,8 @@ package controllers
 		{
 			if (_recordFrame >= Const.RECORD_FRAME_RATE_LIMIT) // 録画可能な容量をオーバーした
 			{
-				var saveFrameAlert:Alert = new Alert();
-				saveFrameAlert.show(_view, "The size of record comes to limit.", "Size Limit");
+				var saveFrameLimit:Alert = new Alert();
+				saveFrameLimit.show(_view, "The size of record comes to limit.", "Size Limit");
 				stopRecording();
 				_recordFrame = 0;
 				return;
