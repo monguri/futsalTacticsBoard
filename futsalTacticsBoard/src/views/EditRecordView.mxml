@@ -50,8 +50,8 @@
 		
 		private function viewAddHandler(event:Event):void
 		{
-			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
-			{
+			if (data != null) //destrunctionPolicy=autoのときは、アプリ再開がこの画面のときはdataはnullになっている。
+			{ // TODO:destructionPolicy=neverのときはそもそもAddイベントが起きないようだが要調査。.
 				var file:File = data as File;
 				info.titleTextInput.text = MainModel.getInstance().getTitle(file);
 				info.commentTextArea.text = MainModel.getInstance().getComment(file);

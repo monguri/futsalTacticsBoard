@@ -46,8 +46,8 @@
 			{
 				file = data as File;
 			}
-			else
-			{ //アプリ再開がこの画面のときはpoppedViewReturnedObjectとdataはnullになっている。またpopであってもnullがかえってきたとき。
+			else //destrunctionPolicy=autoのときは、アプリ再開がこの画面のときはpoppedViewReturnedObjectとdataはnullになっている。またpopであってもnullがかえってきたとき。
+			{ // TODO:destructionPolicy=neverのときはそもそもAddイベントが起きないようだが要調査。.
 				// do nothing
 				return;
 			}
