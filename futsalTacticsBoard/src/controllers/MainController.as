@@ -65,32 +65,32 @@ package controllers
 		 */
 		private function resetData():void
 		{
-			_view.ball.x = 160 - _view.ball.width / 2;
-			_view.ball.y = 230 - _view.ball.height / 2;
+			_view.ball.x = Const.BALL_X - _view.ball.width / 2;
+			_view.ball.y = Const.BALL_Y - _view.ball.height / 2;
 		
-			_view.goalKeeperBlue.x = 160 - _view.goalKeeperBlue.width / 2;
-			_view.goalKeeperBlue.y = 50 - _view.goalKeeperRed.height / 2;
+			_view.goalKeeperBlue.x = Const.GOAL_KEEPER_BLUE_X - _view.goalKeeperBlue.width / 2;
+			_view.goalKeeperBlue.y = Const.GOAL_KEEPER_BLUE_Y - _view.goalKeeperRed.height / 2;
 		
-			_view.fieldPlayerBlue1.x = 160 - _view.fieldPlayerBlue1.width / 2;
-			_view.fieldPlayerBlue1.y = 180 - _view.fieldPlayerBlue1.height / 2;
-			_view.fieldPlayerBlue2.x = 80 - _view.fieldPlayerBlue2.width / 2;
-			_view.fieldPlayerBlue2.y = 140 - _view.fieldPlayerBlue2.height / 2;
-			_view.fieldPlayerBlue3.x = 240 - _view.fieldPlayerBlue3.width / 2;
-			_view.fieldPlayerBlue3.y = 140 - _view.fieldPlayerBlue3.height / 2;
-			_view.fieldPlayerBlue4.x = 160 - _view.fieldPlayerBlue4.width / 2;
-			_view.fieldPlayerBlue4.y = 100 - _view.fieldPlayerBlue4.height / 2;
+			_view.fieldPlayerBlue1.x = Const.FIELD_PLAYER_BLUE1_X - _view.fieldPlayerBlue1.width / 2;
+			_view.fieldPlayerBlue1.y = Const.FIELD_PLAYER_BLUE1_Y - _view.fieldPlayerBlue1.height / 2;
+			_view.fieldPlayerBlue2.x = Const.FIELD_PLAYER_BLUE2_X - _view.fieldPlayerBlue2.width / 2;
+			_view.fieldPlayerBlue2.y = Const.FIELD_PLAYER_BLUE2_Y - _view.fieldPlayerBlue2.height / 2;
+			_view.fieldPlayerBlue3.x = Const.FIELD_PLAYER_BLUE3_X - _view.fieldPlayerBlue3.width / 2;
+			_view.fieldPlayerBlue3.y = Const.FIELD_PLAYER_BLUE3_Y - _view.fieldPlayerBlue3.height / 2;
+			_view.fieldPlayerBlue4.x = Const.FIELD_PLAYER_BLUE4_X - _view.fieldPlayerBlue4.width / 2;
+			_view.fieldPlayerBlue4.y = Const.FIELD_PLAYER_BLUE4_Y - _view.fieldPlayerBlue4.height / 2;
 		
-			_view.goalKeeperRed.x = 160 - _view.goalKeeperBlue.width / 2;
-			_view.goalKeeperRed.y = 400 - _view.goalKeeperRed.height / 2;
+			_view.goalKeeperRed.x = Const.GOAL_KEEPER_RED_X - _view.goalKeeperBlue.width / 2;
+			_view.goalKeeperRed.y = Const.GOAL_KEEPER_RED_Y - _view.goalKeeperRed.height / 2;
 		
-			_view.fieldPlayerRed1.x = 160 - _view.fieldPlayerBlue1.width / 2;
-			_view.fieldPlayerRed1.y = 270 - _view.fieldPlayerBlue1.height / 2;
-			_view.fieldPlayerRed2.x = 80 - _view.fieldPlayerBlue2.width / 2;
-			_view.fieldPlayerRed2.y = 310 - _view.fieldPlayerBlue2.height / 2;
-			_view.fieldPlayerRed3.x = 240 - _view.fieldPlayerBlue3.width / 2;
-			_view.fieldPlayerRed3.y = 310 - _view.fieldPlayerBlue3.height / 2;
-			_view.fieldPlayerRed4.x = 160 - _view.fieldPlayerBlue4.width / 2;
-			_view.fieldPlayerRed4.y = 350 - _view.fieldPlayerBlue4.height / 2;
+			_view.fieldPlayerRed1.x = Const.FIELD_PLAYER_RED1_X - _view.fieldPlayerBlue1.width / 2;
+			_view.fieldPlayerRed1.y = Const.FIELD_PLAYER_RED1_Y - _view.fieldPlayerBlue1.height / 2;
+			_view.fieldPlayerRed2.x = Const.FIELD_PLAYER_RED2_X - _view.fieldPlayerBlue2.width / 2;
+			_view.fieldPlayerRed2.y = Const.FIELD_PLAYER_RED2_Y - _view.fieldPlayerBlue2.height / 2;
+			_view.fieldPlayerRed3.x = Const.FIELD_PLAYER_RED3_X - _view.fieldPlayerBlue3.width / 2;
+			_view.fieldPlayerRed3.y = Const.FIELD_PLAYER_RED3_Y - _view.fieldPlayerBlue3.height / 2;
+			_view.fieldPlayerRed4.x = Const.FIELD_PLAYER_RED4_X - _view.fieldPlayerBlue4.width / 2;
+			_view.fieldPlayerRed4.y = Const.FIELD_PLAYER_RED4_Y - _view.fieldPlayerBlue4.height / 2;
 		
 			_view.fieldPlayerBlue1.text = Const.FIELD_PLAYER_BLUE1_TEXT;
 			_view.fieldPlayerBlue2.text = Const.FIELD_PLAYER_BLUE2_TEXT;
