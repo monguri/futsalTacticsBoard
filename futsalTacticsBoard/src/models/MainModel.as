@@ -87,6 +87,8 @@ package models
 						file.deleteFile();
 					}
 				}
+				
+				_recordList.removeAll();
 			}
 			
 			CONFIG::SAVE_TO_SHARED_OBJECT{
@@ -182,8 +184,6 @@ package models
 					xml.pieces.piece[i].appendChild(text);
 				}
 			}
-			
-			trace(xml);
 			
 			// 保存時は、現在日時をファイル名とする
 			var file:File = new File(RECORD_SAVE_DIRECTORY + getCurrentDateTimeString() + ".xml");
@@ -324,7 +324,7 @@ package models
 				record.file.deleteFile();
 			}
 			
-			_recordList.deleteRecord(record);
+			_recordList.remove(record);
 		}
 		
 		// TODO:SO版はリストがとれない。それが欠点。今のところSO版は凍結

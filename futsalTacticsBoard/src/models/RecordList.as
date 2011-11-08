@@ -26,7 +26,7 @@ package models
 			return new ArrayCollection(_list);
 		}
 		
-		public function deleteRecord(record:Record):void
+		public function remove(record:Record):void
 		{
 			var len:uint = _list.length;
 			for (var i:uint = 0; i < len; i++)
@@ -38,6 +38,11 @@ package models
 			}
 			
 			_list.splice(i, 1);
+		}
+		
+		public function removeAll():void
+		{
+			_list.splice(0, _list.length);
 		}
 		
 		public function length():uint
