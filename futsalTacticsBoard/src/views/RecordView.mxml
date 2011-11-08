@@ -9,6 +9,7 @@
 	<fx:Script>
 	<![CDATA[
 		import models.MainModel;
+		import models.Record;
 		
 		import spark.components.supportClasses.ViewReturnObject;
 		import spark.transitions.SlideViewTransition;
@@ -34,17 +35,17 @@
 		
 		private function viewAddHandler(event:Event):void
 		{
-			var file:File;
+			var record:Record;
 			
 			// popで遷移してきたのかpushで遷移してきたのか判定
 			var o:ViewReturnObject = navigator.poppedViewReturnedObject;
-			if (o != null && o.object is File)
+			if (o != null && o.object is Record)
 			{ // popで遷移してきた
-				file = o.object as File;
+				record = o.object as Record;
 			}
 			else if (data != null) // popで遷移してきた
 			{
-				file = data as File;
+				record = data as Record;
 			}
 			else //destrunctionPolicy=autoのときは、アプリ再開がこの画面のときはpoppedViewReturnedObjectとdataはnullになっている。またpopであってもnullがかえってきたとき。
 			{ // TODO:destructionPolicy=neverのときはそもそもAddイベントが起きないようだが要調査。.
@@ -52,9 +53,9 @@
 				return;
 			}
 		
-			info.titleTextInput.text = MainModel.getInstance().getTitle(file);
-			info.commentTextArea.text = MainModel.getInstance().getComment(file);
-			info.creationDate = file.creationDate.toLocaleString();
+			info.titleTextInput.text = record.title;
+			info.commentTextArea.text = MainModel.getInstance().getComment(record);
+			info.creationDate = record.getCreationDate().toLocaleString();
 		}
 		
 		private function playButtonClickHandler(event:MouseEvent):void
@@ -67,8 +68,7 @@
 		{
 			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
 			{
-				var recordName:String = MainModel.getInstance().getRecordName(data as File);
-				MainModel.getInstance().deleteRecord(recordName);
+				MainModel.getInstance().deleteRecord(data as Record);
 			}
 			this.navigator.popView();
 		}

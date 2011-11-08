@@ -15,8 +15,11 @@ package models
 	// シングルトン
 	public class MainModel
 	{
-		private static var instance:MainModel;
-		private var _recordList:ArrayCollection;
+		private static var _instance:MainModel;
+		
+		/** 録画ファイル情報のリスト */		
+		// TODO:アプリケーション起動時にファイルリストと同期するが、アプリ起動中にどうやってファイルリストと同期確保するかが問題
+		private var _recordList:RecordList;
 
 		// 録画データバッファ。録画(書き込み)と再生(読み出し)の両方で記録領域とのI/Oをバッファする。
 		private var _piecesPoints:Vector.<Vector.<Point>>;
@@ -29,17 +32,24 @@ package models
 
 		public function MainModel(blocker:Blocker)
 		{
-			// do nothing
+			_recordList = new RecordList();
+			
+			var xmlFiles:Vector.<File> = getRecordFiles();
+			for each (var xmlFile:File in xmlFiles)
+			{
+				var title:String = getXmlFileTitle(xmlFile);
+				_recordList.pushRecord(xmlFile, title);
+			}
 		}
 		
 		public static function getInstance():MainModel
 		{
-			if (instance == null)
+			if (_instance == null)
 			{
-				instance = new MainModel(new Blocker());
+				_instance = new MainModel(new Blocker());
 			}
 			
-			return instance;
+			return _instance;
 		}
 		
 		//
@@ -91,18 +101,18 @@ package models
 			_piecesTexts = null;
 		}
 
-		public function loadSaveDataToBuffer(recordName:String):Boolean
+		public function loadSaveDataToBuffer(record:Record):Boolean
 		{
 			clearSaveDataBuffer();
 			
 			var success:Boolean;
-			success = loadPiecesPoints(recordName);
+			success = loadPiecesPoints(record);
 			if (!success)
 			{
 				return false;
 			}
 			
-			success = loadPiecesTexts(recordName);
+			success = loadPiecesTexts(record);
 			if (!success)
 			{
 				return false;
@@ -178,6 +188,7 @@ package models
 			// 保存時は、現在日時をファイル名とする
 			var file:File = new File(RECORD_SAVE_DIRECTORY + getCurrentDateTimeString() + ".xml");
 			writeXmlStringToFile(file, xml.toXMLString());
+			_recordList.pushRecord(file, _title);
 		}
 		
 		private function getCurrentDateTimeString():String
@@ -188,9 +199,10 @@ package models
 		}
 		
 		CONFIG::SAVE_TO_SHARED_OBJECT
-		public function loadPiecesPoints(recordName:String):Boolean
+		public function loadPiecesPoints(record:Record):Boolean
 		{
-			var so:SharedObject = SharedObject.getLocal(recordName);
+			var soName:String = getRecordName(record);
+			var so:SharedObject = SharedObject.getLocal(soName);
 			if (!so.data.hasOwnProperty("piecesPoints"))
 			{
 				return false;
@@ -216,9 +228,9 @@ package models
 		}
 		
 		CONFIG::SAVE_TO_XML_FILE
-		public function loadPiecesPoints(recordName:String):Boolean
+		public function loadPiecesPoints(record:Record):Boolean
 		{
-			var file:File = new File(RECORD_SAVE_DIRECTORY + recordName + ".xml");
+			var file:File = record.file;
 			if (!file.exists)
 			{
 				return false;
@@ -245,9 +257,10 @@ package models
 		}
 
 		CONFIG::SAVE_TO_SHARED_OBJECT
-		public function loadPiecesTexts(recordName:String):Boolean
+		public function loadPiecesTexts(record:Record):Boolean
 		{
-			var so:SharedObject = SharedObject.getLocal(recordName);
+			var soName:String = getRecordName(record);
+			var so:SharedObject = SharedObject.getLocal(soName);
 			if (!so.data.hasOwnProperty("piecesTexts"))
 			{
 				return false;
@@ -270,9 +283,9 @@ package models
 		}
 		
 		CONFIG::SAVE_TO_XML_FILE
-		public function loadPiecesTexts(recordName:String):Boolean
+		public function loadPiecesTexts(record:Record):Boolean
 		{
-			var file:File = new File(RECORD_SAVE_DIRECTORY + recordName + ".xml");
+			var file:File = record.file;
 			if (!file.exists)
 			{
 				return false;
@@ -297,20 +310,21 @@ package models
 		}
 
 		CONFIG::SAVE_TO_SHARED_OBJECT
-		public function deleteRecord(recordName:String):void
+		public function deleteRecord(record:Record):void
 		{
-			var so:SharedObject = SharedObject.getLocal(recordName);
+			var so:SharedObject = SharedObject.getLocal(record.title);
 			so.clear();
 		}
 		
 		CONFIG::SAVE_TO_XML_FILE
-		public function deleteRecord(recordName:String):void
+		public function deleteRecord(record:Record):void
 		{
-			var file:File = new File(RECORD_SAVE_DIRECTORY + recordName + ".xml");
-			if (file.exists)
+			if (record.file.exists)
 			{
-				file.deleteFile();
+				record.file.deleteFile();
 			}
+			
+			_recordList.deleteRecord(record);
 		}
 		
 		// TODO:SO版はリストがとれない。それが欠点。今のところSO版は凍結
@@ -318,10 +332,16 @@ package models
 		CONFIG::SAVE_TO_XML_FILE
 		public function getRecordList():IList
 		{
+			return _recordList.dataProviderList();
+		}
+		
+		CONFIG::SAVE_TO_XML_FILE
+		private function getRecordFiles():Vector.<File>
+		{
 			// レコードが増えているかもしれないので画面表示のたびにリストを初期化する
 			var dir:File = new File(RECORD_SAVE_DIRECTORY);
 			var allFiles:Array = dir.getDirectoryListing();
-			var xmlFiles:Array = new Array();
+			var xmlFiles:Vector.<File> = new Vector.<File>();
 			for each (var file:File in allFiles)
 			{
 				if (file.extension == "xml")
@@ -330,14 +350,13 @@ package models
 				}
 			}
 			
-			_recordList = new ArrayCollection(xmlFiles);
-			return _recordList;
+			return xmlFiles;
 		}
 		
-		// TODO:SO版を用意していない
-		CONFIG::SAVE_TO_XML_FILE
-		public function getRecordName(file:File):String
+		CONFIG::SAVE_TO_SHARED_OBJECT
+		private function getRecordName(record:Record):String
 		{
+			var file:File = record.file;
 			// -1 は"."の分
 			var endIndex:int = file.name.lastIndexOf(file.extension) - 1;
 			return file.name.slice(0, endIndex);
@@ -364,41 +383,47 @@ package models
 		CONFIG::SAVE_TO_XML_FILE
 		public function getNumberRecords():uint
 		{
-			// TODO:Recordクラスを作ったら、これもRecordクラスの数を数えるようにする
-			var dir:File = new File(RECORD_SAVE_DIRECTORY);
-			var allFiles:Array = dir.getDirectoryListing();
-			return allFiles.length;
+//			// TODO:Recordクラスを作ったら、これもRecordクラスの数を数えるようにする
+//			var dir:File = new File(RECORD_SAVE_DIRECTORY);
+//			var allFiles:Array = dir.getDirectoryListing();
+//			return allFiles.length;
+			return _recordList.length();
 		}
 		
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
-		public function getTitle(file:File):String
+		public function getXmlFileTitle(xmlFile:File):String
 		{
-			var xml:XML = new XML(readXmlStringFromFile(file));
+			var xml:XML = new XML(readXmlStringFromFile(xmlFile));
 			return xml.title;
 		}
 		
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
-		public function getComment(file:File):String
+		public function getComment(record:Record):String
 		{
-			var xml:XML = new XML(readXmlStringFromFile(file));
+			var xmlStr:String = readXmlStringFromFile(record.file);
+			var xml:XML = new XML(xmlStr);
 			return xml.comment;
 		}
 		
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
-		public function setTitle(file:File, title:String):void
+		public function setTitle(record:Record, title:String):void
 		{
+			var file:File = record.file;
 			var xml:XML = new XML(readXmlStringFromFile(file));
 			xml.title = title;
 			writeXmlStringToFile(file, xml.toXMLString());
+			
+			record.title = title;
 		}
 		
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
-		public function setComment(file:File, comment:String):void
+		public function setComment(record:Record, comment:String):void
 		{
+			var file:File = record.file;
 			var xml:XML = new XML(readXmlStringFromFile(file));
 			xml.comment = comment;
 			writeXmlStringToFile(file, xml.toXMLString());

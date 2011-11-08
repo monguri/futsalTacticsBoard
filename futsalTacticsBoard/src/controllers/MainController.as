@@ -12,6 +12,7 @@ package controllers
 	
 	import models.Const;
 	import models.MainModel;
+	import models.Record;
 	
 	import mx.core.IMXMLObject;
 	import mx.events.FlexEvent;
@@ -117,13 +118,9 @@ package controllers
 				return;
 			}
 			
-			if (o.object is File) // RecordViewのPlayボタンからのpop
+			if (o.object is Record) // RecordViewのPlayボタンからのpop
 			{
-				// 拡張子をのぞいたファイル名を取得する。1+ は"."を取り除くため
-				var file:File = (o.object as File);
-				var recordName:String = MainModel.getInstance().getRecordName(file);
-			
-				var success:Boolean = MainModel.getInstance().loadSaveDataToBuffer(recordName);
+				var success:Boolean = MainModel.getInstance().loadSaveDataToBuffer(o.object as Record);
 				// ロード失敗なら再生状態に遷移しない
 				if (!success) {
 					return;

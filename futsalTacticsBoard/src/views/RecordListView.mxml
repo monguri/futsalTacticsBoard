@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:s="library://ns.adobe.com/flex/spark"
-		add="viewAddHandler(event)"
-		title="RecordList"
-		destructionPolicy="never">
+		add="viewAddHandler(event)" destructionPolicy="never" title="RecordList">
 	<fx:Declarations>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	<fx:Script>
 	<![CDATA[
 		import models.MainModel;
+		import models.Record;
 		
 		import mx.events.FlexEvent;
 		
@@ -31,9 +30,9 @@
 			}
 		}
 		
-		private function getRecordName(file:File):String
+		private function getRecordTitle(record:Record):String
 		{
-			return MainModel.getInstance().getRecordName(file);
+			return record.title;
 		}
 	]]>
 	</fx:Script>
@@ -43,5 +42,6 @@
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="justify"/>
 	</s:layout>
-	<s:List id="list" width="100%" height="100%" click="listClickHandler(event)" labelFunction="getRecordName"/>
+	<s:List id="list" width="100%" height="100%" click="listClickHandler(event)"
+			labelFunction="getRecordTitle"/>
 </s:View>
