@@ -18,7 +18,6 @@ package models
 		private static var _instance:MainModel;
 		
 		/** 録画ファイル情報のリスト */		
-		// TODO:アプリケーション起動時にファイルリストと同期するが、アプリ起動中にどうやってファイルリストと同期確保するかが問題
 		private var _recordList:RecordList;
 
 		// 録画データバッファ。録画(書き込み)と再生(読み出し)の両方で記録領域とのI/Oをバッファする。
@@ -38,7 +37,8 @@ package models
 			for each (var xmlFile:File in xmlFiles)
 			{
 				var title:String = getXmlFileTitle(xmlFile);
-				_recordList.pushRecord(xmlFile, title);
+				var comment:String = getXmlFileComment(xmlFile);
+				_recordList.pushRecord(xmlFile, title, comment);
 			}
 		}
 		
@@ -188,7 +188,7 @@ package models
 			// 保存時は、現在日時をファイル名とする
 			var file:File = new File(RECORD_SAVE_DIRECTORY + getCurrentDateTimeString() + ".xml");
 			writeXmlStringToFile(file, xml.toXMLString());
-			_recordList.pushRecord(file, _title);
+			_recordList.pushRecord(file, _title, _comment);
 		}
 		
 		private function getCurrentDateTimeString():String
@@ -327,7 +327,7 @@ package models
 			_recordList.remove(record);
 		}
 		
-		// TODO:SO版はリストがとれない。それが欠点。今のところSO版は凍結
+		// TODO:SO版はリストが取得できない。何を保存しているかは別に保存が必要。それ自身をsoにする必要がある。それが欠点。今のところSO版は凍結
 		// 保存方法として、so.data下にArray持たせて、各要素にレコード名にあたるものを持たせるしかない
 		CONFIG::SAVE_TO_XML_FILE
 		public function getRecordList():IList
@@ -362,31 +362,10 @@ package models
 			return file.name.slice(0, endIndex);
 		}
 		
-//		// TODO:SO版を用意していない
-//		CONFIG::SAVE_TO_XML_FILE
-//		public function setRecordName(file:File, newName:String):void
-//		{
-//			var oldName:String = getRecordName(file);
-//			if (oldName != newName) // ファイル名を変えずにmoveTo(dest, true)すると例外が発生する
-//			{
-//				var dest:File = new File(RECORD_SAVE_DIRECTORY + newName + ".xml");
-//				// TODO:第２引数を上書きモードにしているので、既存のファイルがあると上書きになってしまう。例外を考慮してない。
-//				try {
-//					file.moveTo(dest, true);
-//				} catch(e:Error) {
-//					// do nothing
-//				}
-//			}
-//		}
-
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
 		public function getNumberRecords():uint
 		{
-//			// TODO:Recordクラスを作ったら、これもRecordクラスの数を数えるようにする
-//			var dir:File = new File(RECORD_SAVE_DIRECTORY);
-//			var allFiles:Array = dir.getDirectoryListing();
-//			return allFiles.length;
 			return _recordList.length();
 		}
 		
@@ -400,10 +379,9 @@ package models
 		
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
-		public function getComment(record:Record):String
+		public function getXmlFileComment(xmlFile:File):String
 		{
-			var xmlStr:String = readXmlStringFromFile(record.file);
-			var xml:XML = new XML(xmlStr);
+			var xml:XML = new XML(readXmlStringFromFile(xmlFile));
 			return xml.comment;
 		}
 		
@@ -427,6 +405,8 @@ package models
 			var xml:XML = new XML(readXmlStringFromFile(file));
 			xml.comment = comment;
 			writeXmlStringToFile(file, xml.toXMLString());
+			
+			record.comment = comment;
 		}
 		
 		CONFIG::SAVE_TO_XML_FILE

@@ -14,9 +14,9 @@ package models
 			_list = new Array();
 		}
 		
-		public function pushRecord(file:File, title:String):void
+		public function pushRecord(file:File, title:String, comment:String):void
 		{
-			var record:Record = new Record(file, title);
+			var record:Record = new Record(file, title, comment);
 			_list.push(record);
 		}
 		

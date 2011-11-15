@@ -7,11 +7,13 @@ package models
 	{
 		private var _file:File;
 		private var _title:String;
+		private var _comment:String;
 		
-		public function Record(file:File, title:String)
+		public function Record(file:File, title:String, comment:String)
 		{
 			_file = file;
 			_title = title;
+			_comment = comment;
 		}
 
 		public function getCreationDate():Date
@@ -32,6 +34,16 @@ package models
 		public function set title(value:String):void
 		{
 			_title = value;
+		}
+
+		public function get comment():String
+		{
+			return _comment;
+		}
+
+		public function set comment(value:String):void
+		{
+			_comment = value;
 		}
 	}
 }

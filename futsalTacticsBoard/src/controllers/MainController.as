@@ -302,7 +302,6 @@ package controllers
 				v.mode = SlideViewTransitionMode.COVER;
 				v.direction = ViewTransitionDirection.UP;
 				_view.navigator.pushView(AddRecordView, null, null, v);
-				// TODO:Cancelボタンを押したときは保存しない。それと、こちらから遷移したときはタイトルはAddRecord。.
 				
 				_view.recordButton.label = Const.RECORD_BUTTON_LABEL_START;
 		

@@ -54,7 +54,7 @@
 			}
 		
 			info.titleTextInput.text = record.title;
-			info.commentTextArea.text = MainModel.getInstance().getComment(record);
+			info.commentTextArea.text = record.comment;
 			info.creationDate = record.getCreationDate().toLocaleString();
 		}
 		
