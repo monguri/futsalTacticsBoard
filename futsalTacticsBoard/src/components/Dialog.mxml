@@ -8,10 +8,26 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.managers.PopUpManager;
+			
+			public static const BUTTON_OK:uint = 0;
+			public static const BUTTON_OK_CANCEL:uint = 1;
+			
 			public function show(owner:DisplayObjectContainer, 
-										message:String, title:String):void {
-				var a:Alert = new Alert();
+										message:String, title:String, buttonMode:uint):void {
+				var a:Dialog = new Dialog();
 				a.open(owner, true);
+				switch (buttonMode)
+				{
+					case BUTTON_OK:
+						a.buttonGroup.removeElement(a.cancelButton);
+						break;
+					case BUTTON_OK_CANCEL:
+						// fall through
+					default:
+						// do nothing
+						break;
+				}
+				
 				a.titleWindow.title = title;
 				a.label.text = message;
 				PopUpManager.centerPopUp(a);
@@ -22,7 +38,10 @@
 		<s:VGroup gap="20" horizontalAlign="center" paddingBottom="8" paddingLeft="8"
 				  paddingRight="8" paddingTop="8">
 			<s:Label id="label" width="180"/>
-			<s:Button height="30" label="OK" click="close()"/>
+			<s:HGroup id="buttonGroup" gap="15">
+				<s:Button id="OKButton" width="80" height="30" label="OK" click="close()"/>
+				<s:Button id="cancelButton" width="80" height="30" label="Cancel" click="close()"/>
+			</s:HGroup>
 		</s:VGroup>
 	</s:TitleWindow>
 </s:SkinnablePopUpContainer>

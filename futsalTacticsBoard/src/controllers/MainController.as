@@ -1,6 +1,6 @@
 package controllers
 {
-	import components.Alert;
+	import components.Dialog;
 	import components.Piece;
 	
 	import flash.display.StageQuality;
@@ -187,7 +187,7 @@ package controllers
 			
 			// 無償版の場合は、アプリ起動時に制限事項のポップアップを出す
 			CONFIG::FREE{
-				var freeVerLimit:Alert = new Alert();
+				var freeVerLimit:Dialog = new Dialog();
 				freeVerLimit.show(_view, "At this free version, you can have just 1 record.\n 1000 records enable at \"futsal tactics board\".\n Check it!", "Free Ver. Limitation");
 			}
 		}
@@ -241,8 +241,8 @@ package controllers
 		{
 			if (_recordFrame >= Const.RECORD_FRAME_RATE_LIMIT) // 録画可能な容量をオーバーした
 			{
-				var saveFrameLimit:Alert = new Alert();
-				saveFrameLimit.show(_view, "The size of record comes to limit.", "Size Limit");
+				var saveFrameLimit:Dialog = new Dialog();
+				saveFrameLimit.show(_view, "The size of record comes to limit.", "Size Limit", Dialog.BUTTON_OK);
 				stopRecording();
 				_recordFrame = 0;
 				return;
