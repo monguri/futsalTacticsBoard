@@ -36,5 +36,5 @@
 	
 	<s:Image id="image"/>
 	<s:TextInput id="textInput" width="120" height="20" borderVisible="false" fontSize="14"
-				 textAlign="center"/>
+				 textAlign="center" contentBackgroundAlpha="0"/>
 </s:VGroup>
