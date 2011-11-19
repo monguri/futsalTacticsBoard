@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  add="groupAddHandler(event)">
+		  add="groupAddHandler(event)" xmlns:components="components.*">
 	<fx:Declarations>
+		<components:Dialog id="invalidCharAlert" />
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
 			import models.Const;
+			import models.MainModel;
 			
 			import mx.events.FlexEvent;
 			
 			import spark.events.TextOperationEvent;
 			
-			private var _recordTextChangeCallback:Function;
+			private var _recordTitleChangeCallback:Function;
+			private var _recordCommentChangeCallback:Function;
 			private var _commentTextAreaChangeCallback:Function;
 			private var _creationDate:String;
 			
@@ -26,9 +29,24 @@
 				titleTextInput.requestSoftKeyboard();
 			}
 			
-			private function recordTextChangeHandler(event:TextOperationEvent):void
+			private function recordTitleChangeHandler(event:TextOperationEvent):void
 			{
-				_recordTextChangeCallback();
+				var valid:Boolean = MainModel.getInstance().isValidText(titleTextInput.text);
+				if (!valid)
+				{
+					invalidCharAlert.show(this, "Title includes invalid character: >, <, &, \' or \".", "Invalid Char Alert", Dialog.BUTTON_OK);
+				}
+				_recordTitleChangeCallback(valid);
+			}
+			
+			private function recordCommentChangeHandler(event:TextOperationEvent):void
+			{
+				var valid:Boolean = MainModel.getInstance().isValidText(commentTextArea.text);
+				if (!valid)
+				{
+					invalidCharAlert.show(this, "Comment includes invalid character: >, <, &, \' or \".", "Invalid Char Alert", Dialog.BUTTON_OK);
+				}
+				_recordCommentChangeCallback(valid);
 			}
 			
 			// includeInしていると、ViewのaddのタイミングではViewにaddされてないようなのでaddされたら設定する。
@@ -40,9 +58,14 @@
 			//
 			// ゲッター/セッター
 			//
-			public function set recordTextChangeCallback(callback:Function):void
+			public function set recordTitleChangeCallback(callback:Function):void
 			{
-				_recordTextChangeCallback = callback;
+				_recordTitleChangeCallback = callback;
+			}
+			
+			public function set recordCommentChangeCallback(callback:Function):void
+			{
+				_recordCommentChangeCallback = callback;
 			}
 			
 			public function set creationDate(value:String):void
@@ -58,7 +81,7 @@
 	
 	<s:Label text="Title :" textAlign="left"/>
 	<s:TextInput id="titleTextInput" width="300"
-				 change="recordTextChangeHandler(event)"
+				 change="recordTitleChangeHandler(event)"
 				 maxChars="{Const.RECORD_TITLE_MAX_CHARS}"
 				 prompt.edit="Record Name"
 				 borderVisible.show="false" editable.show="false"/>
@@ -72,7 +95,7 @@
 	<s:VGroup> <!-- VerticalLayoutのgapをそのまま適用するとすきまが空きすぎるのでVGroupでまとめた -->
 		<s:TextArea id="commentTextArea" width="300" height="120"
 					maxChars="{Const.RECORD_COMMENT_MAX_CHARS}"
-					prompt.edit="Comment" change="recordTextChangeHandler(event)"
+					prompt.edit="Comment" change="recordCommentChangeHandler(event)"
 					borderVisible.show="false" editable.show="false"/>
 		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
 		<s:Button id="editEndButton" includeIn="edit" width="300" height="25" label="END EDIT"

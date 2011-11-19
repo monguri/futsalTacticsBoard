@@ -429,9 +429,17 @@ package models
 		}
 		
 		CONFIG::SAVE_TO_XML_FILE
-		public function isValidText(recordName:String):Boolean
+		public function isValidText(text:String):Boolean
 		{
-			// TODO:validationの実装。xmlに入る文字列かどうかのチェック
+			if (text.indexOf('>') >= 0
+				|| text.indexOf('<') >= 0
+				|| text.indexOf('&') >= 0
+				|| text.indexOf('\'') >= 0
+				|| text.indexOf('\"') >= 0) // XMLの要素の内容の文字列が定義済み実体参照の文字を含むとき
+			{
+				return false;
+			}
+			
 			return true;
 		}
 		

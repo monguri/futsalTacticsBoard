@@ -5,7 +5,7 @@
 		xmlns:components="components.*"
 		add="viewAddHandler(event)" destructionPolicy="never" title="AddRecord">
 	<fx:Declarations>
-		<components:Dialog id="saveNumLimit"/>
+		<components:Dialog id="saveNumLimitAlert"/>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	<fx:Script>
@@ -37,11 +37,11 @@
 			var curNumRecords:uint = MainModel.getInstance().getNumberRecords();
 			if (curNumRecords + 1 == Const.RECORD_NUMBER_LIMIT)
 			{
-				saveNumLimit.show(this, "The number of records comes to limit. You can delete some records.", "Limit Alert", Dialog.BUTTON_OK);
+				saveNumLimitAlert.show(this, "The number of records comes to limit. You can delete some records.", "Limit Alert", Dialog.BUTTON_OK);
 			}
 			else if (curNumRecords >= Const.RECORD_NUMBER_LIMIT)
 			{
-				saveNumLimit.show(this, "The number of records is over limit. Please delete some records.", "Save Failed", Dialog.BUTTON_OK);
+				saveNumLimitAlert.show(this, "The number of records is over limit. Please delete some records.", "Save Failed", Dialog.BUTTON_OK);
 				saveFlag = false;
 			}
 			
@@ -62,15 +62,20 @@
 		
 		private function viewAddHandler(event:Event):void
 		{
-			info.recordTextChangeCallback = recordTextChangeHandler;
+			info.recordTitleChangeCallback = recordTitleChangeHandler;
+			info.recordCommentChangeCallback = recordCommentChangeHandler;
 			doneButton.enabled = MainModel.getInstance().isValidText(info.titleTextInput.text)
 									&& MainModel.getInstance().isValidText(info.commentTextArea.text);
 		}
 		
-		private function recordTextChangeHandler():void
+		private function recordTitleChangeHandler(validString:Boolean):void
 		{
-			doneButton.enabled = MainModel.getInstance().isValidText(info.titleTextInput.text)
-									&& MainModel.getInstance().isValidText(info.commentTextArea.text);
+			doneButton.enabled = validString;
+		}
+		
+		private function recordCommentChangeHandler(validString:Boolean):void
+		{
+			doneButton.enabled = validString;
 		}
 	]]>
 	</fx:Script>

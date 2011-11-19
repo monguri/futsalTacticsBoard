@@ -55,16 +55,21 @@
 				var record:Record = data as Record;
 				info.titleTextInput.text = record.title;
 				info.commentTextArea.text = record.comment;
-				info.recordTextChangeCallback = recordTextChangeHandler;
+				info.recordTitleChangeCallback = recordTitleChangeHandler;
+				info.recordCommentChangeCallback = recordCommentChangeHandler;
 				doneButton.enabled = MainModel.getInstance().isValidText(info.titleTextInput.text)
 									&& MainModel.getInstance().isValidText(info.commentTextArea.text);
 			}
 		}
 		
-		private function recordTextChangeHandler():void
+		private function recordTitleChangeHandler(validString:Boolean):void
 		{
-			doneButton.enabled = MainModel.getInstance().isValidText(info.titleTextInput.text)
-									&& MainModel.getInstance().isValidText(info.commentTextArea.text);
+			doneButton.enabled = validString;
+		}
+		
+		private function recordCommentChangeHandler(validString:Boolean):void
+		{
+			doneButton.enabled = validString;
 		}
 	]]>
 	</fx:Script>
