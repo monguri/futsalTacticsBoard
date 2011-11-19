@@ -21,6 +21,20 @@ package models
 			return _file.creationDate;
 		}
 		
+		public function containWord(word:String):Boolean
+		{
+			if (_title.indexOf(word) >= 0) // タイトルがwordを含んでいる
+			{
+				return true;
+			}
+			else if (_comment.indexOf(word) >= 0) // コメントがwordを含んでいる
+			{
+				return true;
+			}
+			
+			return false;
+		}
+		
 		public function get file():File
 		{
 			return _file;

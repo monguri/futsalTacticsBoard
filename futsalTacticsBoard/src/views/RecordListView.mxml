@@ -34,11 +34,19 @@
 		{
 			return record.title;
 		}
+		
+		private function textinputSoftKeyboardDeactivateHandler(event:SoftKeyboardEvent):void
+		{
+			list.dataProvider = MainModel.getInstance().getRecordList(searchTextInput.text);
+		}
 	]]>
 	</fx:Script>
 	<s:navigationContent>
 		<s:Button label="Back" click="backButtonClickHandler(event)"/>
 	</s:navigationContent>
+	<s:titleContent>
+		<s:TextInput id="searchTextInput" prompt="Search" width="100%" softKeyboardDeactivate="textinputSoftKeyboardDeactivateHandler(event)"/>
+	</s:titleContent>
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="justify"/>
 	</s:layout>

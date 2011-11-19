@@ -20,10 +20,25 @@ package models
 			_list.push(record);
 		}
 		
-		public function dataProviderList():ArrayCollection
+		public function dataProviderList(searchKeyword:String = null):ArrayCollection
 		{
-			// TODO:Arrayを継承でなくクラス内で保持するようにしてもやはり失敗する。原因不明。
-			return new ArrayCollection(_list);
+			if (searchKeyword == null || searchKeyword == '')
+			{
+				return new ArrayCollection(_list);
+			}
+			else
+			{
+				var searchedRecords:Array = new Array();
+				for each (var record:Record in _list)
+				{
+					if (record.containWord(searchKeyword))
+					{
+						searchedRecords.push(record);
+					}
+				}
+				
+				return new ArrayCollection(searchedRecords);
+			}
 		}
 		
 		public function remove(record:Record):void

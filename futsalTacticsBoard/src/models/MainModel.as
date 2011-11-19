@@ -330,9 +330,9 @@ package models
 		// TODO:SO版はリストが取得できない。何を保存しているかは別に保存が必要。それ自身をsoにする必要がある。それが欠点。今のところSO版は凍結
 		// 保存方法として、so.data下にArray持たせて、各要素にレコード名にあたるものを持たせるしかない
 		CONFIG::SAVE_TO_XML_FILE
-		public function getRecordList():IList
+		public function getRecordList(searchKeyword:String = null):IList
 		{
-			return _recordList.dataProviderList();
+			return _recordList.dataProviderList(searchKeyword);
 		}
 		
 		CONFIG::SAVE_TO_XML_FILE
