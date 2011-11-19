@@ -3,7 +3,6 @@
 							xmlns:s="library://ns.adobe.com/flex/spark"
 							applicationDPI="160" firstView="views.MainView"
 							splashScreenImage="@Embed('assets/screen_shot.png')">
-	<fx:Style source="futsalTacticsBoard.css"/>
 	<fx:Declarations>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
