@@ -4,6 +4,7 @@
 		xmlns:components="components.*"
 		add="viewAddHandler(event)" destructionPolicy="never" title="EditRecord">
 	<fx:Declarations>
+		<components:Dialog id="invalidCharAlert" />
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	<fx:Script>
@@ -61,9 +62,14 @@
 			}
 		}
 		
-		private function recordTextsChangeHandler(validString:Boolean):void
+		private function recordTextsChangeHandler():void
 		{
-			doneButton.enabled = validString;
+			var valid:Boolean = MainModel.getInstance().isValidText(info.titleTextInput.text) && MainModel.getInstance().isValidText(info.commentTextArea.text);
+			doneButton.enabled = valid;
+			if (!valid)
+			{
+				invalidCharAlert.show(this, "Title or Comment includes invalid character: >, <, &, \' or \".", "Invalid Char Alert", Dialog.BUTTON_OK);
+			}
 		}
 	]]>
 	</fx:Script>

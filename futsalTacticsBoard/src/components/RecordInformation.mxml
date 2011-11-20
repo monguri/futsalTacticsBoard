@@ -3,7 +3,6 @@
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  add="groupAddHandler(event)" xmlns:components="components.*">
 	<fx:Declarations>
-		<components:Dialog id="invalidCharAlert" />
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	<fx:Script>
@@ -30,12 +29,7 @@
 			
 			private function recordTextsChangeHandler(event:TextOperationEvent):void
 			{
-				var valid:Boolean = MainModel.getInstance().isValidText(titleTextInput.text) && MainModel.getInstance().isValidText(commentTextArea.text);
-				if (!valid)
-				{
-					invalidCharAlert.show(this, "Title or Comment includes invalid character: >, <, &, \' or \".", "Invalid Char Alert", Dialog.BUTTON_OK);
-				}
-				_recordTextsChangeCallback(valid);
+				_recordTextsChangeCallback();
 			}
 			
 			// includeInしていると、ViewのaddのタイミングではViewにaddされてないようなのでaddされたら設定する。
