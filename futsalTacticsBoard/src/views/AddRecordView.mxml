@@ -62,18 +62,12 @@
 		
 		private function viewAddHandler(event:Event):void
 		{
-			info.recordTitleChangeCallback = recordTitleChangeHandler;
-			info.recordCommentChangeCallback = recordCommentChangeHandler;
+			info.recordTextsChangeCallback = recordTextsChangeHandler;
 			doneButton.enabled = MainModel.getInstance().isValidText(info.titleTextInput.text)
 									&& MainModel.getInstance().isValidText(info.commentTextArea.text);
 		}
 		
-		private function recordTitleChangeHandler(validString:Boolean):void
-		{
-			doneButton.enabled = validString;
-		}
-		
-		private function recordCommentChangeHandler(validString:Boolean):void
+		private function recordTextsChangeHandler(validString:Boolean):void
 		{
 			doneButton.enabled = validString;
 		}

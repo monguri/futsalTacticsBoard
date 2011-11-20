@@ -431,11 +431,12 @@ package models
 		CONFIG::SAVE_TO_XML_FILE
 		public function isValidText(text:String):Boolean
 		{
-			if (text.indexOf('>') >= 0
-				|| text.indexOf('<') >= 0
-				|| text.indexOf('&') >= 0
-				|| text.indexOf('\'') >= 0
-				|| text.indexOf('\"') >= 0) // XMLの要素の内容の文字列が定義済み実体参照の文字を含むとき
+			// 入力するたびの判定に使うので、文字列の最後尾から調べた方が速度が速い
+			if (text.lastIndexOf('>') >= 0
+				|| text.lastIndexOf('<') >= 0
+				|| text.lastIndexOf('&') >= 0
+				|| text.lastIndexOf('\'') >= 0
+				|| text.lastIndexOf('\"') >= 0) // XMLの要素の内容の文字列が定義済み実体参照の文字を含むとき
 			{
 				return false;
 			}

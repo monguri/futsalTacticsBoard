@@ -15,8 +15,7 @@
 			
 			import spark.events.TextOperationEvent;
 			
-			private var _recordTitleChangeCallback:Function;
-			private var _recordCommentChangeCallback:Function;
+			private var _recordTextsChangeCallback:Function;
 			private var _commentTextAreaChangeCallback:Function;
 			private var _creationDate:String;
 			
@@ -29,24 +28,14 @@
 				titleTextInput.requestSoftKeyboard();
 			}
 			
-			private function recordTitleChangeHandler(event:TextOperationEvent):void
+			private function recordTextsChangeHandler(event:TextOperationEvent):void
 			{
-				var valid:Boolean = MainModel.getInstance().isValidText(titleTextInput.text);
+				var valid:Boolean = MainModel.getInstance().isValidText(titleTextInput.text) && MainModel.getInstance().isValidText(commentTextArea.text);
 				if (!valid)
 				{
-					invalidCharAlert.show(this, "Title includes invalid character: >, <, &, \' or \".", "Invalid Char Alert", Dialog.BUTTON_OK);
+					invalidCharAlert.show(this, "Title or Comment includes invalid character: >, <, &, \' or \".", "Invalid Char Alert", Dialog.BUTTON_OK);
 				}
-				_recordTitleChangeCallback(valid);
-			}
-			
-			private function recordCommentChangeHandler(event:TextOperationEvent):void
-			{
-				var valid:Boolean = MainModel.getInstance().isValidText(commentTextArea.text);
-				if (!valid)
-				{
-					invalidCharAlert.show(this, "Comment includes invalid character: >, <, &, \' or \".", "Invalid Char Alert", Dialog.BUTTON_OK);
-				}
-				_recordCommentChangeCallback(valid);
+				_recordTextsChangeCallback(valid);
 			}
 			
 			// includeInしていると、ViewのaddのタイミングではViewにaddされてないようなのでaddされたら設定する。
@@ -58,14 +47,9 @@
 			//
 			// ゲッター/セッター
 			//
-			public function set recordTitleChangeCallback(callback:Function):void
+			public function set recordTextsChangeCallback(callback:Function):void
 			{
-				_recordTitleChangeCallback = callback;
-			}
-			
-			public function set recordCommentChangeCallback(callback:Function):void
-			{
-				_recordCommentChangeCallback = callback;
+				_recordTextsChangeCallback = callback;
 			}
 			
 			public function set creationDate(value:String):void
@@ -81,7 +65,7 @@
 	
 	<s:Label text="Title :" textAlign="left"/>
 	<s:TextInput id="titleTextInput" width="300"
-				 change="recordTitleChangeHandler(event)"
+				 change="recordTextsChangeHandler(event)"
 				 maxChars="{Const.RECORD_TITLE_MAX_CHARS}"
 				 prompt.edit="Record Name"
 				 borderVisible.show="false" editable.show="false"/>
@@ -95,7 +79,7 @@
 	<s:VGroup> <!-- VerticalLayoutのgapをそのまま適用するとすきまが空きすぎるのでVGroupでまとめた -->
 		<s:TextArea id="commentTextArea" width="300" height="120"
 					maxChars="{Const.RECORD_COMMENT_MAX_CHARS}"
-					prompt.edit="Comment" change="recordCommentChangeHandler(event)"
+					prompt.edit="Comment" change="recordTextsChangeHandler(event)"
 					borderVisible.show="false" editable.show="false"/>
 		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
 		<s:Button id="editEndButton" includeIn="edit" width="300" height="25" label="END EDIT"

@@ -55,19 +55,13 @@
 				var record:Record = data as Record;
 				info.titleTextInput.text = record.title;
 				info.commentTextArea.text = record.comment;
-				info.recordTitleChangeCallback = recordTitleChangeHandler;
-				info.recordCommentChangeCallback = recordCommentChangeHandler;
+				info.recordTextsChangeCallback = recordTextsChangeHandler;
 				doneButton.enabled = MainModel.getInstance().isValidText(info.titleTextInput.text)
 									&& MainModel.getInstance().isValidText(info.commentTextArea.text);
 			}
 		}
 		
-		private function recordTitleChangeHandler(validString:Boolean):void
-		{
-			doneButton.enabled = validString;
-		}
-		
-		private function recordCommentChangeHandler(validString:Boolean):void
+		private function recordTextsChangeHandler(validString:Boolean):void
 		{
 			doneButton.enabled = validString;
 		}
