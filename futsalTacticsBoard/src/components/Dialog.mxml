@@ -22,6 +22,7 @@
 						a.buttonGroup.removeElement(a.cancelButton);
 						break;
 					case BUTTON_OK_CANCEL:
+						// TODO:OKボタンとCancleボタンにカスタムイベントを設定し、ownerに飛ばす。OKならdeleteを実行する。.
 						// fall through
 					default:
 						// do nothing
