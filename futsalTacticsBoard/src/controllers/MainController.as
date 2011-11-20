@@ -69,40 +69,38 @@ package controllers
 			_view.ball.x = Const.BALL_X - _view.ball.width / 2;
 			_view.ball.y = Const.BALL_Y - _view.ball.height / 2;
 		
-			_view.goalKeeperBlue.x = Const.GOAL_KEEPER_BLUE_X - _view.goalKeeperBlue.width / 2;
-			_view.goalKeeperBlue.y = Const.GOAL_KEEPER_BLUE_Y - _view.goalKeeperRed.height / 2;
+			_view.playerBlue1.x = Const.PLAYER_BLUE1_X - _view.playerBlue1.width / 2;
+			_view.playerBlue1.y = Const.PLAYER_BLUE1_Y - _view.playerBlue1.height / 2;
+			_view.playerBlue2.x = Const.PLAYER_BLUE2_X - _view.playerBlue2.width / 2;
+			_view.playerBlue2.y = Const.PLAYER_BLUE2_Y - _view.playerBlue2.height / 2;
+			_view.playerBlue3.x = Const.PLAYER_BLUE3_X - _view.playerBlue3.width / 2;
+			_view.playerBlue3.y = Const.PLAYER_BLUE3_Y - _view.playerBlue3.height / 2;
+			_view.playerBlue4.x = Const.PLAYER_BLUE4_X - _view.playerBlue4.width / 2;
+			_view.playerBlue4.y = Const.PLAYER_BLUE4_Y - _view.playerBlue4.height / 2;
+			_view.playerBlue5.x = Const.PLAYER_BLUE5_X - _view.playerBlue5.width / 2;
+			_view.playerBlue5.y = Const.PLAYER_BLUE5_Y - _view.playerBlue5.height / 2;
 		
-			_view.fieldPlayerBlue1.x = Const.FIELD_PLAYER_BLUE1_X - _view.fieldPlayerBlue1.width / 2;
-			_view.fieldPlayerBlue1.y = Const.FIELD_PLAYER_BLUE1_Y - _view.fieldPlayerBlue1.height / 2;
-			_view.fieldPlayerBlue2.x = Const.FIELD_PLAYER_BLUE2_X - _view.fieldPlayerBlue2.width / 2;
-			_view.fieldPlayerBlue2.y = Const.FIELD_PLAYER_BLUE2_Y - _view.fieldPlayerBlue2.height / 2;
-			_view.fieldPlayerBlue3.x = Const.FIELD_PLAYER_BLUE3_X - _view.fieldPlayerBlue3.width / 2;
-			_view.fieldPlayerBlue3.y = Const.FIELD_PLAYER_BLUE3_Y - _view.fieldPlayerBlue3.height / 2;
-			_view.fieldPlayerBlue4.x = Const.FIELD_PLAYER_BLUE4_X - _view.fieldPlayerBlue4.width / 2;
-			_view.fieldPlayerBlue4.y = Const.FIELD_PLAYER_BLUE4_Y - _view.fieldPlayerBlue4.height / 2;
+			_view.playerRed1.x = Const.PLAYER_RED1_X - _view.playerBlue1.width / 2;
+			_view.playerRed1.y = Const.PLAYER_RED1_Y - _view.playerBlue1.height / 2;
+			_view.playerRed2.x = Const.PLAYER_RED2_X - _view.playerBlue2.width / 2;
+			_view.playerRed2.y = Const.PLAYER_RED2_Y - _view.playerBlue2.height / 2;
+			_view.playerRed3.x = Const.PLAYER_RED3_X - _view.playerBlue3.width / 2;
+			_view.playerRed3.y = Const.PLAYER_RED3_Y - _view.playerBlue3.height / 2;
+			_view.playerRed4.x = Const.PLAYER_RED4_X - _view.playerBlue4.width / 2;
+			_view.playerRed4.y = Const.PLAYER_RED4_Y - _view.playerBlue4.height / 2;
+			_view.playerRed5.x = Const.PLAYER_RED5_X - _view.playerBlue5.width / 2;
+			_view.playerRed5.y = Const.PLAYER_RED5_Y - _view.playerBlue5.height / 2;
 		
-			_view.goalKeeperRed.x = Const.GOAL_KEEPER_RED_X - _view.goalKeeperBlue.width / 2;
-			_view.goalKeeperRed.y = Const.GOAL_KEEPER_RED_Y - _view.goalKeeperRed.height / 2;
-		
-			_view.fieldPlayerRed1.x = Const.FIELD_PLAYER_RED1_X - _view.fieldPlayerBlue1.width / 2;
-			_view.fieldPlayerRed1.y = Const.FIELD_PLAYER_RED1_Y - _view.fieldPlayerBlue1.height / 2;
-			_view.fieldPlayerRed2.x = Const.FIELD_PLAYER_RED2_X - _view.fieldPlayerBlue2.width / 2;
-			_view.fieldPlayerRed2.y = Const.FIELD_PLAYER_RED2_Y - _view.fieldPlayerBlue2.height / 2;
-			_view.fieldPlayerRed3.x = Const.FIELD_PLAYER_RED3_X - _view.fieldPlayerBlue3.width / 2;
-			_view.fieldPlayerRed3.y = Const.FIELD_PLAYER_RED3_Y - _view.fieldPlayerBlue3.height / 2;
-			_view.fieldPlayerRed4.x = Const.FIELD_PLAYER_RED4_X - _view.fieldPlayerBlue4.width / 2;
-			_view.fieldPlayerRed4.y = Const.FIELD_PLAYER_RED4_Y - _view.fieldPlayerBlue4.height / 2;
-		
-			_view.fieldPlayerBlue1.text = Const.FIELD_PLAYER_BLUE1_TEXT;
-			_view.fieldPlayerBlue2.text = Const.FIELD_PLAYER_BLUE2_TEXT;
-			_view.fieldPlayerBlue3.text = Const.FIELD_PLAYER_BLUE3_TEXT;
-			_view.fieldPlayerBlue4.text = Const.FIELD_PLAYER_BLUE4_TEXT;
-			_view.fieldPlayerRed1.text = Const.FIELD_PLAYER_RED1_TEXT;
-			_view.fieldPlayerRed2.text = Const.FIELD_PLAYER_RED2_TEXT;
-			_view.fieldPlayerRed3.text = Const.FIELD_PLAYER_RED3_TEXT;
-			_view.fieldPlayerRed4.text = Const.FIELD_PLAYER_RED4_TEXT;
-			_view.goalKeeperBlue.text = Const.GOAL_KEEPER_BLUE_TEXT;
-			_view.goalKeeperRed.text = Const.GOAL_KEEPER_RED_TEXT;
+			_view.playerBlue1.text = Const.PLAYER_BLUE1_TEXT;
+			_view.playerBlue2.text = Const.PLAYER_BLUE2_TEXT;
+			_view.playerBlue3.text = Const.PLAYER_BLUE3_TEXT;
+			_view.playerBlue4.text = Const.PLAYER_BLUE4_TEXT;
+			_view.playerBlue5.text = Const.PLAYER_BLUE5_TEXT;
+			_view.playerRed1.text = Const.PLAYER_RED1_TEXT;
+			_view.playerRed2.text = Const.PLAYER_RED2_TEXT;
+			_view.playerRed3.text = Const.PLAYER_RED3_TEXT;
+			_view.playerRed4.text = Const.PLAYER_RED4_TEXT;
+			_view.playerRed5.text = Const.PLAYER_RED5_TEXT;
 		}
 		
 		public function addedToStageHandler(event:Event):void
@@ -154,16 +152,16 @@ package controllers
 		
 			_pieces = new Vector.<Piece>;
 			_pieces.push(_view.ball);
-			_pieces.push(_view.goalKeeperBlue);
-			_pieces.push(_view.goalKeeperRed);	
-			_pieces.push(_view.fieldPlayerBlue1);
-			_pieces.push(_view.fieldPlayerBlue2);
-			_pieces.push(_view.fieldPlayerBlue3);
-			_pieces.push(_view.fieldPlayerBlue4);
-			_pieces.push(_view.fieldPlayerRed1);
-			_pieces.push(_view.fieldPlayerRed2);
-			_pieces.push(_view.fieldPlayerRed3);
-			_pieces.push(_view.fieldPlayerRed4);
+			_pieces.push(_view.playerBlue1);
+			_pieces.push(_view.playerBlue2);
+			_pieces.push(_view.playerBlue3);
+			_pieces.push(_view.playerBlue4);
+			_pieces.push(_view.playerBlue5);
+			_pieces.push(_view.playerRed1);
+			_pieces.push(_view.playerRed2);
+			_pieces.push(_view.playerRed3);
+			_pieces.push(_view.playerRed4);
+			_pieces.push(_view.playerRed5);
 			
 			// ContentCacheを使って画像描画の高速化
 			var contentLoader:IContentLoader = new ContentCache();

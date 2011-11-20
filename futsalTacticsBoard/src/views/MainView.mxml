@@ -13,10 +13,8 @@
 			
 			import mx.events.FlexEvent;
 			
-			private static const FIELD_PLAYER_BLUE_IMAGE_PATH:String = "../assets/field_player_blue.png";
-			private static const FIELD_PLAYER_RED_IMAGE_PATH:String = "../assets/field_player_red.png";
-			private static const GOAL_KEEPER_BLUE_IMAGE_PATH:String = "../assets/goal_keeper_blue.png";
-			private static const GOAL_KEEPER_RED_IMAGE_PATH:String = "../assets/goal_keeper_red.png";
+			private static const PLAYER_BLUE_IMAGE_PATH:String = "../assets/player_blue.png";
+			private static const PLAYER_RED_IMAGE_PATH:String = "../assets/player_red.png";
 			private static const BALL_IMAGE_PATH:String = "../assets/ball.png";
 		]]>
 	</fx:Script>
@@ -37,15 +35,15 @@
 		<s:Button id="recordListButton" width="90" height="25" cacheAsBitmap="true" fontSize="12"
 				  fontStyle="normal" fontWeight="bold"/>
 	</s:HGroup>
-	<components:Piece id="fieldPlayerBlue1" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
-	<components:Piece id="fieldPlayerBlue2" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
-	<components:Piece id="fieldPlayerBlue3" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
-	<components:Piece id="fieldPlayerBlue4" imageSource="{FIELD_PLAYER_BLUE_IMAGE_PATH}"/>
-	<components:Piece id="fieldPlayerRed1" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
-	<components:Piece id="fieldPlayerRed2" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
-	<components:Piece id="fieldPlayerRed3" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
-	<components:Piece id="fieldPlayerRed4" imageSource="{FIELD_PLAYER_RED_IMAGE_PATH}"/>
-	<components:Piece id="goalKeeperBlue" imageSource="{GOAL_KEEPER_BLUE_IMAGE_PATH}"/>
-	<components:Piece id="goalKeeperRed" imageSource="{GOAL_KEEPER_RED_IMAGE_PATH}"/>
+	<components:Piece id="playerBlue1" imageSource="{PLAYER_BLUE_IMAGE_PATH}"/>
+	<components:Piece id="playerBlue2" imageSource="{PLAYER_BLUE_IMAGE_PATH}"/>
+	<components:Piece id="playerBlue3" imageSource="{PLAYER_BLUE_IMAGE_PATH}"/>
+	<components:Piece id="playerBlue4" imageSource="{PLAYER_BLUE_IMAGE_PATH}"/>
+	<components:Piece id="playerBlue5" imageSource="{PLAYER_BLUE_IMAGE_PATH}"/>
+	<components:Piece id="playerRed1" imageSource="{PLAYER_RED_IMAGE_PATH}"/>
+	<components:Piece id="playerRed2" imageSource="{PLAYER_RED_IMAGE_PATH}"/>
+	<components:Piece id="playerRed3" imageSource="{PLAYER_RED_IMAGE_PATH}"/>
+	<components:Piece id="playerRed4" imageSource="{PLAYER_RED_IMAGE_PATH}"/>
+	<components:Piece id="playerRed5" imageSource="{PLAYER_RED_IMAGE_PATH}"/>
 	<components:Piece id="ball" imageSource="{BALL_IMAGE_PATH}" textEnabled="false"/>
 </s:View>
