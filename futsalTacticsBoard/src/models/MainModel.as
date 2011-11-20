@@ -431,7 +431,7 @@ package models
 		CONFIG::SAVE_TO_XML_FILE
 		public function isValidText(text:String):Boolean
 		{
-			// 入力するたびの判定に使うので、文字列の最後尾から調べた方が速度が速い
+			// 文字を入力するたびに判定するので、文字列の最後尾から調べた方が速度が速いと思われる
 			if (text.lastIndexOf('>') >= 0
 				|| text.lastIndexOf('<') >= 0
 				|| text.lastIndexOf('&') >= 0
