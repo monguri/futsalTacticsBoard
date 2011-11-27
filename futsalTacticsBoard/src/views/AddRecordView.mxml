@@ -11,7 +11,7 @@
 	<fx:Script>
 	<![CDATA[
 		import models.Const;
-		import models.MainModel;
+		import models.RecordModel;
 		
 		import spark.transitions.SlideViewTransition;
 		import spark.transitions.SlideViewTransitionMode;
@@ -34,7 +34,7 @@
 		{
 			saveFlag = true;
 			
-			var curNumRecords:uint = MainModel.getInstance().getNumberRecords();
+			var curNumRecords:uint = RecordModel.getInstance().getNumberRecords();
 			if (curNumRecords + 1 == Const.RECORD_NUMBER_LIMIT)
 			{
 				alertDialog.show(this, "The number of records comes to limit. You can delete some records.", "Limit Alert", Dialog.BUTTON_OK);
@@ -46,8 +46,8 @@
 			}
 			
 			//TODO:Modelに直接触るのはよくない
-			MainModel.getInstance().titleBuffer = info.titleTextInput.text;
-			MainModel.getInstance().commentBuffer = info.commentTextArea.text;
+			RecordModel.getInstance().titleBuffer = info.titleTextInput.text;
+			RecordModel.getInstance().commentBuffer = info.commentTextArea.text;
 			
 			var v:SlideViewTransition = new SlideViewTransition();
 			v.mode = SlideViewTransitionMode.UNCOVER;
@@ -63,13 +63,13 @@
 		private function viewAddHandler(event:Event):void
 		{
 			info.recordTextsChangeCallback = recordTextsChangeHandler;
-			doneButton.enabled = MainModel.getInstance().isValidText(info.titleTextInput.text)
-									&& MainModel.getInstance().isValidText(info.commentTextArea.text);
+			doneButton.enabled = RecordModel.getInstance().isValidText(info.titleTextInput.text)
+									&& RecordModel.getInstance().isValidText(info.commentTextArea.text);
 		}
 		
 		private function recordTextsChangeHandler():void
 		{
-			var valid:Boolean = MainModel.getInstance().isValidText(info.titleTextInput.text) && MainModel.getInstance().isValidText(info.commentTextArea.text);
+			var valid:Boolean = RecordModel.getInstance().isValidText(info.titleTextInput.text) && RecordModel.getInstance().isValidText(info.commentTextArea.text);
 			doneButton.enabled = valid;
 			if (!valid)
 			{

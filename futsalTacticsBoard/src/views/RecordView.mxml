@@ -8,8 +8,8 @@
 	</fx:Declarations>
 	<fx:Script>
 	<![CDATA[
-		import models.MainModel;
-		import models.Record;
+		import models.RecordModel;
+		import models.RecordInfoModel;
 		
 		import spark.components.supportClasses.ViewReturnObject;
 		import spark.transitions.SlideViewTransition;
@@ -35,17 +35,17 @@
 		
 		private function viewAddHandler(event:Event):void
 		{
-			var record:Record;
+			var record:RecordInfoModel;
 			
 			// popで遷移してきたのかpushで遷移してきたのか判定
 			var o:ViewReturnObject = navigator.poppedViewReturnedObject;
-			if (o != null && o.object is Record)
+			if (o != null && o.object is RecordInfoModel)
 			{ // popで遷移してきた
-				record = o.object as Record;
+				record = o.object as RecordInfoModel;
 			}
 			else if (data != null) // popで遷移してきた
 			{
-				record = data as Record;
+				record = data as RecordInfoModel;
 			}
 			else //destrunctionPolicy=autoのときは、アプリ再開がこの画面のときはpoppedViewReturnedObjectとdataはnullになっている。またpopであってもnullがかえってきたとき。
 			{ // TODO:destructionPolicy=neverのときはそもそもAddイベントが起きないようだが要調査。.
@@ -68,7 +68,7 @@
 		{
 			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
 			{
-				MainModel.getInstance().deleteRecord(data as Record);
+				RecordModel.getInstance().deleteRecord(data as RecordInfoModel);
 			}
 			this.navigator.popView();
 		}

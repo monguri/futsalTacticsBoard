@@ -5,18 +5,18 @@ package models
 	import mx.collections.ArrayCollection;
 
 	//TODO;Recordの中にXMLやFileみたいな都合は隠蔽したいな
-	public class RecordList
+	public class RecordInfoModelList
 	{
 		private var _list:Array;
 		
-		public function RecordList()
+		public function RecordInfoModelList()
 		{
 			_list = new Array();
 		}
 		
 		public function pushRecord(file:File, title:String, comment:String):void
 		{
-			var record:Record = new Record(file, title, comment);
+			var record:RecordInfoModel = new RecordInfoModel(file, title, comment);
 			_list.push(record);
 		}
 		
@@ -29,7 +29,7 @@ package models
 			else
 			{
 				var searchedRecords:Array = new Array();
-				for each (var record:Record in _list)
+				for each (var record:RecordInfoModel in _list)
 				{
 					if (record.containWord(searchKeyword))
 					{
@@ -41,7 +41,7 @@ package models
 			}
 		}
 		
-		public function remove(record:Record):void
+		public function remove(record:RecordInfoModel):void
 		{
 			var len:uint = _list.length;
 			for (var i:uint = 0; i < len; i++)

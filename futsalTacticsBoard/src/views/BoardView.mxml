@@ -19,7 +19,7 @@
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<controllers:MainController id="controller"/>
+		<controllers:BoardController id="controller"/>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	

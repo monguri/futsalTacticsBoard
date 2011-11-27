@@ -11,8 +11,8 @@ package controllers
 	import flash.geom.Point;
 	
 	import models.Const;
-	import models.MainModel;
-	import models.Record;
+	import models.RecordModel;
+	import models.RecordInfoModel;
 	
 	import mx.core.IMXMLObject;
 	import mx.events.FlexEvent;
@@ -25,12 +25,12 @@ package controllers
 	import spark.transitions.ViewTransitionDirection;
 	
 	import views.AddRecordView;
-	import views.MainView;
+	import views.BoardView;
 	import views.RecordListView;
 	
-	public class MainController implements IMXMLObject
+	public class BoardController implements IMXMLObject
 	{
-		private var _view:MainView;
+		private var _view:BoardView;
 		
 		// 状態フラグ
 		private var _isRecording:Boolean = false;
@@ -44,14 +44,14 @@ package controllers
 		// 再生中のフレーム数
 		private var _playFrame:uint = 0;
 
-		public function MainController()
+		public function BoardController()
 		{
 		}
 		
 		public function initialized(document:Object, id:String):void
 		{
 			trace("initialized");
-			_view = document as MainView;
+			_view = document as BoardView;
 			_view.addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 			_view.addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
 			_view.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
@@ -116,9 +116,9 @@ package controllers
 				return;
 			}
 			
-			if (o.object is Record) // RecordViewのPlayボタンからのpop
+			if (o.object is RecordInfoModel) // RecordViewのPlayボタンからのpop
 			{
-				var success:Boolean = MainModel.getInstance().loadSaveDataToBuffer(o.object as Record);
+				var success:Boolean = RecordModel.getInstance().loadSaveDataToBuffer(o.object as RecordInfoModel);
 				// ロード失敗なら再生状態に遷移しない
 				if (!success) {
 					return;
@@ -139,9 +139,9 @@ package controllers
 				var saveFlag:Boolean = o.object as Boolean;
 				if (saveFlag) // 保存するとき
 				{
-					MainModel.getInstance().flushSaveDataBuffer(); // バッファのデータを記録領域に保存
+					RecordModel.getInstance().flushSaveDataBuffer(); // バッファのデータを記録領域に保存
 				}
-				MainModel.getInstance().clearSaveDataBuffer(); // バッファをクリア
+				RecordModel.getInstance().clearSaveDataBuffer(); // バッファをクリア
 			}
 		}
 		
@@ -270,7 +270,7 @@ package controllers
 		private function playEnterFrameHandler():void
 		{
 			// 録画したデータをすべて再生で吐き出した(毎フレームすべての配列にデータを入れるので一つだけ長さをチェックすればよい)
-			if (MainModel.getInstance().piecesPointsBuffer[0].length <= _playFrame)
+			if (RecordModel.getInstance().piecesPointsBuffer[0].length <= _playFrame)
 			{
 				stopPlaying();
 				// 次回再生は０フレーム目から
@@ -309,7 +309,7 @@ package controllers
 			}
 			else
 			{
-				MainModel.getInstance().clearSaveDataBuffer(); // バッファをクリア
+				RecordModel.getInstance().clearSaveDataBuffer(); // バッファをクリア
 				writeDataToSaveDataBuffer();// ボタンを押したときの初期状態を記録
 				_view.recordButton.label = Const.RECORD_BUTTON_LABEL_SUSPEND;
 		
@@ -359,8 +359,8 @@ package controllers
 			var i:uint = 0;
 			for each (var piece:Piece in _pieces)
 			{
-				MainModel.getInstance().piecesPointsBuffer[i].push(new Point(piece.x, piece.y));
-				MainModel.getInstance().piecesTextsBuffer[i].push(piece.text);
+				RecordModel.getInstance().piecesPointsBuffer[i].push(new Point(piece.x, piece.y));
+				RecordModel.getInstance().piecesTextsBuffer[i].push(piece.text);
 				i++;
 			}
 		}
@@ -370,9 +370,9 @@ package controllers
 			var i:uint = 0;
 			for each (var piece:Piece in _pieces)
 			{
-				piece.x = MainModel.getInstance().piecesPointsBuffer[i][frame].x;
-				piece.y = MainModel.getInstance().piecesPointsBuffer[i][frame].y;
-				piece.textInput.text = MainModel.getInstance().piecesTextsBuffer[i][frame];
+				piece.x = RecordModel.getInstance().piecesPointsBuffer[i][frame].x;
+				piece.y = RecordModel.getInstance().piecesPointsBuffer[i][frame].y;
+				piece.textInput.text = RecordModel.getInstance().piecesTextsBuffer[i][frame];
 				i++;
 			}
 		}

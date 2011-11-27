@@ -13,12 +13,12 @@ package models
 	import mx.collections.IList;
 
 	// シングルトン
-	public class MainModel
+	public class RecordModel
 	{
-		private static var _instance:MainModel;
+		private static var _instance:RecordModel;
 		
 		/** 録画ファイル情報のリスト */		
-		private var _recordList:RecordList;
+		private var _recordList:RecordInfoModelList;
 
 		// 録画データバッファ。録画(書き込み)と再生(読み出し)の両方で記録領域とのI/Oをバッファする。
 		private var _piecesPoints:Vector.<Vector.<Point>>;
@@ -29,9 +29,9 @@ package models
 		private static const NUM_PIECES:uint = 11;
 		private static const RECORD_SAVE_DIRECTORY:String = "app-storage:/";
 
-		public function MainModel(blocker:Blocker)
+		public function RecordModel(blocker:Blocker)
 		{
-			_recordList = new RecordList();
+			_recordList = new RecordInfoModelList();
 			
 			var xmlFiles:Vector.<File> = getRecordFiles();
 			for each (var xmlFile:File in xmlFiles)
@@ -42,11 +42,11 @@ package models
 			}
 		}
 		
-		public static function getInstance():MainModel
+		public static function getInstance():RecordModel
 		{
 			if (_instance == null)
 			{
-				_instance = new MainModel(new Blocker());
+				_instance = new RecordModel(new Blocker());
 			}
 			
 			return _instance;
@@ -103,7 +103,7 @@ package models
 			_piecesTexts = null;
 		}
 
-		public function loadSaveDataToBuffer(record:Record):Boolean
+		public function loadSaveDataToBuffer(record:RecordInfoModel):Boolean
 		{
 			clearSaveDataBuffer();
 			
@@ -199,7 +199,7 @@ package models
 		}
 		
 		CONFIG::SAVE_TO_SHARED_OBJECT
-		public function loadPiecesPoints(record:Record):Boolean
+		public function loadPiecesPoints(record:RecordInfoModel):Boolean
 		{
 			var soName:String = getRecordName(record);
 			var so:SharedObject = SharedObject.getLocal(soName);
@@ -228,7 +228,7 @@ package models
 		}
 		
 		CONFIG::SAVE_TO_XML_FILE
-		public function loadPiecesPoints(record:Record):Boolean
+		public function loadPiecesPoints(record:RecordInfoModel):Boolean
 		{
 			var file:File = record.file;
 			if (!file.exists)
@@ -257,7 +257,7 @@ package models
 		}
 
 		CONFIG::SAVE_TO_SHARED_OBJECT
-		public function loadPiecesTexts(record:Record):Boolean
+		public function loadPiecesTexts(record:RecordInfoModel):Boolean
 		{
 			var soName:String = getRecordName(record);
 			var so:SharedObject = SharedObject.getLocal(soName);
@@ -283,7 +283,7 @@ package models
 		}
 		
 		CONFIG::SAVE_TO_XML_FILE
-		public function loadPiecesTexts(record:Record):Boolean
+		public function loadPiecesTexts(record:RecordInfoModel):Boolean
 		{
 			var file:File = record.file;
 			if (!file.exists)
@@ -310,14 +310,14 @@ package models
 		}
 
 		CONFIG::SAVE_TO_SHARED_OBJECT
-		public function deleteRecord(record:Record):void
+		public function deleteRecord(record:RecordInfoModel):void
 		{
 			var so:SharedObject = SharedObject.getLocal(record.title);
 			so.clear();
 		}
 		
 		CONFIG::SAVE_TO_XML_FILE
-		public function deleteRecord(record:Record):void
+		public function deleteRecord(record:RecordInfoModel):void
 		{
 			if (record.file.exists)
 			{
@@ -354,7 +354,7 @@ package models
 		}
 		
 		CONFIG::SAVE_TO_SHARED_OBJECT
-		private function getRecordName(record:Record):String
+		private function getRecordName(record:RecordInfoModel):String
 		{
 			var file:File = record.file;
 			// -1 は"."の分
@@ -387,7 +387,7 @@ package models
 		
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
-		public function setTitle(record:Record, title:String):void
+		public function setTitle(record:RecordInfoModel, title:String):void
 		{
 			var file:File = record.file;
 			var xml:XML = new XML(readXmlStringFromFile(file));
@@ -399,7 +399,7 @@ package models
 		
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
-		public function setComment(record:Record, comment:String):void
+		public function setComment(record:RecordInfoModel, comment:String):void
 		{
 			var file:File = record.file;
 			var xml:XML = new XML(readXmlStringFromFile(file));

@@ -8,7 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import models.Const;
-			import models.MainModel;
+			import models.RecordModel;
 			
 			import mx.events.FlexEvent;
 			

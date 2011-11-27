@@ -3,13 +3,13 @@ package models
 	import flash.filesystem.File;
 
 	//TODO;Recordの中にXMLやFileみたいな都合は隠蔽したいな
-	public class Record
+	public class RecordInfoModel
 	{
 		private var _file:File;
 		private var _title:String;
 		private var _comment:String;
 		
-		public function Record(file:File, title:String, comment:String)
+		public function RecordInfoModel(file:File, title:String, comment:String)
 		{
 			_file = file;
 			_title = title;

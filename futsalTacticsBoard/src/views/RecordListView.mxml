@@ -7,14 +7,14 @@
 	</fx:Declarations>
 	<fx:Script>
 	<![CDATA[
-		import models.MainModel;
-		import models.Record;
+		import models.RecordModel;
+		import models.RecordInfoModel;
 		
 		import mx.events.FlexEvent;
 		
 		private function viewAddHandler(event:FlexEvent):void
 		{
-			list.dataProvider = MainModel.getInstance().getRecordList();
+			list.dataProvider = RecordModel.getInstance().getRecordList();
 		}
 		
 		private function backButtonClickHandler(event:MouseEvent):void
@@ -30,14 +30,14 @@
 			}
 		}
 		
-		private function getRecordTitle(record:Record):String
+		private function getRecordTitle(record:RecordInfoModel):String
 		{
 			return record.title;
 		}
 		
 		private function textinputSoftKeyboardDeactivateHandler(event:SoftKeyboardEvent):void
 		{
-			list.dataProvider = MainModel.getInstance().getRecordList(searchTextInput.text);
+			list.dataProvider = RecordModel.getInstance().getRecordList(searchTextInput.text);
 		}
 	]]>
 	</fx:Script>

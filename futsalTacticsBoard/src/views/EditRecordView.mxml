@@ -9,8 +9,8 @@
 	</fx:Declarations>
 	<fx:Script>
 	<![CDATA[
-		import models.MainModel;
-		import models.Record;
+		import models.RecordModel;
+		import models.RecordInfoModel;
 		
 		import spark.transitions.SlideViewTransition;
 		import spark.transitions.SlideViewTransitionMode;
@@ -30,8 +30,8 @@
 			// TODO:アプリ再開がこの画面から再開するときは保存ができない。まあAddでなくEditだから大した被害ないけど。
 			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
 			{// TODO:destructionPolicy=neverのときはそもそもAddイベントが起きないようだが要調査。.
-				MainModel.getInstance().setTitle((data as Record), info.titleTextInput.text);
-				MainModel.getInstance().setComment((data as Record), info.commentTextArea.text);
+				RecordModel.getInstance().setTitle((data as RecordInfoModel), info.titleTextInput.text);
+				RecordModel.getInstance().setComment((data as RecordInfoModel), info.commentTextArea.text);
 			}
 			
 			popView();
@@ -53,18 +53,18 @@
 		{
 			if (data != null) //destrunctionPolicy=autoのときは、アプリ再開がこの画面のときはdataはnullになっている。
 			{ // TODO:destructionPolicy=neverのときはそもそもAddイベントが起きないようだが要調査。.
-				var record:Record = data as Record;
+				var record:RecordInfoModel = data as RecordInfoModel;
 				info.titleTextInput.text = record.title;
 				info.commentTextArea.text = record.comment;
 				info.recordTextsChangeCallback = recordTextsChangeHandler;
-				doneButton.enabled = MainModel.getInstance().isValidText(info.titleTextInput.text)
-									&& MainModel.getInstance().isValidText(info.commentTextArea.text);
+				doneButton.enabled = RecordModel.getInstance().isValidText(info.titleTextInput.text)
+									&& RecordModel.getInstance().isValidText(info.commentTextArea.text);
 			}
 		}
 		
 		private function recordTextsChangeHandler():void
 		{
-			var valid:Boolean = MainModel.getInstance().isValidText(info.titleTextInput.text) && MainModel.getInstance().isValidText(info.commentTextArea.text);
+			var valid:Boolean = RecordModel.getInstance().isValidText(info.titleTextInput.text) && RecordModel.getInstance().isValidText(info.commentTextArea.text);
 			doneButton.enabled = valid;
 			if (!valid)
 			{
