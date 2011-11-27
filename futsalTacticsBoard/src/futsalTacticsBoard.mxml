@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ViewNavigatorApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
 							xmlns:s="library://ns.adobe.com/flex/spark"
-							applicationDPI="160" firstView="views.RecordListView"
-							splashScreenImage="@Embed('assets/screen_shot.png')" addedToStage="addedToStageHandler(event)">
+							xmlns:components="components.*"
+							addedToStage="addedToStageHandler(event)" applicationDPI="160"
+							firstView="views.RecordListView"
+							splashScreenImage="@Embed('assets/screen_shot.png')">
 	
+	<fx:Declarations>
+		<components:Dialog id="freeVerLimitDialog"/>
+		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
+	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
+			import components.Dialog;
 			protected function addedToStageHandler(event:Event):void
 			{
 				// initializeイベントやcreationCompleteではタイミングが早くてthis.stageがnullになるのでaddedToStageイベントを使うのが確実
 				this.stage.quality = StageQuality.MEDIUM;
 				this.stage.frameRate = 24;
+				// 無償版の場合は、アプリ起動時に制限事項のポップアップを出す
+				CONFIG::FREE{
+					freeVerLimitDialog.show(this, "At this free version, you can have just 1 record.\n 1000 records enable at \"futsal tactics board\".\n Check it!", "Free Ver. Limitation", Dialog.BUTTON_OK);
+				}
 			}
 		]]>
 	</fx:Script>
-	
-	<fx:Declarations>
-		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
-	</fx:Declarations>
 </s:ViewNavigatorApplication>
