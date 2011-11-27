@@ -3,16 +3,14 @@ package controllers
 	import components.Dialog;
 	import components.Piece;
 	
-	import flash.display.StageQuality;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.SoftKeyboardEvent;
-	import flash.filesystem.File;
 	import flash.geom.Point;
 	
 	import models.Const;
-	import models.RecordModel;
 	import models.RecordInfoModel;
+	import models.RecordModel;
 	
 	import mx.core.IMXMLObject;
 	import mx.events.FlexEvent;
@@ -26,11 +24,14 @@ package controllers
 	
 	import views.AddRecordView;
 	import views.BoardView;
-	import views.RecordListView;
 	
 	public class BoardController implements IMXMLObject
 	{
 		private var _view:BoardView;
+		
+		private static const MODE_RECORD:uint = 0; // 録画モード
+		private static const MODE_PLAY:uint = 1; // 再生モード
+		private var _mode:uint = MODE_RECORD;
 		
 		// 状態フラグ
 		private var _isRecording:Boolean = false;
@@ -53,7 +54,7 @@ package controllers
 			trace("initialized");
 			_view = document as BoardView;
 			_view.addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
-			_view.addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
+			_view.addEventListener(FlexEvent.ADD, addHandler);
 			_view.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
 		}
 
@@ -103,38 +104,13 @@ package controllers
 			_view.playerRed5.text = Const.PLAYER_RED5_TEXT;
 		}
 		
-		public function addedToStageHandler(event:Event):void
+		public function addHandler(event:Event):void
 		{
-			trace("added to stage");
-			// initializeイベントやcreationCompleteではタイミングが早くて_view.stageがnullになるのでaddedToStageイベントを使うのが確実
-			_view.stage.quality = StageQuality.MEDIUM;
-			_view.stage.frameRate = 24;
-			
+			trace("add");
 			// 描画されてから再生されるようにADDED_TO_STAGEイベントハンドラで再生開始
 			var o:ViewReturnObject = _view.navigator.poppedViewReturnedObject;
-			if (o == null) {
-				return;
-			}
-			
-			if (o.object is RecordInfoModel) // RecordViewのPlayボタンからのpop
-			{
-				var success:Boolean = RecordModel.getInstance().loadSaveDataToBuffer(o.object as RecordInfoModel);
-				// ロード失敗なら再生状態に遷移しない
-				if (!success) {
-					return;
-				}
-			
-				_view.recordListButton.label = Const.RECORD_LIST_BUTTON_LABEL_STOP;
-				
-				// 再生中は他のボタンの機能は殺す
-				_view.recordButton.enabled = false;
-				_view.resetButton.enabled = false;
-				
-				// 再生状態/非再生状態　のトグル
-				_isPlaying = ! _isPlaying;
-			}
-			else if (o.object is Boolean) // AddRecordViewからのpop
-			{
+			if (o != null)
+			{ // AddRecordViewからのpop
 				// Do nothing
 				var saveFlag:Boolean = o.object as Boolean;
 				if (saveFlag) // 保存するとき
@@ -142,6 +118,32 @@ package controllers
 					RecordModel.getInstance().flushSaveDataBuffer(); // バッファのデータを記録領域に保存
 				}
 				RecordModel.getInstance().clearSaveDataBuffer(); // バッファをクリア
+				
+				_mode = MODE_RECORD;
+				_view.recordPlayButton.label = Const.RECORD_BUTTON_LABEL_START;
+			}
+			else if (_view.data != null) // RecordViewのPlayボタンからのpush
+			{
+				var success:Boolean = RecordModel.getInstance().loadSaveDataToBuffer(_view.data as RecordInfoModel);
+				// ロード失敗なら再生状態に遷移しない
+				if (!success) {
+					return;
+				}
+			
+				// 再生中はボタンの機能は殺す
+				_view.backButton.enabled = false;
+				_view.resetButton.enabled = false;
+				
+				_mode = MODE_PLAY;
+				_view.recordPlayButton.label = Const.PLAY_BUTTON_LABEL_SUSPEND;
+				
+				// 再生状態に
+				_isPlaying = true;
+			}
+			else
+			{ // RecordListViewからのpush
+				_mode = MODE_RECORD;
+				_view.recordPlayButton.label = Const.RECORD_BUTTON_LABEL_START;
 			}
 		}
 		
@@ -173,21 +175,10 @@ package controllers
 				piece.image.contentLoader = contentLoader;
 			}
 
-			// ボタンのラベル設定
-			_view.recordButton.label = Const.RECORD_BUTTON_LABEL_START;
-			_view.resetButton.label = Const.RESET_BUTTON_LABEL;
-			_view.recordListButton.label = Const.RECORD_LIST_BUTTON_LABEL_LIST;
-			
 			// ボタンのマウスクリックイベント;
-			_view.recordButton.addEventListener(MouseEvent.CLICK, recordButtonMouseClickHandler);
+			_view.recordPlayButton.addEventListener(MouseEvent.CLICK, recordPlayButtonMouseClickHandler);
 			_view.resetButton.addEventListener(MouseEvent.CLICK, resetButtonMouseClickHandler);
-			_view.recordListButton.addEventListener(MouseEvent.CLICK, recordListButtonMouseClickHandler);
-			
-			// 無償版の場合は、アプリ起動時に制限事項のポップアップを出す
-			CONFIG::FREE{
-				var freeVerLimit:Dialog = new Dialog();
-				freeVerLimit.show(_view, "At this free version, you can have just 1 record.\n 1000 records enable at \"futsal tactics board\".\n Check it!", "Free Ver. Limitation");
-			}
+			_view.backButton.addEventListener(MouseEvent.CLICK, backButtonMouseClickHandler);
 		}
 		
 		/**
@@ -210,15 +201,26 @@ package controllers
 		 */
 		public function enterFrameHandler(event:Event):void
 		{
-			// 録画中、ドラッグアンドドローをしているときに座標を毎フレーム保存する。テキスト入力はテキスト入力ハンドラで保存する。
-			if (_isRecording && isAnyPieceDraging())
+			switch (_mode)
 			{
-				// TODO:座標をすべて保存するのでなくevent.targetのObjectと座標をPointを保存したい。テキストも保存するからそれとの分離がポイント
-				recordEnterFrameHandler();
-			}
-			else if (_isPlaying)
-			{
-				playEnterFrameHandler();
+				case MODE_RECORD:
+					// 録画中、ドラッグアンドドローをしているときに座標を毎フレーム保存する。テキスト入力はテキスト入力ハンドラで保存する。
+					if (_isRecording && isAnyPieceDraging())
+					{
+						// TODO:座標をすべて保存するのでなくevent.targetのObjectと座標をPointを保存したい。テキストも保存するからそれとの分離がポイント
+						recordEnterFrameHandler();
+					}
+					break;
+				case MODE_PLAY:
+					if (_isPlaying)
+					{
+						playEnterFrameHandler();
+					}
+					break;
+				default:
+					// do nothing
+					trace("Assert");
+					break;
 			}
 		}
 		
@@ -255,7 +257,7 @@ package controllers
 			if (_isRecording)
 			{
 				stopAllPieceDrag(); // ドラッグ中に録画停止された場合に各pieceのドラッグ状態をoffにする必要がある
-				recordButtonMouseClickHandler();
+				recordPlayButtonMouseClickHandler();
 			}
 		}
 		
@@ -287,42 +289,71 @@ package controllers
 		{
 			if (_isPlaying)
 			{
-				recordListButtonMouseClickHandler();
+				recordPlayButtonMouseClickHandler();
 			}
 		}
 		
 		/* 録画ボタンのマウスクリックイベント */
-		public function recordButtonMouseClickHandler(event:MouseEvent = null):void
+		public function recordPlayButtonMouseClickHandler(event:MouseEvent = null):void
 		{
-			if (_isRecording)
+			switch (_mode)
 			{
-				var v:SlideViewTransition = new SlideViewTransition();
-				v.mode = SlideViewTransitionMode.COVER;
-				v.direction = ViewTransitionDirection.UP;
-				_view.navigator.pushView(AddRecordView, null, null, v);
+				case MODE_RECORD:
+					if (_isRecording)
+					{
+						var v:SlideViewTransition = new SlideViewTransition();
+						v.mode = SlideViewTransitionMode.COVER;
+						v.direction = ViewTransitionDirection.UP;
+						_view.navigator.pushView(AddRecordView, null, null, v);
+						
+						_view.recordPlayButton.label = Const.RECORD_BUTTON_LABEL_START;
 				
-				_view.recordButton.label = Const.RECORD_BUTTON_LABEL_START;
-		
-				// 録画終了したら他のボタン復活
-				_view.resetButton.enabled = true;
-				_view.recordListButton.enabled = true;
-			}
-			else
-			{
-				RecordModel.getInstance().clearSaveDataBuffer(); // バッファをクリア
-				writeDataToSaveDataBuffer();// ボタンを押したときの初期状態を記録
-				_view.recordButton.label = Const.RECORD_BUTTON_LABEL_SUSPEND;
-		
-				// 録画中は他のボタンの機能は殺す
-				_view.resetButton.enabled = false;
-				_view.recordListButton.enabled = false;
+						// 録画終了したら他のボタン復活
+						_view.backButton.enabled = true;
+						_view.resetButton.enabled = true;
+					}
+					else
+					{
+						RecordModel.getInstance().clearSaveDataBuffer(); // バッファをクリア
+						writeDataToSaveDataBuffer();// ボタンを押したときの初期状態を記録
+						_view.recordPlayButton.label = Const.RECORD_BUTTON_LABEL_SUSPEND;
+				
+						// 録画中は他のボタンの機能は殺す
+						_view.backButton.enabled = false;
+						_view.resetButton.enabled = false;
+					}
+					
+						
+					// 録画フレーム数初期化
+					_recordFrame = 0;
+					// 録画状態ON/OFFトグル
+					_isRecording = ! _isRecording;
+					break;
+				case MODE_PLAY:
+					if (_isPlaying)
+					{
+						_view.recordPlayButton.label = Const.PLAY_BUTTON_LABEL_START;
+						// 再生停止したら他のボタンを復活
+						_view.backButton.enabled = true;
+						_view.resetButton.enabled = true;
+					}
+					else
+					{
+						_view.recordPlayButton.label = Const.PLAY_BUTTON_LABEL_SUSPEND;
+						// 再生中は他のボタンの機能は殺す
+						_view.backButton.enabled = false;
+						_view.resetButton.enabled = false;
+					}
+					
+					// 再生状態/非再生状態　のトグル
+					_isPlaying = ! _isPlaying;
+					break;
+				default:
+					// do nothing
+					trace("Assert");
+					break;
 			}
 			
-				
-			// 録画フレーム数初期化
-			_recordFrame = 0;
-			// 録画状態ON/OFFトグル
-			_isRecording = ! _isRecording;
 		}
 		
 		/* リセットボタンのマウスクリックイベント */
@@ -331,27 +362,13 @@ package controllers
 			resetData();
 		}
 		
-		/* 再生ボタンのマウスクリックイベント */
-		public function recordListButtonMouseClickHandler(event:MouseEvent = null):void
+		/* バックボタンのマウスクリックイベント */
+		public function backButtonMouseClickHandler(event:MouseEvent = null):void
 		{
-			if (_isPlaying)
-			{
-				_view.recordListButton.label = Const.RECORD_LIST_BUTTON_LABEL_LIST;
-				
-				// 再生停止したら他のボタンを復活
-				_view.recordButton.enabled = true;
-				_view.resetButton.enabled = true;
-				
-				// 再生中フレーム数は初期化 TODO:録画リストボタンと再生/再生中断ボタンを分けたらここで0にしちゃうと途中から再生ができない
-				_playFrame = 0;
-				
-				// 再生状態/非再生状態　のトグル
-				_isPlaying = ! _isPlaying;
-			}
-			else
-			{
-				_view.navigator.pushView(RecordListView);
-			}
+			var v:SlideViewTransition = new SlideViewTransition();
+			v.mode = SlideViewTransitionMode.UNCOVER;
+			v.direction = ViewTransitionDirection.DOWN;
+			_view.navigator.popView(v);
 		}
 		
 		private function writeDataToSaveDataBuffer():void

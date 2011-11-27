@@ -16,6 +16,8 @@
 		import spark.transitions.SlideViewTransitionMode;
 		import spark.transitions.ViewTransitionDirection;
 		
+		private var _record:RecordInfoModel;
+		
 		private function backButtonClickHandler(event:MouseEvent):void
 		{
 			this.navigator.popView();
@@ -35,17 +37,18 @@
 		
 		private function viewAddHandler(event:Event):void
 		{
-			var record:RecordInfoModel;
 			
 			// popで遷移してきたのかpushで遷移してきたのか判定
 			var o:ViewReturnObject = navigator.poppedViewReturnedObject;
 			if (o != null && o.object is RecordInfoModel)
 			{ // popで遷移してきた
-				record = o.object as RecordInfoModel;
+				_record = o.object as RecordInfoModel;
+				playButton.enabled = true;
 			}
-			else if (data != null) // popで遷移してきた
+			else if (data != null) // pushで遷移してきた
 			{
-				record = data as RecordInfoModel;
+				_record = data as RecordInfoModel;
+				playButton.enabled = true;
 			}
 			else //destrunctionPolicy=autoのときは、アプリ再開がこの画面のときはpoppedViewReturnedObjectとdataはnullになっている。またpopであってもnullがかえってきたとき。
 			{ // TODO:destructionPolicy=neverのときはそもそもAddイベントが起きないようだが要調査。.
@@ -53,14 +56,17 @@
 				return;
 			}
 		
-			info.titleTextInput.text = record.title;
-			info.commentTextArea.text = record.comment;
-			info.creationDate = record.getCreationDate().toLocaleString();
+			info.titleTextInput.text = _record.title;
+			info.commentTextArea.text = _record.comment;
+			info.creationDate = _record.getCreationDate().toLocaleString();
 		}
 		
 		private function playButtonClickHandler(event:MouseEvent):void
 		{
-			this.navigator.popToFirstView();
+			var v:SlideViewTransition = new SlideViewTransition();
+			v.mode = SlideViewTransitionMode.COVER;
+			v.direction = ViewTransitionDirection.UP;
+			this.navigator.pushView(BoardView, _record, null, v);
 		}
 		
 		// TODO:削除時には確認ダイアログが必要
@@ -88,7 +94,7 @@
 	<s:HGroup gap="20" horizontalAlign="center" paddingLeft="0">
 		<s:Button id="playButton" width="90" height="25" label="PLAY" cacheAsBitmap="true"
 				  click="playButtonClickHandler(event)" fontSize="12" fontStyle="normal"
-				  fontWeight="bold"/>
+				  fontWeight="bold" enabled="false"/>
 		<!-- TODO 3D機能はいずれ作る
 		<s:Button id="play3dButton" width="90" height="25" label="PLAY 3D" cacheAsBitmap="true"
 				  fontSize="12" fontStyle="normal" fontWeight="bold"/>

@@ -48,16 +48,20 @@ package models
 		//
 		// ボタンのラベル
 		//
-		public static const RECORD_LIST_BUTTON_LABEL_LIST:String = "REC LIST";
-		public static const RECORD_LIST_BUTTON_LABEL_STOP:String = "PLAY STOP";
+//		public static const RECORD_LIST_BUTTON_LABEL_LIST:String = "REC LIST";
+//		public static const RECORD_LIST_BUTTON_LABEL_STOP:String = "PLAY STOP";
 		// TODO:play stopでなく、suspendとrestartにしたいが、複雑になるので今はやらない
 		//public static const RECORD_LIST_BUTTON_LABEL_SUSPEND:String = "SUSPEND";
 		//public static const RECORD_LIST_BUTTON_LABEL_RESTART:String = "RESTART";
 		
+		public static const RECORD_BUTTON_LABEL_START:String = "RECORD";
+		public static const RECORD_BUTTON_LABEL_SUSPEND:String = "STOP";
+		public static const PLAY_BUTTON_LABEL_START:String = "PLAY";
+		public static const PLAY_BUTTON_LABEL_SUSPEND:String = "STOP";
+		
 		public static const RESET_BUTTON_LABEL:String = "RESET";
 		
-		public static const RECORD_BUTTON_LABEL_START:String = "RECORD";
-		public static const RECORD_BUTTON_LABEL_SUSPEND:String = "REC END";
+		public static const BACK_BUTTON_LABEL:String = "BACK";
 		
 		//
 		// 録画情報の文字数制限

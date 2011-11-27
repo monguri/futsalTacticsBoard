@@ -3,15 +3,12 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		xmlns:views="views.*"
 		xmlns:controllers="controllers.*"
-		actionBarVisible="false"
-		backgroundColor="0xffd700"
-		destructionPolicy="never"
-		title="MainView" xmlns:components="components.*">
+		xmlns:components="components.*"
+		actionBarVisible="false" backgroundColor="0xffd700" destructionPolicy="never"
+		title="MainView">
 	<fx:Script>
 		<![CDATA[
 			import models.Const;
-			
-			import mx.events.FlexEvent;
 			
 			private static const PLAYER_BLUE_IMAGE_PATH:String = "../assets/player_blue.png";
 			private static const PLAYER_RED_IMAGE_PATH:String = "../assets/player_red.png";
@@ -28,11 +25,11 @@
 	-->
 	<s:BitmapImage id="courtImage" x="24" y="3" source="@Embed('assets/futsal_court.png')"/>
 	<s:HGroup x="10" y="430" width="300" gap="8" horizontalAlign="center">
-		<s:Button id="recordButton" width="90" height="25" cacheAsBitmap="true" fontSize="12"
-				  fontStyle="normal" fontWeight="bold" />
-		<s:Button id="resetButton" width="90" height="25" cacheAsBitmap="true" fontSize="12"
-				  fontStyle="normal" fontWeight="bold"/>
-		<s:Button id="recordListButton" width="90" height="25" cacheAsBitmap="true" fontSize="12"
+		<s:Button id="backButton" width="90" height="25" label="{Const.BACK_BUTTON_LABEL}"
+				  cacheAsBitmap="true" fontSize="12" fontStyle="normal" fontWeight="bold"/>
+		<s:Button id="resetButton" width="90" height="25" label="{Const.RESET_BUTTON_LABEL}"
+				  cacheAsBitmap="true" fontSize="12" fontStyle="normal" fontWeight="bold"/>
+		<s:Button id="recordPlayButton" width="90" height="25" cacheAsBitmap="true" fontSize="12"
 				  fontStyle="normal" fontWeight="bold"/>
 	</s:HGroup>
 	<components:Piece id="playerBlue1" imageSource="{PLAYER_BLUE_IMAGE_PATH}"/>

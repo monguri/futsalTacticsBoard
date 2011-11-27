@@ -1,25 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:s="library://ns.adobe.com/flex/spark"
-		add="viewAddHandler(event)" destructionPolicy="never" title="RecordList">
+		xmlns:controllers="controllers.*"
+		add="viewAddHandler(event)" creationComplete="viewCreationCompleteHandler(event)"
+		destructionPolicy="never" title="RecordList">
 	<fx:Declarations>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	<fx:Script>
 	<![CDATA[
-		import models.RecordModel;
+		import components.Dialog;
+		
 		import models.RecordInfoModel;
+		import models.RecordModel;
 		
 		import mx.events.FlexEvent;
+		
+		import spark.transitions.SlideViewTransition;
+		import spark.transitions.SlideViewTransitionMode;
+		import spark.transitions.ViewTransitionDirection;
+		
+		private function viewCreationCompleteHandler(event:FlexEvent):void
+		{
+			// 無償版の場合は、アプリ起動時に制限事項のポップアップを出す
+			CONFIG::FREE{
+				var freeVerLimit:Dialog = new Dialog();
+				freeVerLimit.show(this, "At this free version, you can have just 1 record.\n 1000 records enable at \"futsal tactics board\".\n Check it!", "Free Ver. Limitation", Dialog.BUTTON_OK);
+			}
+		}
 		
 		private function viewAddHandler(event:FlexEvent):void
 		{
 			list.dataProvider = RecordModel.getInstance().getRecordList();
 		}
 		
-		private function backButtonClickHandler(event:MouseEvent):void
+		private function addButtonClickHandler(event:MouseEvent):void
 		{
-			this.navigator.popView();
+			var v:SlideViewTransition = new SlideViewTransition();
+			v.mode = SlideViewTransitionMode.COVER;
+			v.direction = ViewTransitionDirection.UP;
+			this.navigator.pushView(BoardView, null, null, v);
 		}
 			
 		private function listClickHandler(event:MouseEvent):void
@@ -41,12 +61,13 @@
 		}
 	]]>
 	</fx:Script>
-	<s:navigationContent>
-		<s:Button label="Back" click="backButtonClickHandler(event)"/>
-	</s:navigationContent>
 	<s:titleContent>
-		<s:TextInput id="searchTextInput" prompt="Search" width="100%" softKeyboardDeactivate="textinputSoftKeyboardDeactivateHandler(event)"/>
+		<s:TextInput id="searchTextInput" width="100%" prompt="Search"
+					 softKeyboardDeactivate="textinputSoftKeyboardDeactivateHandler(event)"/>
 	</s:titleContent>
+	<s:actionContent>
+		<s:Button id="addButton" label="+Add" click="addButtonClickHandler(event)"/>
+	</s:actionContent>
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="justify"/>
 	</s:layout>
