@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<application xmlns="http://ns.adobe.com/air/application/2.6">
+<application xmlns="http://ns.adobe.com/air/application/3.1">
 
 <!-- Adobe AIR Application Descriptor File Template.
 
 	Specifies parameters for identifying, installing, and launching AIR applications.
 
-	xmlns - The Adobe AIR namespace: http://ns.adobe.com/air/application/2.6
+	xmlns - The Adobe AIR namespace: http://ns.adobe.com/air/application/3.1
 			The last segment of the namespace specifies the version 
 			of the AIR runtime required for this application to run.
 			
@@ -111,6 +111,7 @@
 		
 		<!-- gpu描画すると、デバイスではButton押下時の描画がおかしくなる -->
 		<!-- <renderMode>gpu</renderMode> -->
+        <fullScreen>false</fullScreen>
 		<visible>true</visible>
 	</initialWindow>
 
@@ -184,6 +185,7 @@
 		<!-- </fileType> -->
 	<!-- </fileTypes> -->
 
+
     <!-- iOS specific capabilities -->
 	<!-- <iPhone> -->
 		<!-- A list of plist key/value pairs to be added to the application Info.plist -->
@@ -200,19 +202,28 @@
                 <string>YES</string>
             ]]>
         </InfoAdditions> -->
-        <!-- <requestedDisplayResolution></requestedDisplayResolution> -->
+        <!-- A list of plist key/value pairs to be added to the application Entitlements.plist -->
+		<!-- <Entitlements>
+            <![CDATA[
+                <key>keychain-access-groups</key>
+                <array>
+                    <string></string>
+                    <string></string>
+                </array>
+            ]]>
+        </Entitlements> -->
+	<!-- Display Resolution for the app (either "standard" or "high"). Optional. Default "standard" -->
+	<!-- <requestedDisplayResolution></requestedDisplayResolution> -->
 	<!-- </iPhone> -->
 
 	<!-- Specify Android specific tags that get passed to AndroidManifest.xml file. -->
-	<!--<android> 
-		<manifestAdditions>
+    <!--<android> -->
+    <!--	<manifestAdditions>
 		<![CDATA[
 			<manifest android:installLocation="auto">
 				<uses-permission android:name="android.permission.INTERNET"/>
 				<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 				<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-				<uses-configuration android:reqFiveWayNav="true"/>
-				<supports-screens android:normalScreens="true"/>
 				<uses-feature android:required="true" android:name="android.hardware.touchscreen.multitouch"/>
 				<application android:enabled="true">
 					<activity android:excludeFromRecents="false">
@@ -222,13 +233,17 @@
 						</intent-filter>
 					</activity>
 				</application>
-			</manifest>
+            </manifest>
 		]]>
-		</manifestAdditions> 
-	</android> -->
+        </manifestAdditions> -->
+	    <!-- Color depth for the app (either "32bit" or "16bit"). Optional. Default 16bit before namespace 3.0, 32bit after -->
+        <!-- <colorDepth></colorDepth> -->
+    <!-- </android> -->
 	<!-- End of the schema for adding the android specific tags in AndroidManifest.xml file -->
 
+
 <android>
+        <colorDepth>16bit</colorDepth>
         <manifestAdditions><![CDATA[
 			<manifest android:installLocation="auto">
 			    <!--See the Adobe AIR documentation for more information about setting Google Android permissions-->
