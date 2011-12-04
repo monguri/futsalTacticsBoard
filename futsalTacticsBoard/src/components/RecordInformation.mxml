@@ -59,7 +59,7 @@
 	
 	<s:Label text="Title :" textAlign="left"/>
 	<s:TextInput id="titleTextInput" width="300"
-				 change="recordTextsChangeHandler(event)"
+				 change.edit="recordTextsChangeHandler(event)"
 				 maxChars="{Const.RECORD_TITLE_MAX_CHARS}"
 				 prompt.edit="Record Name"
 				 borderVisible.show="false" editable.show="false"/>
@@ -73,7 +73,7 @@
 	<s:VGroup> <!-- VerticalLayoutのgapをそのまま適用するとすきまが空きすぎるのでVGroupでまとめた -->
 		<s:TextArea id="commentTextArea" width="300" height="120"
 					maxChars="{Const.RECORD_COMMENT_MAX_CHARS}"
-					prompt.edit="Comment" change="recordTextsChangeHandler(event)"
+					prompt.edit="Comment" change.edit="recordTextsChangeHandler(event)"
 					borderVisible.show="false" editable.show="false"/>
 		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
 		<s:Button id="editEndButton" includeIn="edit" width="300" height="25" label="END EDIT"
