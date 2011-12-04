@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:VGroup
-		xmlns:fx="http://ns.adobe.com/mxml/2009"
-		xmlns:s="library://ns.adobe.com/flex/spark"
-		xmlns:controllers="controllers.*"
-		width="40" height="56" horizontalAlign="center"
-		verticalAlign="middle">
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  xmlns:controllers="controllers.*"
+		  width="28" height="63" gap="5" horizontalAlign="center" verticalAlign="middle">
 	<fx:Declarations>
 		<controllers:PieceController id="controller"/>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
@@ -35,6 +33,6 @@
 	</fx:Script>
 	
 	<s:Image id="image"/>
-	<s:TextInput id="textInput" width="120" height="20" borderVisible="false" fontSize="14"
-				 textAlign="center" contentBackgroundAlpha="0"/>
+	<s:TextInput id="textInput" width="120" borderVisible="false" contentBackgroundAlpha="0"
+				 fontSize="14" textAlign="center"/>
 </s:VGroup>
