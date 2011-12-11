@@ -243,7 +243,9 @@
 
 
 <android>
+		<!-- for flex4.6
         <colorDepth>16bit</colorDepth>
+        -->
         <manifestAdditions><![CDATA[
 			<manifest android:installLocation="auto">
 			    <!--See the Adobe AIR documentation for more information about setting Google Android permissions-->
