@@ -16,13 +16,9 @@
 		import spark.transitions.SlideViewTransitionMode;
 		import spark.transitions.ViewTransitionDirection;
 		
-		/* ファイルを保存するかどうか */
-		private var saveFlag:Boolean = false;
-
 		private function cancelButtonClickHandler(event:MouseEvent):void
 		{
-			saveFlag = false;
-			popView();
+			this.navigator.popView();
 		}
 			
 		private function doneButtonClickHandler(event:MouseEvent):void
@@ -34,17 +30,9 @@
 				RecordModel.getInstance().setComment((data as RecordInfoModel), info.commentTextArea.text);
 			}
 			
-			popView();
+			this.navigator.popView();
 		}
 			
-		private function popView():void
-		{
-			var v:SlideViewTransition = new SlideViewTransition();
-			v.mode = SlideViewTransitionMode.UNCOVER;
-			v.direction = ViewTransitionDirection.DOWN;
-			this.navigator.popView(v);
-		}
-		
 		public override function createReturnObject():Object{
 			return data;
 		}

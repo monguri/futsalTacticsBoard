@@ -25,10 +25,7 @@
 			
 		private function editButtonClickHandler(event:MouseEvent):void
 		{
-			var v:SlideViewTransition = new SlideViewTransition();
-			v.mode = SlideViewTransitionMode.COVER;
-			v.direction = ViewTransitionDirection.UP;
-			this.navigator.pushView(EditRecordView, data, null, v);
+			this.navigator.pushView(EditRecordView, data, null, null);
 		}
 			
 		public override function createReturnObject():Object{
