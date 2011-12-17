@@ -3,7 +3,6 @@ package models
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
-	
 	import flash.geom.Point;
 	
 	CONFIG::SAVE_TO_SHARED_OBJECT
@@ -189,6 +188,8 @@ package models
 		CONFIG::SAVE_TO_JSON_FILE
 		private function saveRecord():void
 		{
+			var jsonStr:String = JSON.stringify(this, null, 4);
+			trace(jsonStr);
 		}
 		
 		private function getCurrentDateTimeString():String
@@ -494,7 +495,7 @@ package models
 		CONFIG::SAVE_TO_JSON_FILE
 		public function isValidText(text:String):Boolean
 		{
-			return false;
+			return true;
 		}
 		
 		//
@@ -508,6 +509,24 @@ package models
 		public function get piecesTextsBuffer():Vector.<Vector.<String>>
 		{
 			return _piecesTexts;
+		}
+
+		/**
+		 * JSON出力のためだけのゲッター 
+		 */		
+		CONFIG::SAVE_TO_JSON_FILE
+		public function get titleBuffer():String
+		{
+			return _title;
+		}
+
+		/**
+		 * JSON出力のためだけのゲッター 
+		 */		
+		CONFIG::SAVE_TO_JSON_FILE
+		public function get commentBuffer():String
+		{
+			return _comment;
 		}
 
 		public function set titleBuffer(value:String):void
