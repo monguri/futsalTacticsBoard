@@ -10,6 +10,10 @@
 			<value>true</value>
 		</define>
 		<define>
+			<name>CONFIG::SAVE_TO_JSON_FILE</name>
+			<value>false</value>
+		</define>
+		<define>
 			<name>CONFIG::FREE</name>
 			<value>false</value>
 		</define>

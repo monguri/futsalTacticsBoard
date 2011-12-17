@@ -1,14 +1,14 @@
 package models
 {
-	CONFIG::SAVE_TO_XML_FILE
 	import flash.filesystem.File;
-	CONFIG::SAVE_TO_XML_FILE
 	import flash.filesystem.FileMode;
-	CONFIG::SAVE_TO_XML_FILE
 	import flash.filesystem.FileStream;
+	
 	import flash.geom.Point;
+	
 	CONFIG::SAVE_TO_SHARED_OBJECT
 	import flash.net.SharedObject;
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.IList;
 
@@ -33,12 +33,12 @@ package models
 		{
 			_recordList = new RecordInfoModelList();
 			
-			var xmlFiles:Vector.<File> = getRecordFiles();
-			for each (var xmlFile:File in xmlFiles)
+			var files:Vector.<File> = getRecordFiles();
+			for each (var file:File in files)
 			{
-				var title:String = getXmlFileTitle(xmlFile);
-				var comment:String = getXmlFileComment(xmlFile);
-				_recordList.pushRecord(xmlFile, title, comment);
+				var title:String = getFileTitle(file);
+				var comment:String = getFileComment(file);
+				_recordList.pushRecord(file, title, comment);
 			}
 		}
 		
@@ -91,12 +91,7 @@ package models
 				_recordList.removeAll();
 			}
 			
-			CONFIG::SAVE_TO_SHARED_OBJECT{
-				saveRecord();
-			}
-			CONFIG::SAVE_TO_XML_FILE{
-				saveRecord();
-			}
+			saveRecord();
 
 			// メモリ解放
 			_piecesPoints = null;
@@ -187,8 +182,13 @@ package models
 			
 			// 保存時は、現在日時をファイル名とする
 			var file:File = new File(RECORD_SAVE_DIRECTORY + getCurrentDateTimeString() + ".xml");
-			writeXmlStringToFile(file, xml.toXMLString());
+			writeStringToFile(file, xml.toXMLString());
 			_recordList.pushRecord(file, _title, _comment);
+		}
+		
+		CONFIG::SAVE_TO_JSON_FILE
+		private function saveRecord():void
+		{
 		}
 		
 		private function getCurrentDateTimeString():String
@@ -236,7 +236,7 @@ package models
 				return false;
 			}
 			
-			var xml:XML = new XML(readXmlStringFromFile(file));
+			var xml:XML = new XML(readStringFromFile(file));
 			var pieces:XMLList = xml.pieces.piece;
 			var len1:int = pieces.length();
 			var len2:int = 0;
@@ -256,6 +256,12 @@ package models
 			return true;
 		}
 
+		CONFIG::SAVE_TO_JSON_FILE
+		public function loadPiecesPoints(record:RecordInfoModel):Boolean
+		{
+			return false;
+		}
+		
 		CONFIG::SAVE_TO_SHARED_OBJECT
 		public function loadPiecesTexts(record:RecordInfoModel):Boolean
 		{
@@ -291,7 +297,7 @@ package models
 				return false;
 			}
 			
-			var xml:XML = new XML(readXmlStringFromFile(file));
+			var xml:XML = new XML(readStringFromFile(file));
 			var pieces:XMLList = xml.pieces.piece;
 			var len1:int = pieces.length();
 			var len2:int = 0;
@@ -309,6 +315,12 @@ package models
 			return true;
 		}
 
+		CONFIG::SAVE_TO_JSON_FILE
+		public function loadPiecesTexts(record:RecordInfoModel):Boolean
+		{
+			return false;
+		}
+		
 		CONFIG::SAVE_TO_SHARED_OBJECT
 		public function deleteRecord(record:RecordInfoModel):void
 		{
@@ -327,9 +339,14 @@ package models
 			_recordList.remove(record);
 		}
 		
+		CONFIG::SAVE_TO_JSON_FILE
+		public function deleteRecord(record:RecordInfoModel):void
+		{
+			
+		}
+		
 		// TODO:SO版はリストが取得できない。何を保存しているかは別に保存が必要。それ自身をsoにする必要がある。それが欠点。今のところSO版は凍結
 		// 保存方法として、so.data下にArray持たせて、各要素にレコード名にあたるものを持たせるしかない
-		CONFIG::SAVE_TO_XML_FILE
 		public function getRecordList(searchKeyword:String = null):IList
 		{
 			return _recordList.dataProviderList(searchKeyword);
@@ -353,6 +370,12 @@ package models
 			return xmlFiles;
 		}
 		
+		CONFIG::SAVE_TO_JSON_FILE
+		private function getRecordFiles():Vector.<File>
+		{
+			return null;
+		}
+		
 		CONFIG::SAVE_TO_SHARED_OBJECT
 		private function getRecordName(record:RecordInfoModel):String
 		{
@@ -363,7 +386,6 @@ package models
 		}
 		
 		// TODO:SO版を用意していない
-		CONFIG::SAVE_TO_XML_FILE
 		public function getNumberRecords():uint
 		{
 			return _recordList.length();
@@ -371,18 +393,32 @@ package models
 		
 		// TODO:SO版を用意していない
 		CONFIG::SAVE_TO_XML_FILE
-		public function getXmlFileTitle(xmlFile:File):String
+		public function getFileTitle(file:File):String
 		{
-			var xml:XML = new XML(readXmlStringFromFile(xmlFile));
+			var xml:XML = new XML(readStringFromFile(file));
 			return xml.title;
 		}
 		
 		// TODO:SO版を用意していない
-		CONFIG::SAVE_TO_XML_FILE
-		public function getXmlFileComment(xmlFile:File):String
+		CONFIG::SAVE_TO_JSON_FILE
+		public function getFileTitle(file:File):String
 		{
-			var xml:XML = new XML(readXmlStringFromFile(xmlFile));
+			return null;
+		}
+		
+		// TODO:SO版を用意していない
+		CONFIG::SAVE_TO_XML_FILE
+		public function getFileComment(file:File):String
+		{
+			var xml:XML = new XML(readStringFromFile(file));
 			return xml.comment;
+		}
+		
+		// TODO:SO版を用意していない
+		CONFIG::SAVE_TO_JSON_FILE
+		public function getFileComment(file:File):String
+		{
+			return null;
 		}
 		
 		// TODO:SO版を用意していない
@@ -390,11 +426,17 @@ package models
 		public function setTitle(record:RecordInfoModel, title:String):void
 		{
 			var file:File = record.file;
-			var xml:XML = new XML(readXmlStringFromFile(file));
+			var xml:XML = new XML(readStringFromFile(file));
 			xml.title = title;
-			writeXmlStringToFile(file, xml.toXMLString());
+			writeStringToFile(file, xml.toXMLString());
 			
 			record.title = title;
+		}
+		
+		// TODO:SO版を用意していない
+		CONFIG::SAVE_TO_JSON_FILE
+		public function setTitle(record:RecordInfoModel, title:String):void
+		{
 		}
 		
 		// TODO:SO版を用意していない
@@ -402,29 +444,34 @@ package models
 		public function setComment(record:RecordInfoModel, comment:String):void
 		{
 			var file:File = record.file;
-			var xml:XML = new XML(readXmlStringFromFile(file));
+			var xml:XML = new XML(readStringFromFile(file));
 			xml.comment = comment;
-			writeXmlStringToFile(file, xml.toXMLString());
+			writeStringToFile(file, xml.toXMLString());
 			
 			record.comment = comment;
 		}
 		
-		CONFIG::SAVE_TO_XML_FILE
-		private function readXmlStringFromFile(file:File):String
+		// TODO:SO版を用意していない
+		CONFIG::SAVE_TO_JSON_FILE
+		public function setComment(record:RecordInfoModel, comment:String):void
+		{
+			
+		}
+		
+		private function readStringFromFile(file:File):String
 		{
 			var fs:FileStream = new FileStream();
 			fs.open(file, FileMode.READ);
-			var xmlStr:String = fs.readUTFBytes(fs.bytesAvailable);
+			var str:String = fs.readUTFBytes(fs.bytesAvailable);
 			fs.close();
-			return xmlStr;
+			return str;
 		}
 		
-		CONFIG::SAVE_TO_XML_FILE
-		private function writeXmlStringToFile(file:File, xmlStr:String):void
+		private function writeStringToFile(file:File, str:String):void
 		{
 			var fs:FileStream = new FileStream();
 			fs.open(file, FileMode.WRITE);
-			fs.writeUTFBytes(xmlStr);
+			fs.writeUTFBytes(str);
 			fs.close();
 		}
 		
@@ -442,6 +489,12 @@ package models
 			}
 			
 			return true;
+		}
+		
+		CONFIG::SAVE_TO_JSON_FILE
+		public function isValidText(text:String):Boolean
+		{
+			return false;
 		}
 		
 		//
