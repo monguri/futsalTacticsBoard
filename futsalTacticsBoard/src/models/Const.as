@@ -45,6 +45,9 @@ package models
 		public static const PLAYER_RED5_X:int = 160;
 		public static const PLAYER_RED5_Y:int = 350;
 		
+		// コマの数
+		public static const NUM_PIECES:int = 11;
+		
 		//
 		// ボタンのラベル
 		//

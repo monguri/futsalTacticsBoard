@@ -9,6 +9,7 @@ package controllers
 	import flash.geom.Point;
 	
 	import models.Const;
+	import models.FrameDatum;
 	import models.RecordInfoModel;
 	import models.RecordModel;
 	
@@ -272,7 +273,8 @@ package controllers
 		private function playEnterFrameHandler():void
 		{
 			// 録画したデータをすべて再生で吐き出した(毎フレームすべての配列にデータを入れるので一つだけ長さをチェックすればよい)
-			if (RecordModel.getInstance().piecesPointsBuffer[0].length <= _playFrame)
+//			if (RecordModel.getInstance().piecesPointsBuffer[0].length <= _playFrame)
+			if (RecordModel.getInstance().recordBean.frameLength() <= _playFrame)
 			{
 				stopPlaying();
 				// 次回再生は０フレーム目から
@@ -374,10 +376,13 @@ package controllers
 		private function writeDataToSaveDataBuffer():void
 		{
 			var i:uint = 0;
+			var datum:FrameDatum;
 			for each (var piece:Piece in _pieces)
 			{
-				RecordModel.getInstance().piecesPointsBuffer[i].push(new Point(piece.x, piece.y));
-				RecordModel.getInstance().piecesTextsBuffer[i].push(piece.text);
+//				RecordModel.getInstance().piecesPointsBuffer[i].push(new Point(piece.x, piece.y));
+//				RecordModel.getInstance().piecesTextsBuffer[i].push(piece.text);
+				datum = new FrameDatum(piece.x, piece.y, piece.text);
+				RecordModel.getInstance().recordBean.pushFrameDatum(i, datum);
 				i++;
 			}
 		}
@@ -387,9 +392,12 @@ package controllers
 			var i:uint = 0;
 			for each (var piece:Piece in _pieces)
 			{
-				piece.x = RecordModel.getInstance().piecesPointsBuffer[i][frame].x;
-				piece.y = RecordModel.getInstance().piecesPointsBuffer[i][frame].y;
-				piece.textInput.text = RecordModel.getInstance().piecesTextsBuffer[i][frame];
+//				piece.x = RecordModel.getInstance().piecesPointsBuffer[i][frame].x;
+//				piece.y = RecordModel.getInstance().piecesPointsBuffer[i][frame].y;
+//				piece.textInput.text = RecordModel.getInstance().piecesTextsBuffer[i][frame];
+				piece.x = RecordModel.getInstance().recordBean.frameData[i][frame].x;
+				piece.y = RecordModel.getInstance().recordBean.frameData[i][frame].y;
+				piece.textInput.text = RecordModel.getInstance().recordBean.frameData[i][frame].text;
 				i++;
 			}
 		}
