@@ -76,7 +76,9 @@
 					prompt.edit="Comment" change.edit="recordTextsChangeHandler(event)"
 					borderVisible.show="false" editable.show="false"/>
 		<!-- コメント編集中にフォーカスを外してソフトキーボードを引っ込ませるためだけに存在するボタン -->
+		<!-- flex4.6ではstageをクリックすることでソフトキーボードがひっこむので必要ない
 		<s:Button id="editEndButton" includeIn="edit" width="300" height="25" label="END EDIT"
 				  cacheAsBitmap="true" fontSize="12" fontStyle="normal" fontWeight="bold"/>
+		-->
 	</s:VGroup>
 </s:VGroup>
