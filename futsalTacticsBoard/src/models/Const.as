@@ -5,16 +5,16 @@ package models
 		//
 		// コマの背番号
 		//
-		public static const PLAYER_BLUE1_TEXT:String = "1 Reina";
-		public static const PLAYER_BLUE2_TEXT:String = "9 Ronald";
-		public static const PLAYER_BLUE3_TEXT:String = "10 Zidane";
-		public static const PLAYER_BLUE4_TEXT:String = "7 Rivaldo";
-		public static const PLAYER_BLUE5_TEXT:String = "4 Lucio";
+		public static const PLAYER_BLUE1_TEXT:String = "1 Reine";
+		public static const PLAYER_BLUE2_TEXT:String = "9 Ronold";
+		public static const PLAYER_BLUE3_TEXT:String = "10 Zidene";
+		public static const PLAYER_BLUE4_TEXT:String = "7 Rivald";
+		public static const PLAYER_BLUE5_TEXT:String = "4 Lusio";
 		
-		public static const PLAYER_RED1_TEXT:String = "1 川島";
-		public static const PLAYER_RED2_TEXT:String = "18 本田";
-		public static const PLAYER_RED3_TEXT:String = "10 香川";
-		public static const PLAYER_RED4_TEXT:String = "7 遠藤";
+		public static const PLAYER_RED1_TEXT:String = "1 川嶋";
+		public static const PLAYER_RED2_TEXT:String = "18 本多";
+		public static const PLAYER_RED3_TEXT:String = "10 うどん";
+		public static const PLAYER_RED4_TEXT:String = "7 えんどう";
 		public static const PLAYER_RED5_TEXT:String = "4 吉田";
 		
 		//
@@ -79,6 +79,15 @@ package models
 		public static const RECORD_NUMBER_LIMIT:int = 1000;
 		/** 録画フレーム数の制限 */		
 		public static const RECORD_FRAME_RATE_LIMIT:int = 3 * 60 * 24;
+		
+		//
+		// ダイアログの文言
+		//
+		public static const INVALID_CHARACTER_ERROR:String = "Invalid character, cannot save: >, <, &, \' or \".";
+		public static const RECORDS_NUMBER_FULL_WARNING:String = "The number of records comes to limit. You can delete some records.";
+		public static const RECORDS_NUMBER_OVER_LIMIT_ERROR:String = "The number of records is over limit. Please delete some records.";
+		public static const RECORD_SIZE_FULL_MESSAGE:String = "The size of record comes to limit.";
+		public static const FREE_LIMITATION_MESSAGE:String = "At this free version, you can have just 1 record.\n 1000 records enable at \"futsal tactics board\".\n Check it!";
 		
 		public function Const()
 		{

@@ -13,6 +13,8 @@
 	<fx:Script>
 		<![CDATA[
 			import components.Dialog;
+			
+			import models.Const;
 			protected function addedToStageHandler(event:Event):void
 			{
 				// initializeイベントやcreationCompleteではタイミングが早くてthis.stageがnullになるのでaddedToStageイベントを使うのが確実
@@ -20,7 +22,7 @@
 				this.stage.frameRate = 24;
 				// 無償版の場合は、アプリ起動時に制限事項のポップアップを出す
 				CONFIG::FREE{
-					freeVerLimitDialog.show(this, "At this free version, you can have just 1 record.\n 1000 records enable at \"futsal tactics board\".\n Check it!", "Free Ver. Limitation", Dialog.BUTTON_OK);
+					freeVerLimitDialog.show(this, Const.FREE_LIMITATION_MESSAGE, "Free Ver. Limitation", Dialog.BUTTON_OK);
 				}
 			}
 		]]>

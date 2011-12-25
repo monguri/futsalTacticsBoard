@@ -9,8 +9,9 @@
 	</fx:Declarations>
 	<fx:Script>
 	<![CDATA[
-		import models.RecordModel;
+		import models.Const;
 		import models.RecordInfoModel;
+		import models.RecordModel;
 		
 		import spark.transitions.SlideViewTransition;
 		import spark.transitions.SlideViewTransitionMode;
@@ -56,7 +57,7 @@
 			doneButton.enabled = valid;
 			if (!valid)
 			{
-				invalidCharAlert.show(this, "Title or Comment includes invalid character: >, <, &, \' or \".", "Invalid Char Alert", Dialog.BUTTON_OK);
+				invalidCharAlert.show(this, Const.INVALID_CHARACTER_ERROR, "Invalid Char Alert", Dialog.BUTTON_OK);
 			}
 		}
 	]]>

@@ -207,7 +207,8 @@ package controllers
 					_view.recordPlayButton.enabled = valid;
 					if (!valid)
 					{
-						_view.invalidCharAlert.show(_view, "Invalid character, cannot record: >, <, &, \' or \".", "Invalid Char Alert", Dialog.BUTTON_OK);
+						// TODO:このダイアログのOKボタンを押したら、ソフトキーボードが引っ込んで、jsonに使用不可文字が入らないか？?
+						_view.invalidCharAlert.show(_view, Const.INVALID_CHARACTER_ERROR, "Invalid Char Alert", Dialog.BUTTON_OK);
 					}
 					break;
 				case MODE_PLAY:
@@ -266,7 +267,7 @@ package controllers
 			if (_recordFrame >= Const.RECORD_FRAME_RATE_LIMIT) // 録画可能な容量をオーバーした
 			{
 				var saveFrameLimit:Dialog = new Dialog();
-				saveFrameLimit.show(_view, "The size of record comes to limit.", "Size Limit", Dialog.BUTTON_OK);
+				saveFrameLimit.show(_view, Const.RECORD_SIZE_FULL_MESSAGE, "Size Limit", Dialog.BUTTON_OK);
 				stopRecording();
 				_recordFrame = 0;
 				return;

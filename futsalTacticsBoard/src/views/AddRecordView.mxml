@@ -37,11 +37,11 @@
 			var curNumRecords:uint = RecordModel.getInstance().getNumberRecords();
 			if (curNumRecords + 1 == Const.RECORD_NUMBER_LIMIT)
 			{
-				alertDialog.show(this, "The number of records comes to limit. You can delete some records.", "Limit Alert", Dialog.BUTTON_OK);
+				alertDialog.show(this, Const.RECORDS_NUMBER_FULL_WARNING, "Limit Alert", Dialog.BUTTON_OK);
 			}
 			else if (curNumRecords >= Const.RECORD_NUMBER_LIMIT)
 			{
-				alertDialog.show(this, "The number of records is over limit. Please delete some records.", "Save Failed", Dialog.BUTTON_OK);
+				alertDialog.show(this, Const.RECORDS_NUMBER_OVER_LIMIT_ERROR, "Save Failed", Dialog.BUTTON_OK);
 				saveFlag = false;
 			}
 			
@@ -75,7 +75,7 @@
 			doneButton.enabled = valid;
 			if (!valid)
 			{
-				alertDialog.show(this, "Title or Comment includes invalid character: >, <, &, \' or \".", "Invalid Char Alert", Dialog.BUTTON_OK);
+				alertDialog.show(this, Const.INVALID_CHARACTER_ERROR, "Invalid Char Alert", Dialog.BUTTON_OK);
 			}
 		}
 	]]>
