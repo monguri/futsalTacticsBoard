@@ -16,6 +16,7 @@ package controllers
 	import mx.core.IMXMLObject;
 	import mx.events.FlexEvent;
 	
+	import spark.components.TextInput;
 	import spark.components.supportClasses.ViewReturnObject;
 	import spark.core.ContentCache;
 	import spark.core.IContentLoader;
@@ -105,7 +106,7 @@ package controllers
 			_view.playerRed5.text = Const.PLAYER_RED5_TEXT;
 		}
 		
-		public function addHandler(event:Event):void
+		private function addHandler(event:Event):void
 		{
 			trace("add");
 			// 描画されてから再生されるようにADDED_TO_STAGEイベントハンドラで再生開始
@@ -148,11 +149,9 @@ package controllers
 			}
 		}
 		
-		public function creationCompleteHandler(event:Event):void
+		private function creationCompleteHandler(event:Event):void
 		{
 			trace("creation complete");
-			resetData();//初期状態へ
-		
 			_pieces = new Vector.<Piece>;
 			_pieces.push(_view.ball);
 			_pieces.push(_view.playerBlue1);
@@ -174,12 +173,16 @@ package controllers
 			{
 				piece.textInput.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE, pieceTextInputSoftKeyboardDeactivateHandler);
 				piece.image.contentLoader = contentLoader;
+				piece.controller.pieceTextChangeCallback = pieceTextChangeHandler;
 			}
 
 			// ボタンのマウスクリックイベント;
 			_view.recordPlayButton.addEventListener(MouseEvent.CLICK, recordPlayButtonMouseClickHandler);
 			_view.resetButton.addEventListener(MouseEvent.CLICK, resetButtonMouseClickHandler);
 			_view.backButton.addEventListener(MouseEvent.CLICK, backButtonMouseClickHandler);
+			
+			//コマの位置、テキストを初期状態へ
+			resetData();
 		}
 		
 		/**
@@ -187,11 +190,32 @@ package controllers
 		 * @param event
 		 * 
 		 */
-		public function pieceTextInputSoftKeyboardDeactivateHandler(event:SoftKeyboardEvent = null):void
+		private function pieceTextInputSoftKeyboardDeactivateHandler(event:SoftKeyboardEvent = null):void
 		{
 			if (_isRecording)
 			{
 				writeDataToSaveDataBuffer();
+			}
+		}
+		
+		private function pieceTextChangeHandler(pieceText:TextInput):void
+		{
+			switch (_mode)
+			{
+				case MODE_RECORD:
+					var valid:Boolean = RecordModel.getInstance().isValidText(pieceText.text);
+					_view.recordPlayButton.enabled = valid;
+					if (!valid)
+					{
+						_view.invalidCharAlert.show(_view, "Invalid character, cannot record: >, <, &, \' or \".", "Invalid Char Alert", Dialog.BUTTON_OK);
+					}
+					break;
+				case MODE_PLAY:
+					// do nothing
+					break;
+				default:
+					trace("Assert");
+					break;
 			}
 		}
 		
@@ -200,7 +224,7 @@ package controllers
 		 * @param event
 		 * 
 		 */
-		public function enterFrameHandler(event:Event):void
+		private function enterFrameHandler(event:Event):void
 		{
 			switch (_mode)
 			{
@@ -219,7 +243,6 @@ package controllers
 					}
 					break;
 				default:
-					// do nothing
 					trace("Assert");
 					break;
 			}

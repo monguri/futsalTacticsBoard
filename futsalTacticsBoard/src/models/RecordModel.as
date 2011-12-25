@@ -602,8 +602,7 @@ package models
 			fs.close();
 		}
 		
-		// TODO:要素の中身、属性、Jsonに分けて実装する。
-		CONFIG::SAVE_TO_XML_FILE
+		// 要素の中身、属性、Jsonでエスケープすべき文字は同じに扱う
 		public function isValidText(text:String):Boolean
 		{
 			// 文字を入力するたびに判定するので、文字列の最後尾から調べた方が速度が速いと思われる
@@ -619,12 +618,6 @@ package models
 			return true;
 		}
 		
-		CONFIG::SAVE_TO_JSON_FILE
-		public function isValidText(text:String):Boolean
-		{
-			return true;
-		}
-
 		public function get recordBean():RecordBean
 		{
 			return _bean;

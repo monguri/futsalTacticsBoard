@@ -1,18 +1,20 @@
 package controllers
 {
+	import components.Piece;
+	
 	import flash.events.MouseEvent;
 	
 	import mx.core.IMXMLObject;
 	import mx.events.FlexEvent;
 	
 	import spark.core.ContentCache;
-	
-	import components.Piece;
+	import spark.events.TextOperationEvent;
 
 	public class PieceController implements IMXMLObject
 	{
 		private var _view:Piece;
 		private var _isDraging:Boolean = false;
+		private var _pieceTextChangeCallback:Function;
 		
 		public function PieceController()
 		{
@@ -27,10 +29,16 @@ package controllers
 		//
 		// イベントハンドラ
 		//
-		protected function creationCompleteHandler(event:FlexEvent):void
+		private function creationCompleteHandler(event:FlexEvent):void
 		{
 			_view.image.addEventListener(MouseEvent.MOUSE_DOWN, imageMouseDownHandler);
 			_view.image.addEventListener(MouseEvent.MOUSE_UP, imageMouseUpHandler);
+			_view.textInput.addEventListener(TextOperationEvent.CHANGE, pieceTextChangeHandler);
+		}
+		
+		private function pieceTextChangeHandler(event:TextOperationEvent):void
+		{
+			_pieceTextChangeCallback(event.currentTarget);	
 		}
 		
 		private function imageMouseDownHandler(event:MouseEvent):void
@@ -62,6 +70,11 @@ package controllers
 		public function get isDraging():Boolean
 		{
 			return _isDraging;
+		}
+
+		public function set pieceTextChangeCallback(value:Function):void
+		{
+			_pieceTextChangeCallback = value;
 		}
 	}
 }
