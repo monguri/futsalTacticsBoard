@@ -22,7 +22,7 @@
 				this.stage.frameRate = 24;
 				// 無償版の場合は、アプリ起動時に制限事項のポップアップを出す
 				CONFIG::FREE{
-					freeVerLimitDialog.show(this, Const.FREE_LIMITATION_MESSAGE, "Free Ver. Limitation", Dialog.BUTTON_OK);
+					freeVerLimitDialog.show(this, Const.FREE_LIMITATION_TITLE, Const.FREE_LIMITATION_MESSAGE, Dialog.BUTTON_OK);
 				}
 			}
 		]]>

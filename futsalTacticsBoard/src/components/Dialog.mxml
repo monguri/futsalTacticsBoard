@@ -12,8 +12,7 @@
 			public static const BUTTON_OK:uint = 0;
 			public static const BUTTON_OK_CANCEL:uint = 1;
 			
-			public function show(owner:DisplayObjectContainer, 
-										message:String, title:String, buttonMode:uint):void {
+			public function show(owner:DisplayObjectContainer, title:String, message:String, buttonMode:uint):void {
 				var a:Dialog = new Dialog();
 				a.open(owner, true);
 				switch (buttonMode)

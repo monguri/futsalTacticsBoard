@@ -83,11 +83,21 @@ package models
 		//
 		// ダイアログの文言
 		//
+		public static const FREE_LIMITATION_TITLE:String = "Free Ver. Limitation";
+		public static const INVALID_CHARACTER_TITLE:String = "Invalid Char Alert";
+		public static const RECORD_SIZE_FULL_TITLE:String = "Size Limit";
+		public static const UPLOAD_SUCCEDED_TITLE:String = "Upload Success";
+		public static const UPLOAD_FAILED_TITLE:String = "Upload Failed";
+		public static const RECORDS_NUMBER_FULL_TITLE:String = "Limit Alert";
+		public static const RECORDS_NUMBER_OVER_LIMIT_TITLE:String = "Save Failed";
+		
 		public static const INVALID_CHARACTER_ERROR:String = "Invalid character, cannot save: >, <, &, \' or \".";
 		public static const RECORDS_NUMBER_FULL_WARNING:String = "The number of records comes to limit. You can delete some records.";
 		public static const RECORDS_NUMBER_OVER_LIMIT_ERROR:String = "The number of records is over limit. Please delete some records.";
 		public static const RECORD_SIZE_FULL_MESSAGE:String = "The size of record comes to limit.";
 		public static const FREE_LIMITATION_MESSAGE:String = "At this free version, you can have just 1 record.\n 1000 records enable at \"futsal tactics board\".\n Check it!";
+		public static const UPLOAD_SUCCEDED_MESSAGE:String = "Uploading record was succeeded.";
+		public static const UPLOAD_FAILED_MESSAGE:String = "Sorry, uploading record was failed by an error.";
 		
 		public function Const()
 		{

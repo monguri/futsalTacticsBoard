@@ -57,7 +57,7 @@
 			doneButton.enabled = valid;
 			if (!valid)
 			{
-				invalidCharAlert.show(this, Const.INVALID_CHARACTER_ERROR, "Invalid Char Alert", Dialog.BUTTON_OK);
+				invalidCharAlert.show(this, Const.INVALID_CHARACTER_TITLE, Const.INVALID_CHARACTER_ERROR, Dialog.BUTTON_OK);
 			}
 		}
 	]]>
