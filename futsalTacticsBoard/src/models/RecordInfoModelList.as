@@ -12,6 +12,10 @@ package models
 		public function RecordInfoModelList()
 		{
 			_list = new Array();
+			
+			// リストの一番上の項目はサーバダウンロード 
+			var record:RecordInfoModel = new RecordInfoModel(null, Const.DOWNLOAD_LIST_LABEL, null);
+			_list.push(record);
 		}
 		
 		public function pushRecord(file:File, title:String, comment:String):void

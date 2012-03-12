@@ -4,12 +4,14 @@
 		xmlns:components="components.*"
 		add="viewAddHandler(event)" destructionPolicy="never" title="Information">
 	<fx:Declarations>
+		<components:Dialog id="uploadResponseDialog"/>
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	<fx:Script>
 	<![CDATA[
-		import models.RecordModel;
+		import models.Const;
 		import models.RecordInfoModel;
+		import models.RecordModel;
 		
 		import spark.components.supportClasses.ViewReturnObject;
 		import spark.transitions.SlideViewTransition;
@@ -75,6 +77,25 @@
 			}
 			this.navigator.popView();
 		}
+		
+		private function uploadButtonClickHandler(event:MouseEvent):void
+		{
+			if (data != null) // アプリ再開がこの画面のときはdataはnullになっている
+			{
+				// TODO:なんでもRecordModelにやらせるのはよくないがとりあえず試験的実装
+				RecordModel.getInstance().uploadRecord(data as RecordInfoModel, uploadRecordCompleteHandler, uploadRecordErrorHandler);
+			}
+		}
+		
+		private function uploadRecordCompleteHandler():void
+		{
+			uploadResponseDialog.show(this, Const.UPLOAD_SUCCEDED_TITLE, Const.UPLOAD_SUCCEDED_MESSAGE, Dialog.BUTTON_OK);
+		}
+		
+		private function uploadRecordErrorHandler():void
+		{
+			uploadResponseDialog.show(this, Const.UPLOAD_FAILED_TITLE, Const.UPLOAD_FAILED_MESSAGE, Dialog.BUTTON_OK);
+		}
 	]]>
 	</fx:Script>
 	<s:navigationContent>
@@ -98,6 +119,9 @@
 		-->
 		<s:Button id="deleteButton" width="90" height="25" label="DELETE" cacheAsBitmap="true"
 				  click="deleteButtonClickHandler(event)" fontSize="12" fontStyle="normal"
+				  fontWeight="bold"/>
+		<s:Button id="uploadButton" width="90" height="25" label="UPLOAD" cacheAsBitmap="true"
+				  click="uploadButtonClickHandler(event)" fontSize="12" fontStyle="normal"
 				  fontWeight="bold"/>
 	</s:HGroup>
 </s:View>

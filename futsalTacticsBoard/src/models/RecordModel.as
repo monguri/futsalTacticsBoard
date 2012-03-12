@@ -10,6 +10,17 @@ package models
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.IList;
+	import flash.net.URLRequest;
+	import flash.events.Event;
+	import flash.events.SecurityErrorEvent;
+	import flash.events.HTTPStatusEvent;
+	import flash.events.IOErrorEvent;
+	import flash.errors.IOError;
+	import flash.net.URLRequestMethod;
+	import flash.net.URLLoader;
+	import flash.net.URLVariables;
+	import flash.net.URLLoaderDataFormat;
+	import flash.system.System;
 
 	// シングルトン
 	public class RecordModel
@@ -25,6 +36,10 @@ package models
 //		private var _title:String;
 //		private var _comment:String;
 		private var _bean:RecordBean;
+		private var _urlLoadCompleteCallback:Function;
+		private var _urlLoadErrorCallback:Function;
+		private var _loader:URLLoader;
+//		private var _file:File;
 
 		private static const RECORD_SAVE_DIRECTORY:String = "app-storage:/";
 
@@ -35,6 +50,7 @@ package models
 			var files:Vector.<File> = getRecordFiles();
 			for each (var file:File in files)
 			{
+				// TODO:不正なJSONファイルが一個できるとアプリが起動できなくなるので対処
 				var title:String = getFileTitle(file);
 				var comment:String = getFileComment(file);
 				_recordList.pushRecord(file, title, comment);
@@ -440,6 +456,116 @@ package models
 			}
 			
 			_recordList.remove(record);
+		}
+		
+		
+		CONFIG::SAVE_TO_XML_FILE
+		public function uploadRecord(record:RecordInfoModel):void
+		{
+			if (record.file.exists)
+			{
+				record.file.deleteFile();
+			}
+		}
+		
+		// TODO:SO版を用意していない
+		public function uploadRecord(record:RecordInfoModel, urlLoadCompleteCallback:Function, urlLoadErrorCallback:Function):void
+		{
+			var file:File = record.file;
+			if (file.exists)
+			{
+				_urlLoadCompleteCallback = urlLoadCompleteCallback;
+				_urlLoadErrorCallback = urlLoadErrorCallback;
+				
+				// リクエストを作成する POSTでファイルの文字列をHTTPヘッダに含めて送信する
+				var request:URLRequest = new URLRequest(Const.SERVER_URL_BASE);
+				request.method = URLRequestMethod.POST;
+				var urlVar:URLVariables = new URLVariables();
+				urlVar.mode = Const.URL_VALUE_UPLOAD;
+				urlVar.title = record.title;
+				urlVar.comment = record.comment;
+				urlVar.data = readStringFromFile(file);
+				request.data = urlVar;
+				var loader:URLLoader = new URLLoader();
+				
+				// イベントリスナー設定
+				loader.addEventListener(Event.COMPLETE, uploadCompleteHandler);
+				loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, urlLoadHTTPStatusHandler);
+				loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoadErrorHandler);
+				loader.addEventListener(IOErrorEvent.IO_ERROR, urlLoadErrorHandler);
+				
+				// 送信
+				_loader = loader;
+				loader.load(request);
+			}
+		}
+		
+		// TODO:SO版を用意していない
+		public function downloadRecord(url:String, urlLoadCompleteCallback:Function, urlLoadErrorCallback:Function):void
+		{
+			_urlLoadCompleteCallback = urlLoadCompleteCallback;
+			_urlLoadErrorCallback = urlLoadErrorCallback;
+			
+			var request:URLRequest = new URLRequest(url);
+			request.method = URLRequestMethod.GET;
+			var loader:URLLoader = new URLLoader();
+			loader.dataFormat = URLLoaderDataFormat.TEXT;
+//			System.useCodePage = true;
+			
+			// イベントリスナー設定
+			loader.addEventListener(Event.COMPLETE, downloadCompleteHandler);
+			loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, urlLoadHTTPStatusHandler);
+			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoadErrorHandler);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, urlLoadErrorHandler);
+			
+			// 送信
+			_loader = loader;
+			loader.load(request);
+		}
+		
+		private function uploadCompleteHandler(event:Event):void
+		{
+			_loader.removeEventListener(Event.COMPLETE, uploadCompleteHandler);
+			_loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, urlLoadHTTPStatusHandler);
+			_loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoadErrorHandler);
+			_loader.removeEventListener(IOErrorEvent.IO_ERROR, urlLoadErrorHandler);
+			_loader = null;
+			_urlLoadCompleteCallback();
+		}
+		
+		private function downloadCompleteHandler(event:Event):void
+		{
+			var recordData:String = _loader.data as String;
+			var file:File = new File(RECORD_SAVE_DIRECTORY + getCurrentDateTimeString() + ".json");
+			writeStringToFile(file, recordData);
+			var o:Object = JSON.parse(recordData);
+			_recordList.pushRecord(file, o.title, o.comment);
+			
+			_loader.removeEventListener(Event.COMPLETE, uploadCompleteHandler);
+			_loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, urlLoadHTTPStatusHandler);
+			_loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoadErrorHandler);
+			_loader.removeEventListener(IOErrorEvent.IO_ERROR, urlLoadErrorHandler);
+			_loader = null;
+			_urlLoadCompleteCallback();
+		}
+		
+		private function urlLoadHTTPStatusHandler(event:HTTPStatusEvent):void
+		{
+			// この後にcompleteイベントがくるので、ステータスコードが成功のときは得に何もしない
+			if (event.status >= 300)
+			{
+				urlLoadErrorHandler(event);
+			}
+		}
+		
+		private function urlLoadErrorHandler(event:Event):void
+		{
+			_loader.removeEventListener(Event.COMPLETE, uploadCompleteHandler);
+			_loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, urlLoadHTTPStatusHandler);
+			_loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoadErrorHandler);
+			_loader.removeEventListener(IOErrorEvent.IO_ERROR, urlLoadErrorHandler);
+			_loader = null;
+			_urlLoadErrorCallback();
 		}
 		
 		// TODO:SO版はリストが取得できない。何を保存しているかは別に保存が必要。それ自身をsoにする必要がある。それが欠点。今のところSO版は凍結

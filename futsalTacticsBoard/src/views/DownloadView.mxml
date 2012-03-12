@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:components="components.*"
+		add="downloadViewAddHandler(event)" title="Download">
+	
+	<fx:Declarations>
+		<components:Dialog id="downloadResponseDialog"/>
+		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import models.Const;
+			import models.RecordModel;
+			
+			import mx.events.FlexEvent;
+			
+			private var _webView:StageWebView = null;
+			
+			private function backButtonClickHandler(event:MouseEvent):void
+			{
+				popThisView();
+			}
+			
+			private function popThisView():void
+			{
+				if (_webView != null)
+				{
+					_webView.removeEventListener(LocationChangeEvent.LOCATION_CHANGING, webViewLocationChangingHandler);
+//					_webView.removeEventListener(LocationChangeEvent.LOCATION_CHANGE, webViewLocationChangeHandler);
+					_webView.dispose();
+					_webView = null;
+				}
+				
+				this.navigator.popView();
+			}
+			
+			protected function downloadViewAddHandler(event:FlexEvent):void
+			{
+				var y:Number = navigator.actionBar.height;
+				
+				_webView = new StageWebView();
+				_webView.stage = this.stage;
+				_webView.viewPort = new Rectangle(0, y, stage.stageWidth, (stage.stageHeight - y));
+				_webView.addEventListener(LocationChangeEvent.LOCATION_CHANGING, webViewLocationChangingHandler);
+//				_webView.addEventListener(LocationChangeEvent.LOCATION_CHANGE, webViewLocationChangeHandler);
+				var url:String = Const.SERVER_URL_BASE + "?mode=downloadlist";
+				_webView.loadURL(url); // GETによる通信となる
+			}
+			
+			private function webViewLocationChangingHandler(event:LocationChangeEvent):void
+			{
+				const downloadStartURL:String = Const.SERVER_URL_BASE + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD_START + "&" + Const.URL_PARAM_RECORD_ID;
+				var changedURL:String = event.location;
+//				downloadResponseDialog.show(this, Const.DOWNLOAD_SUCCEDED_TITLE, changedURL, Dialog.BUTTON_OK);
+				if (changedURL.indexOf(downloadStartURL) == 0)
+				{
+					var nextURL:String = Const.SERVER_URL_BASE + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD + "&" + Const.URL_PARAM_RECORD_ID;
+					nextURL += changedURL.substring(downloadStartURL.length, changedURL.length);
+//					downloadResponseDialog.show(this, Const.DOWNLOAD_SUCCEDED_TITLE, "Just before load()", Dialog.BUTTON_OK);
+					RecordModel.getInstance().downloadRecord(nextURL, downloadRecordCompleteHandler, downloadRecordErrorHandler);
+//					downloadResponseDialog.show(this, Const.DOWNLOAD_SUCCEDED_TITLE, "Just after load()", Dialog.BUTTON_OK);
+				}
+			}
+			
+//			private function webViewLocationChangeHandler(event:LocationChangeEvent):void
+//			{
+//				const downloadStartURL:String = Const.SERVER_URL_BASE + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD_START + "&" + Const.URL_PARAM_RECORD_ID;
+//				var changedURL:String = event.location;
+////				downloadResponseDialog.show(this, Const.DOWNLOAD_SUCCEDED_TITLE, changedURL, Dialog.BUTTON_OK);
+//				if (changedURL.indexOf(downloadStartURL) == 0)
+//				{
+//					var nextURL:String = Const.SERVER_URL_BASE + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD + "&" + Const.URL_PARAM_RECORD_ID;
+//					nextURL += changedURL.substring(downloadStartURL.length, changedURL.length);
+////					downloadResponseDialog.show(this, Const.DOWNLOAD_SUCCEDED_TITLE, "Just before load()", Dialog.BUTTON_OK);
+//					RecordModel.getInstance().downloadRecord(nextURL, downloadRecordCompleteHandler, downloadRecordErrorHandler);
+////					downloadResponseDialog.show(this, Const.DOWNLOAD_SUCCEDED_TITLE, "Just after load()", Dialog.BUTTON_OK);
+//				}
+//			}
+			
+			private function downloadRecordCompleteHandler():void
+			{
+				downloadResponseDialog.show(this, Const.DOWNLOAD_SUCCEDED_TITLE, Const.DOWNLOAD_SUCCEDED_MESSAGE, Dialog.BUTTON_OK);
+				popThisView();
+			}
+			
+			private function downloadRecordErrorHandler():void
+			{
+				downloadResponseDialog.show(this, Const.DOWNLOAD_FAILED_TITLE, Const.DOWNLOAD_FAILED_MESSAGE, Dialog.BUTTON_OK);
+				popThisView();
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
+	</fx:Declarations>
+	<s:navigationContent>
+		<s:Button id="backButton" label="Back" click="backButtonClickHandler(event)"/>
+	</s:navigationContent>
+</s:View>
