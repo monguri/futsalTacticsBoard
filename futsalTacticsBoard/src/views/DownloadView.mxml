@@ -26,8 +26,13 @@
 			{
 				if (_webView != null)
 				{
-					_webView.removeEventListener(LocationChangeEvent.LOCATION_CHANGING, webViewLocationChangingHandler);
-//					_webView.removeEventListener(LocationChangeEvent.LOCATION_CHANGE, webViewLocationChangeHandler);
+					CONFIG::SIMULATOR {
+						_webView.removeEventListener(LocationChangeEvent.LOCATION_CHANGE, webViewLocationChangeHandler);
+					}
+					CONFIG::DEVICE {
+						_webView.removeEventListener(LocationChangeEvent.LOCATION_CHANGING, webViewLocationChangeHandler);
+					}
+				
 					_webView.dispose();
 					_webView = null;
 				}
@@ -42,20 +47,28 @@
 				_webView = new StageWebView();
 				_webView.stage = this.stage;
 				_webView.viewPort = new Rectangle(0, y, stage.stageWidth, (stage.stageHeight - y));
-				_webView.addEventListener(LocationChangeEvent.LOCATION_CHANGING, webViewLocationChangingHandler);
-//				_webView.addEventListener(LocationChangeEvent.LOCATION_CHANGE, webViewLocationChangeHandler);
-				var url:String = Const.SERVER_URL_BASE + "?mode=downloadlist";
+				
+				// シミュレータとデバイスで、URL変更に反応するイベントが異なる
+				CONFIG::SIMULATOR {
+					_webView.addEventListener(LocationChangeEvent.LOCATION_CHANGE, webViewLocationChangeHandler);
+				}
+				
+				CONFIG::DEVICE {
+					_webView.addEventListener(LocationChangeEvent.LOCATION_CHANGING, webViewLocationChangeHandler);
+				}
+
+				var url:String = Const.DOWNLOAD_URL + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD_LIST;
 				_webView.loadURL(url); // GETによる通信となる
 			}
 			
-			private function webViewLocationChangingHandler(event:LocationChangeEvent):void
+			private function webViewLocationChangeHandler(event:LocationChangeEvent):void
 			{
-				const downloadStartURL:String = Const.SERVER_URL_BASE + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD_START + "&" + Const.URL_PARAM_RECORD_ID;
+				const downloadStartURL:String = Const.DOWNLOAD_URL + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD_START + "&" + Const.URL_PARAM_RECORD_ID;
 				var changedURL:String = event.location;
 //				downloadResponseDialog.show(this, Const.DOWNLOAD_SUCCEDED_TITLE, changedURL, Dialog.BUTTON_OK);
 				if (changedURL.indexOf(downloadStartURL) == 0)
 				{
-					var nextURL:String = Const.SERVER_URL_BASE + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD + "&" + Const.URL_PARAM_RECORD_ID;
+					var nextURL:String = Const.DOWNLOAD_URL + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD + "&" + Const.URL_PARAM_RECORD_ID;
 					nextURL += changedURL.substring(downloadStartURL.length, changedURL.length);
 //					downloadResponseDialog.show(this, Const.DOWNLOAD_SUCCEDED_TITLE, "Just before load()", Dialog.BUTTON_OK);
 					RecordModel.getInstance().downloadRecord(nextURL, downloadRecordCompleteHandler, downloadRecordErrorHandler);
@@ -65,12 +78,12 @@
 			
 //			private function webViewLocationChangeHandler(event:LocationChangeEvent):void
 //			{
-//				const downloadStartURL:String = Const.SERVER_URL_BASE + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD_START + "&" + Const.URL_PARAM_RECORD_ID;
+//				const downloadStartURL:String = Const.DOWNLOAD_URL + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD_START + "&" + Const.URL_PARAM_RECORD_ID;
 //				var changedURL:String = event.location;
 ////				downloadResponseDialog.show(this, Const.DOWNLOAD_SUCCEDED_TITLE, changedURL, Dialog.BUTTON_OK);
 //				if (changedURL.indexOf(downloadStartURL) == 0)
 //				{
-//					var nextURL:String = Const.SERVER_URL_BASE + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD + "&" + Const.URL_PARAM_RECORD_ID;
+//					var nextURL:String = Const.DOWNLOAD_URL + "?" + Const.URL_PARAM_MODE + Const.URL_VALUE_DOWNLOAD + "&" + Const.URL_PARAM_RECORD_ID;
 //					nextURL += changedURL.substring(downloadStartURL.length, changedURL.length);
 ////					downloadResponseDialog.show(this, Const.DOWNLOAD_SUCCEDED_TITLE, "Just before load()", Dialog.BUTTON_OK);
 //					RecordModel.getInstance().downloadRecord(nextURL, downloadRecordCompleteHandler, downloadRecordErrorHandler);

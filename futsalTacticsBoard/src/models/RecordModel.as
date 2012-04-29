@@ -478,10 +478,9 @@ package models
 				_urlLoadErrorCallback = urlLoadErrorCallback;
 				
 				// リクエストを作成する POSTでファイルの文字列をHTTPヘッダに含めて送信する
-				var request:URLRequest = new URLRequest(Const.SERVER_URL_BASE);
+				var request:URLRequest = new URLRequest(Const.UPLOAD_URL);
 				request.method = URLRequestMethod.POST;
 				var urlVar:URLVariables = new URLVariables();
-				urlVar.mode = Const.URL_VALUE_UPLOAD;
 				urlVar.title = record.title;
 				urlVar.comment = record.comment;
 				urlVar.data = readStringFromFile(file);

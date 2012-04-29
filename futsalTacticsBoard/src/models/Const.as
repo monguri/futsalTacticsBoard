@@ -61,22 +61,34 @@ package models
 		public static const RECORD_BUTTON_LABEL_SUSPEND:String = "STOP";
 		public static const PLAY_BUTTON_LABEL_START:String = "PLAY";
 		public static const PLAY_BUTTON_LABEL_SUSPEND:String = "STOP";
-		
 		public static const RESET_BUTTON_LABEL:String = "RESET";
-		
 		public static const BACK_BUTTON_LABEL:String = "BACK";
 		
 		//
 		// アップロード、ダウンロード
 		//
-//		public static const SERVER_URL_BASE:String = "http://localhost:8888/futsalTacticsBoard";
-		public static const SERVER_URL_BASE:String = "http://futsaltacticsboard.appspot.com/futsalTacticsBoard";
+		CONFIG::GAE_LOCAL {
+			public static const SERVER_URL_BASE:String = "http://localhost:8888/";
+		}
+		CONFIG::GAE_REMOTE {
+			public static const SERVER_URL_BASE:String = "http://futsaltacticsboard.appspot.com/";
+		}
+		public static const DOWNLOAD_URL:String = SERVER_URL_BASE + "download";
 		public static const URL_PARAM_MODE:String = "mode=";
+		public static const URL_VALUE_DOWNLOAD_LIST:String = "downloadlist";
 		public static const URL_VALUE_DOWNLOAD_START:String = "downloadstart";
 		public static const URL_VALUE_DOWNLOAD:String = "download";
-		public static const URL_VALUE_UPLOAD:String = "upload";
+		public static const UPLOAD_URL:String = SERVER_URL_BASE + "upload";
 		public static const URL_PARAM_RECORD_ID:String = "recordid=";
 		public static const DOWNLOAD_LIST_LABEL:String = "[DOWNLOAD FROM SERVER...]";
+
+		//
+		// アップロード、ダウンロードの結果コード
+		//
+		public static const RESULT_CD_SUCCESS:int = 0;
+		public static const RESULT_CD_SYSTEM_ERROR:int = -1;
+		public static const RESULT_CD_NOT_LOGIN_ERROR:int = -2;
+		public static const RESULT_CD_NOT_REGIST_ERROR:int = -3;
 
 		//
 		// 録画情報の文字数制限

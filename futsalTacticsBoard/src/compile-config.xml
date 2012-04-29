@@ -17,5 +17,21 @@
 			<name>CONFIG::FREE</name>
 			<value>false</value>
 		</define>
+		<define>
+			<name>CONFIG::SIMULATOR</name>
+			<value>false</value>
+		</define>
+		<define>
+			<name>CONFIG::DEVICE</name>
+			<value>true</value>
+		</define>
+		<define>
+			<name>CONFIG::GAE_LOCAL</name>
+			<value>false</value>
+		</define>
+		<define>
+			<name>CONFIG::GAE_REMOTE</name>
+			<value>true</value>
+		</define>
 	</compiler>
 </flex-config>
