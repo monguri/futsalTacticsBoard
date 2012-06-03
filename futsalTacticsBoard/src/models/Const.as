@@ -121,7 +121,7 @@ package models
 		public static const RECORDS_NUMBER_FULL_WARNING:String = "The number of records comes to limit. You can delete some records.";
 		public static const RECORDS_NUMBER_OVER_LIMIT_ERROR:String = "The number of records is over limit. Please delete some records.";
 		public static const RECORD_SIZE_FULL_MESSAGE:String = "The size of record comes to limit.";
-		public static const FREE_LIMITATION_MESSAGE:String = "At this free version, you can have just 1 record.\n 1000 records enable at \"futsal tactics board\".\n Check it!";
+		public static const FREE_LIMITATION_MESSAGE:String = "At this free version, you can have just 1 record.\n 1000 records enable at \"FutsalTacticsBoard\".\n Check it!";
 		public static const UPLOAD_SUCCEDED_MESSAGE:String = "Uploading record was succeeded.";
 		public static const UPLOAD_FAILED_MESSAGE:String = "Sorry, uploading record was failed by an error.";
 		public static const DOWNLOAD_SUCCEDED_MESSAGE:String = "Downloading record was succeeded.";

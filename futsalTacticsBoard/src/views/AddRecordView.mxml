@@ -46,8 +46,6 @@
 			}
 			
 			//TODO:Modelに直接触るのはよくない
-//			RecordModel.getInstance().titleBuffer = info.titleTextInput.text;
-//			RecordModel.getInstance().commentBuffer = info.commentTextArea.text;
 			RecordModel.getInstance().recordBean.title = info.titleTextInput.text;
 			RecordModel.getInstance().recordBean.comment = info.commentTextArea.text;
 			

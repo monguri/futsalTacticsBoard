@@ -120,8 +120,10 @@
 		<s:Button id="deleteButton" width="90" height="25" label="DELETE" cacheAsBitmap="true"
 				  click="deleteButtonClickHandler(event)" fontSize="12" fontStyle="normal"
 				  fontWeight="bold"/>
+		<!-- サーバなしのリリースのため
 		<s:Button id="uploadButton" width="90" height="25" label="UPLOAD" cacheAsBitmap="true"
 				  click="uploadButtonClickHandler(event)" fontSize="12" fontStyle="normal"
 				  fontWeight="bold"/>
+		-->
 	</s:HGroup>
 </s:View>

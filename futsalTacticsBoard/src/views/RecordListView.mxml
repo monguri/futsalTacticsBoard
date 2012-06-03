@@ -32,14 +32,15 @@
 			
 		private function listClickHandler(event:MouseEvent):void
 		{
-			if (list.selectedIndex == 0) // リストにアイテムが一つもないときはselectedIndex = -1, selectedItem = undefined
-			{
-				this.navigator.pushView(DownloadView);
+			CONFIG::SERVER{
+				if (list.selectedIndex == 0) // リストにアイテムが一つもないときはselectedIndex = -1, selectedItem = undefined
+				{
+					this.navigator.pushView(DownloadView);
+					return;
+				}
 			}
-			else if (list.selectedIndex >= 1)
-			{
-				this.navigator.pushView(RecordView, list.selectedItem);
-			}
+
+			this.navigator.pushView(RecordView, list.selectedItem);
 		}
 		
 		private function getRecordTitle(record:RecordInfoModel):String

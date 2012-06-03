@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <flex-config>
 	<compiler>
+		<!-- save file formats -->
 		<define>
 			<name>CONFIG::SAVE_TO_SHARED_OBJECT</name>
 			<value>false</value>
@@ -13,10 +14,17 @@
 			<name>CONFIG::SAVE_TO_JSON_FILE</name>
 			<value>true</value>
 		</define>
+		<!-- free version or not. can save just one record at free version -->
 		<define>
 			<name>CONFIG::FREE</name>
+			<value>true</value>
+		</define>
+		<!-- use GAE server -->
+		<define>
+			<name>CONFIG::SERVER</name>
 			<value>false</value>
 		</define>
+		<!-- for difference of webView event behavior -->
 		<define>
 			<name>CONFIG::SIMULATOR</name>
 			<value>false</value>
@@ -25,6 +33,7 @@
 			<name>CONFIG::DEVICE</name>
 			<value>true</value>
 		</define>
+		<!-- GAE URL -->
 		<define>
 			<name>CONFIG::GAE_LOCAL</name>
 			<value>false</value>

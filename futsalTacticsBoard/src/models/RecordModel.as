@@ -31,15 +31,10 @@ package models
 		private var _recordList:RecordInfoModelList;
 
 		// 録画データバッファ。録画(書き込み)と再生(読み出し)の両方で記録領域とのI/Oをバッファする。
-//		private var _piecesPoints:Vector.<Vector.<Point>>;
-//		private var _piecesTexts:Vector.<Vector.<String>>;
-//		private var _title:String;
-//		private var _comment:String;
 		private var _bean:RecordBean;
 		private var _urlLoadCompleteCallback:Function;
 		private var _urlLoadErrorCallback:Function;
 		private var _loader:URLLoader;
-//		private var _file:File;
 
 		private static const RECORD_SAVE_DIRECTORY:String = "app-storage:/";
 
@@ -73,23 +68,6 @@ package models
 		
 		public function clearSaveDataBuffer():void
 		{
-//			// メモリ解放
-//			_title = null;
-//			_comment = null;
-//			_piecesPoints = new Vector.<Vector.<Point>>();
-//			_piecesTexts = new Vector.<Vector.<String>>();
-			
-//			// 別のメモリ領域に再確保
-//			_piecesPoints = new Vector.<Vector.<Point>>();
-//			_piecesTexts = new Vector.<Vector.<String>>();
-			
-//			// 二次元配列のnewだけでなく一次元配列をnewしておかないと要素をpushできない
-//			for (var i:uint = 0; i < Const.NUM_PIECES; i++)
-//			{
-//				_piecesPoints[i] = new Vector.<Point>;
-//				_piecesTexts[i] = new Vector.<String>;
-//			}
-			
 			_bean = null;
 			_bean = new RecordBean();
 		}
@@ -118,19 +96,6 @@ package models
 		public function loadSaveDataToBuffer(record:RecordInfoModel):Boolean
 		{
 			clearSaveDataBuffer();
-			
-//			var success:Boolean;
-//			success = loadPiecesPoints(record);
-//			if (!success)
-//			{
-//				return false;
-//			}
-//			
-//			success = loadPiecesTexts(record);
-//			if (!success)
-//			{
-//				return false;
-//			}
 			
 			var success:Boolean;
 			success = loadFrameData(record);
@@ -172,28 +137,22 @@ package models
 		{
 			//TODO:先頭の<xml>というのはださいかもしれない
 			var xml:XML = <xml></xml>;
-//			var title:XML = <title>{_title}</title>;
 			var title:XML = <title>{_bean.title}</title>;
 			xml.appendChild(title);
-//			var comment:XML = <comment>{_comment}</comment>;
 			var comment:XML = <comment>{_bean.comment}</comment>;
 			xml.appendChild(comment);
 			xml.appendChild(<pieces></pieces>);
 			
 			var piece:XML;
 			var frame:XML;
-//			for (var i:uint = 0; i < _piecesPoints.length; i++)
 			for (var i:uint = 0; i < _bean.frameData.length; i++)
 			{
 				piece = <piece></piece>;
 				piece.@id = i; //TODO:idにはballとかfieldPlayerBlueとか持たせたいな
 				
-//				for (var j:uint = 0; j < _piecesPoints[i].length; j++)
 				for (var j:uint = 0; j < _bean.frameData[i].length; j++)
 				{
 					frame = <frame/>;
-//					frame.@x = _piecesPoints[i][j].x;
-//					frame.@y = _piecesPoints[i][j].y;
 					frame.@x = _bean.frameData[i][j].x;
 					frame.@y = _bean.frameData[i][j].y;
 					frame.@text = _bean.frameData[i][j].text;
@@ -206,7 +165,6 @@ package models
 			// 保存時は、現在日時をファイル名とする
 			var file:File = new File(RECORD_SAVE_DIRECTORY + getCurrentDateTimeString() + ".xml");
 			writeStringToFile(file, xml.toXMLString());
-//			_recordList.pushRecord(file, _title, _comment);
 			_recordList.pushRecord(file, _bean.title, _bean.comment);
 		}
 		
@@ -227,117 +185,6 @@ package models
 			// TODO:しかしファイル共有を考えるなら端末IDの付加が必要
 			return now.time.toString();
 		}
-		
-//		CONFIG::SAVE_TO_SHARED_OBJECT
-//		public function loadPiecesPoints(record:RecordInfoModel):Boolean
-//		{
-//			var soName:String = getRecordName(record);
-//			var so:SharedObject = SharedObject.getLocal(soName);
-//			if (!so.data.hasOwnProperty("piecesPoints"))
-//			{
-//				return false;
-//			}
-//			
-//			var saveData:Vector.<Object> = so.data.piecesPoints; // SharedObjectに入れるとVector.<Object>で保持される
-//			var point:Point;
-//			var len1:uint = saveData.length;
-//			var len2:uint = 0;
-//			for (var i:uint = 0; i < len1; i++)
-//			{
-//				len2 = saveData[i].length;
-//				for (var j:uint = 0; j < len2; j++)
-//				{
-//					// xとyのプロパティとその型の情報だけは残っている。Pointごととか、Vectorごと読み出そうとしてもキャストできないというエラーになる
-//					// 最終的な実値データのプロパティ名とその型の情報だけはObject型に残るということだろう
-//					point = new Point(saveData[i][j].x, saveData[i][j].y);
-//					_piecesPoints[i].push(point);
-//				}
-//			}
-//
-//			return true;
-//		}
-//		
-//		CONFIG::SAVE_TO_XML_FILE
-//		public function loadPiecesPoints(record:RecordInfoModel):Boolean
-//		{
-//			var file:File = record.file;
-//			if (!file.exists)
-//			{
-//				return false;
-//			}
-//			
-//			var xml:XML = new XML(readStringFromFile(file));
-//			var pieces:XMLList = xml.pieces.piece;
-//			var len1:int = pieces.length();
-//			var len2:int = 0;
-//			var points:XMLList;
-//			var point:Point;
-//			for (var i:uint = 0; i < len1; i++)
-//			{
-//				points = pieces[i].point;
-//				len2 = points.length();
-//				for (var j:uint = 0; j < len2; j++)
-//				{
-//					point = new Point(points[j].@x, points[j].@y);
-//					_piecesPoints[i].push(point);
-//				}
-//			}
-//			
-//			return true;
-//		}
-
-//		CONFIG::SAVE_TO_SHARED_OBJECT
-//		public function loadPiecesTexts(record:RecordInfoModel):Boolean
-//		{
-//			var soName:String = getRecordName(record);
-//			var so:SharedObject = SharedObject.getLocal(soName);
-//			if (!so.data.hasOwnProperty("piecesTexts"))
-//			{
-//				return false;
-//			}
-//			
-//			var saveData:Vector.<Object> = so.data.piecesTexts; // SharedObjectに入れるとVector.<Object>で保持される
-//			var point:Point;
-//			var len1:uint = saveData.length;
-//			var len2:uint = 0;
-//			for (var i:uint = 0; i < len1; i++)
-//			{
-//				len2 = saveData[i].length;
-//				for (var j:uint = 0; j < len2; j++)
-//				{
-//					_piecesTexts[i].push(saveData[i][j]);
-//				}
-//			}
-//		
-//			return true;
-//		}
-//		
-//		CONFIG::SAVE_TO_XML_FILE
-//		public function loadPiecesTexts(record:RecordInfoModel):Boolean
-//		{
-//			var file:File = record.file;
-//			if (!file.exists)
-//			{
-//				return false;
-//			}
-//			
-//			var xml:XML = new XML(readStringFromFile(file));
-//			var pieces:XMLList = xml.pieces.piece;
-//			var len1:int = pieces.length();
-//			var len2:int = 0;
-//			var texts:XMLList;
-//			for (var i:uint = 0; i < len1; i++)
-//			{
-//				texts = pieces[i].text;
-//				len2 = texts.length();
-//				for (var j:uint = 0; j < len2; j++)
-//				{
-//					_piecesTexts[i].push(texts[j]);
-//				}
-//			}
-//			
-//			return true;
-//		}
 
 		CONFIG::SAVE_TO_SHARED_OBJECT
 		public function loadFrameData(record:RecordInfoModel):Boolean
@@ -747,30 +594,6 @@ package models
 		{
 			return _bean;
 		}
-
-		
-		//
-		// ゲッター/セッター
-		//
-//		public function get piecesPointsBuffer():Vector.<Vector.<Point>>
-//		{
-//			return _piecesPoints;
-//		}
-//		
-//		public function get piecesTextsBuffer():Vector.<Vector.<String>>
-//		{
-//			return _piecesTexts;
-//		}
-
-//		public function set titleBuffer(value:String):void
-//		{
-//			_title = value;
-//		}
-//
-//		public function set commentBuffer(value:String):void
-//		{
-//			_comment = value;
-//		}
 	}
 }
 
