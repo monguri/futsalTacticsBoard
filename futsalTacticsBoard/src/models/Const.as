@@ -48,6 +48,9 @@ package models
 		// コマの数
 		public static const NUM_PIECES:int = 11;
 		
+		// Playボタンを押したときの待ち時間(ミリ秒)
+		public static const PLAY_START_WAIT:uint = 1000;
+		
 		//
 		// ボタンのラベル
 		//
@@ -108,6 +111,7 @@ package models
 		// ダイアログの文言
 		//
 		public static const FREE_LIMITATION_TITLE:String = "Free Ver. Limitation";
+		public static const NO_TITLE_TITLE:String = "No Title";
 		public static const INVALID_CHARACTER_TITLE:String = "Invalid Char Alert";
 		public static const RECORD_SIZE_FULL_TITLE:String = "Size Limit";
 		public static const RECORDS_NUMBER_FULL_TITLE:String = "Limit Alert";
@@ -117,6 +121,7 @@ package models
 		public static const DOWNLOAD_SUCCEDED_TITLE:String = "Download Success";
 		public static const DOWNLOAD_FAILED_TITLE:String = "Download Failed";
 		
+		public static const NO_TITLE_ERROR:String = "Please input title.";
 		public static const INVALID_CHARACTER_ERROR:String = "Invalid character, cannot save: >, <, &, \' or \".";
 		public static const RECORDS_NUMBER_FULL_WARNING:String = "The number of records comes to limit. You can delete some records.";
 		public static const RECORDS_NUMBER_OVER_LIMIT_ERROR:String = "The number of records is over limit. Please delete some records.";

@@ -6,7 +6,9 @@ package controllers
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.SoftKeyboardEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
+	import flash.utils.Timer;
 	
 	import models.Const;
 	import models.FrameDatum;
@@ -39,6 +41,9 @@ package controllers
 		private var _isRecording:Boolean = false;
 		private var _isPlaying:Boolean = false;
 		
+		// PLAYボタンから再生開始を遅らせるためのタイマー
+		private static var _playTimer:Timer;
+		
 		private var _pieces:Vector.<Piece>;
 		
 		// 録画中のフレーム数
@@ -58,6 +63,8 @@ package controllers
 			_view.addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 			_view.addEventListener(FlexEvent.ADD, addHandler);
 			_view.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
+			_playTimer = new Timer(Const.PLAY_START_WAIT, 1);
+			_playTimer.addEventListener(TimerEvent.TIMER_COMPLETE, playStartTimerHandler);
 		}
 
 		//
@@ -111,9 +118,13 @@ package controllers
 			trace("add");
 			// 描画されてから再生されるようにADDED_TO_STAGEイベントハンドラで再生開始
 			var o:ViewReturnObject = _view.navigator.poppedViewReturnedObject;
-			if (o != null)
-			{ // AddRecordViewからのpop
-				// Do nothing
+			if (o != null) // AddRecordViewからのpop
+			{
+				if (RecordModel.getInstance().recordBean.title == null) {
+					// Flex4.6のバグ対応コード。なぜかAddRecordViewからのポップでaddHandler()が２回呼ばれてしまう
+					// ２回目はタイトルにnullが入っているので、タイトル入力を義務づけることで回避
+					return;
+				}
 				var saveFlag:Boolean = o.object as Boolean;
 				if (saveFlag) // 保存するとき
 				{
@@ -126,27 +137,35 @@ package controllers
 			}
 			else if (_view.data != null) // RecordViewのPlayボタンからのpush
 			{
-				var success:Boolean = RecordModel.getInstance().loadSaveDataToBuffer(_view.data as RecordInfoModel);
-				// ロード失敗なら再生状態に遷移しない
-				if (!success) {
-					return;
-				}
-			
-				// 再生中はボタンの機能は殺す
-				_view.backButton.enabled = false;
-				_view.resetButton.enabled = false;
-				
-				_mode = MODE_PLAY;
-				_view.recordPlayButton.label = Const.PLAY_BUTTON_LABEL_SUSPEND;
-				
-				// 再生状態に
-				_isPlaying = true;
+				// ADDイベントの直後に再正開始すると早すぎるので少し遅らせる
+				_playTimer.start();
 			}
-			else
-			{ // RecordListViewからのpush
+			else // RecordListViewからのpush
+			{
 				_mode = MODE_RECORD;
 				_view.recordPlayButton.label = Const.RECORD_BUTTON_LABEL_START;
 			}
+		}
+		
+		protected function playStartTimerHandler(event:TimerEvent):void
+		{
+			_playTimer.reset();
+			
+			var success:Boolean = RecordModel.getInstance().loadSaveDataToBuffer(_view.data as RecordInfoModel);
+			// ロード失敗なら再生状態に遷移しない
+			if (!success) {
+				return;
+			}
+		
+			// 再生中はボタンの機能は殺す
+			_view.backButton.enabled = false;
+			_view.resetButton.enabled = false;
+			
+			_mode = MODE_PLAY;
+			_view.recordPlayButton.label = Const.PLAY_BUTTON_LABEL_SUSPEND;
+			
+			// 再生状態に
+			_isPlaying = true;
 		}
 		
 		private function creationCompleteHandler(event:Event):void

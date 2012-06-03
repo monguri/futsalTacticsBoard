@@ -32,8 +32,13 @@
 			
 		private function listClickHandler(event:MouseEvent):void
 		{
+			// リストでアイテムでない空白をクリックするとselectedIndex = -1, selectedItem = undefined
+			if (list.selectedIndex < 0) {
+				return;
+			}
+
 			CONFIG::SERVER{
-				if (list.selectedIndex == 0) // リストにアイテムが一つもないときはselectedIndex = -1, selectedItem = undefined
+				if (list.selectedIndex == 0)
 				{
 					this.navigator.pushView(DownloadView);
 					return;

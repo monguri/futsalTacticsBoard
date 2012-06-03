@@ -4,7 +4,7 @@
 		xmlns:components="components.*"
 		add="viewAddHandler(event)" destructionPolicy="never" title="EditRecord">
 	<fx:Declarations>
-		<components:Dialog id="invalidCharAlert" />
+		<components:Dialog id="alertDialog" />
 		<!-- 非ビジュアルエレメント (サービス、値オブジェクトなど) をここに配置 -->
 	</fx:Declarations>
 	<fx:Script>
@@ -46,18 +46,28 @@
 				info.titleTextInput.text = record.title;
 				info.commentTextArea.text = record.comment;
 				info.recordTextsChangeCallback = recordTextsChangeHandler;
-				doneButton.enabled = RecordModel.getInstance().isValidText(info.titleTextInput.text)
+
+				var title:String = info.titleTextInput.text;
+				doneButton.enabled = title.length > 0 
+									&& RecordModel.getInstance().isValidText(title)
 									&& RecordModel.getInstance().isValidText(info.commentTextArea.text);
 			}
 		}
 		
 		private function recordTextsChangeHandler():void
 		{
-			var valid:Boolean = RecordModel.getInstance().isValidText(info.titleTextInput.text) && RecordModel.getInstance().isValidText(info.commentTextArea.text);
+			var title:String = info.titleTextInput.text;
+			if (title.length == 0) {
+				alertDialog.show(this, Const.NO_TITLE_TITLE, Const.NO_TITLE_ERROR, Dialog.BUTTON_OK);
+				doneButton.enabled = false;
+				return;
+			}
+
+			var valid:Boolean = RecordModel.getInstance().isValidText(title) && RecordModel.getInstance().isValidText(info.commentTextArea.text);
 			doneButton.enabled = valid;
 			if (!valid)
 			{
-				invalidCharAlert.show(this, Const.INVALID_CHARACTER_TITLE, Const.INVALID_CHARACTER_ERROR, Dialog.BUTTON_OK);
+				alertDialog.show(this, Const.INVALID_CHARACTER_TITLE, Const.INVALID_CHARACTER_ERROR, Dialog.BUTTON_OK);
 			}
 		}
 	]]>

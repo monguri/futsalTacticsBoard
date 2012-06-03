@@ -81,9 +81,18 @@ package models
 				var allFiles:Array = dir.getDirectoryListing();
 				for each (var file:File in allFiles)
 				{
-					if (file.extension == "xml")
-					{
-						file.deleteFile();
+					CONFIG::SAVE_TO_XML_FILE{
+						if (file.extension == "xml")
+						{
+							file.deleteFile();
+						}
+					}
+	
+					CONFIG::SAVE_TO_JSON_FILE{
+						if (file.extension == "json")
+						{
+							file.deleteFile();
+						}
 					}
 				}
 				

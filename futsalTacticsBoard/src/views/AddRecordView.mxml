@@ -63,18 +63,31 @@
 		private function viewAddHandler(event:Event):void
 		{
 			info.recordTextsChangeCallback = recordTextsChangeHandler;
-			doneButton.enabled = RecordModel.getInstance().isValidText(info.titleTextInput.text)
-									&& RecordModel.getInstance().isValidText(info.commentTextArea.text);
+			doneButton.enabled = false;
 		}
 		
 		private function recordTextsChangeHandler():void
 		{
-			var valid:Boolean = RecordModel.getInstance().isValidText(info.titleTextInput.text) && RecordModel.getInstance().isValidText(info.commentTextArea.text);
+			var title:String = info.titleTextInput.text;
+			if (title.length == 0) {
+				alertDialog.show(this, Const.NO_TITLE_TITLE, Const.NO_TITLE_ERROR, Dialog.BUTTON_OK);
+				doneButton.enabled = false;
+				return;
+			}
+
+			var valid:Boolean = RecordModel.getInstance().isValidText(title) && RecordModel.getInstance().isValidText(info.commentTextArea.text);
 			doneButton.enabled = valid;
 			if (!valid)
 			{
 				alertDialog.show(this, Const.INVALID_CHARACTER_TITLE, Const.INVALID_CHARACTER_ERROR, Dialog.BUTTON_OK);
 			}
+		}
+		
+		private function isValid(info:RecordInformation):Boolean {
+			var title:String = info.titleTextInput.text;
+			return title.length > 0
+				&& RecordModel.getInstance().isValidText(info.titleTextInput.text)
+				&& RecordModel.getInstance().isValidText(info.commentTextArea.text);
 		}
 	]]>
 	</fx:Script>
